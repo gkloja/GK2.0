@@ -1,0 +1,19 @@
+<header id="header" class="row">   
+  <div class="header-logo">
+      <a href="/">Escola-Dev</a>
+  </div>
+  <nav id="header-nav-wrap">
+      <ul class="header-main-nav">
+          <li><a href="/">Voltar para o início</a></li>
+          <li><a href="https://wa.me/559185470410">Conversar com o criador</a></li>
+          <% if (user) { %>
+            <li><a href="/users/logout">Sair</a></li>
+          <% } else { %>
+            <li><a href="/users/register">Criar conta</a></li>
+            <li><a href="/users/login">Entrar</a></li>
+          <% } %> 
+      </ul>
+      <a href="/docs" class="button button-primary cta">Docs</a>
+  </nav>
+  <a class="header-menu-toggle" href="#"><span>Menu</span></a>    	
+</header>

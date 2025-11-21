@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>Samá Bank - Login</title>
+  <meta name="description" content="Faça login para acessar sua conta no Samá Bank e conquistar o topo do ranking.">
+  <meta name="author" content="Gabriel Samá">
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+  <link rel="shortcut icon" href="/favicon.png" type="image/x-icon">
+
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    .login-container {
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 30px 25px;
+      border-radius: 15px;
+      box-shadow: 0 0 30px rgba(0,0,0,0.3);
+      width: 100%;
+      max-width: 360px;
+      text-align: center;
+    }
+
+    .logo {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #ffcc00;
+      margin-bottom: 15px;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    h2 {
+      color: #ffcc00;
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 12px;
+      font-size: 15px;
+      border-radius: 8px;
+      border: none;
+      margin-bottom: 15px;
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+    }
+
+    .form-control::placeholder {
+      color: rgba(255, 255, 255, 0.6);
+      font-family: 'Font Awesome 5 Free', sans-serif;
+    }
+
+    .form-control:focus {
+      outline: none;
+      box-shadow: 0 0 10px rgba(255, 204, 0, 0.6);
+    }
+
+    .button-primary {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      background: #ffcc00;
+      color: #000;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.2s;
+    }
+
+    .button-primary:hover {
+      background: #ff9900;
+      transform: scale(1.05);
+    }
+
+    .register-link {
+      margin-top: 15px;
+      color: #ffcc00;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 14px;
+    }
+
+    .register-link:hover {
+      color: #ff9933;
+    }
+
+    .error-msg {
+      color: #ff4d4d;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    footer {
+      margin-top: 25px;
+      font-size: 13px;
+      text-align: center;
+      color: #ccc;
+    }
+
+    footer a {
+      color: #ffcc00;
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      color: #ffa500;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="login-container">
+    <img src="/flogo.jpg" alt="Logo" class="logo" />
+    <h2>Entrar no Samá Bank</h2>
+
+    <% if (error_msg) { %>
+      <div class="error-msg"><%= error_msg %></div>
+    <% } %>
+
+    <form method="POST" action="/users/login">
+      <input name="username" type="text" class="form-control" placeholder="&#xf007;  Nome de usuário" required />
+      <input name="password" type="password" class="form-control" placeholder="&#xf13e;  Senha" required />
+      <button type="submit" class="button-primary">Entrar</button>
+    </form>
+
+    <p><a class="register-link" href="/registro">Ainda não tem uma conta? Cadastre-se</a></p>
+  </div>
+
+  <footer>
+    <p>© <a href="https://wa.link/brgbaw">Gabriel Samá</a>. Todos os direitos reservados.</p>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Buscador de Músicas</title>
+
+ 
+</head>
+<body>
+      <button id="chat-button">💬</button>
+  
+    <div class="chat-container hidden" id="chat-container">
+        <h2>CHAT</h2>
+        <ul id="messages"></ul>
+        <form id="form" method="POST" action="#">
+            <input id="input" name="texto" autocomplete="off" placeholder="Digite sua mensagem..." required>
+            <button type="submit">Enviar</button>
+        </form>
+    </div>
+    
+    
+ <style> 
+ body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #1e2a47;
+    color: #f0f0f0;
+}
+
+/* Botão do chat */
+#chat-button {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    background-color: #ffcc00;
+    border: none;
+    border-radius: 50%;
+    padding: 20px;
+    cursor: pointer;
+    font-size: 24px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    z-index: 1000;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+#chat-button:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.6);
+}
+
+/* Chat container */
+.chat-container {
+    position: fixed;
+    bottom: 80px;
+    left: 20px;
+    width: 320px;
+    background-color: rgba(28, 35, 52, 0.95);
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.6);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 450px;
+    transition: bottom 0.3s ease, transform 0.3s ease;
+    z-index: 999;
+}
+
+.chat-container.hidden {
+    bottom: -450px;
+}
+
+.chat-container.open {
+    transform: translateY(10px);
+}
+
+/* Cabeçalho do chat */
+h2 {
+    font-size: 24px;
+    color: #ffcc00;
+    margin-bottom: 15px;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: bold;
+    font-family: 'Roboto', sans-serif;
+}
+
+/* Mensagens */
+#messages {
+    list-style: none;
+    padding: 0;
+    flex-grow: 1;
+    overflow-y: auto;
+    margin-bottom: 20px;
+    font-size: 16px;
+    color: white;
+}
+
+#messages li {
+    background: linear-gradient(45deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.3));
+    margin: 12px 0;
+    padding: 14px;
+    border-radius: 10px;
+    font-size: 18px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    position: relative;
+}
+
+#messages li:hover {
+    background-color: rgba(255, 255, 255, 0.4);
+    transform: translateX(5px);
+}
+
+/* Cabeçalho da mensagem */
+.message-header {
+    font-weight: bold;
+    color: #ffcc00;
+    margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+}
+
+/* Hora da mensagem */
+.message-time {
+    font-size: 12px;
+    color: #bbb;
+    margin-left: 8px;
+}
+
+/* Corpo da mensagem */
+.message-body {
+    color: #f0f0f0;
+    font-size: 16px;
+    line-height: 1.4;
+}
+
+.rank {
+    display: inline-block;
+    margin-left: 8px;
+    background: linear-gradient(45deg, #ff5e62, #ff9966);
+    color: white;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+/* Formulário de envio */
+form {
+    display: flex;
+    align-items: center;
+    border-top: 1px solid #ddd;
+    padding-top: 10px;
+    margin-top: 10px;
+}
+
+input {
+    flex-grow: 1;
+    padding: 14px;
+    border-radius: 8px;
+    border: none;
+    font-size: 16px;
+    margin-right: 12px;
+    background-color: #2e3b51;
+    color: white;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+input:focus {
+    background-color: #3b4a65;
+    outline: none;
+    transform: scale(1.02);
+}
+
+button {
+    padding: 14px;
+    background-color: #ffcc00;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+button:hover {
+    background-color: #ff9933;
+    transform: scale(1.05);
+}
+
+/* Animação para abrir o chat */
+.open-chat {
+    animation: slideIn 0.4s ease-out;
+}
+
+@keyframes slideIn {
+    0% {
+        bottom: -450px;
+    }
+    100% {
+        bottom: 80px;
+    }
+}
+ </style>
+<script>
+  const chatButton = document.getElementById("chat-button");
+const chatContainer = document.getElementById("chat-container");
+const form = document.getElementById("form");
+const messages = document.getElementById("messages");
+
+// Alterna a visibilidade do chat ao clicar no botão
+chatButton.addEventListener("click", () => {
+    chatContainer.classList.toggle("hidden");
+});
+
+// Função para formatar a data/hora da mensagem
+function formatarHora(data) {
+    const date = new Date(data);
+    const horas = date.getHours().toString().padStart(2, '0');
+    const minutos = date.getMinutes().toString().padStart(2, '0');
+    const segundos = date.getSeconds().toString().padStart(2, '0');
+    return `${horas}:${minutos}:${segundos}`;
+}
+
+// Função para adicionar mensagens ao chat com emojis, rank e hora
+function adicionarMensagem(data) {
+    const item = document.createElement("li");
+
+    // Emojis de rank
+    let rankEmoji = '';
+    if (data.globalRank === 1) {
+        rankEmoji = '🏆';
+    } else if (data.globalRank === 2) {
+        rankEmoji = '🥈';
+    } else if (data.globalRank === 3) {
+        rankEmoji = '🥉';
+    } else {
+        rankEmoji = '💪';
+    }
+
+    item.innerHTML = `
+        <div class="message-header">
+            <span>${rankEmoji} ${data.nome}</span>
+            <span class="rank">Rank ${data.globalRank}</span>
+            <span class="message-time">${formatarHora(data.data)}</span>
+        </div>
+        <div class="message-body">${data.texto}</div>
+    `;
+    messages.appendChild(item);
+    messages.scrollTop = messages.scrollHeight; // Rola para a última mensagem
+}
+
+// Função para buscar novas mensagens do servidor a cada 1 segundo
+function atualizarChat() {
+    fetch('/historico-mensagens')
+        .then(response => response.json())
+        .then(data => {
+            messages.innerHTML = '';  // Limpa as mensagens antigas
+            data.mensagens.forEach(adicionarMensagem);  // Adiciona as novas mensagens
+        })
+        .catch(err => {
+            console.error('Erro ao carregar mensagens:', err);
+        });
+}
+
+// Atualiza o chat a cada 1 segundo
+setInterval(atualizarChat, 1000);
+
+let isCooldown = false;
+let cooldownTime = 10;    // Tempo de cooldown em segundos
+const inputButton = document.querySelector('button[type="submit"]');
+
+// Função para desabilitar o envio de mensagens durante o cooldown
+function startCooldown() {
+    isCooldown = true;
+    inputButton.disabled = true;
+    inputButton.textContent = `Espere ${cooldownTime}s`;  // Atualiza o texto do botão
+
+    const countdown = setInterval(() => {
+        cooldownTime--;
+        inputButton.textContent = `Espere ${cooldownTime}s`;  // Atualiza o texto com o tempo restante
+
+        if (cooldownTime <= 0) {
+            clearInterval(countdown);
+            isCooldown = false;
+            inputButton.disabled = false;
+            inputButton.textContent = "Enviar";
+            cooldownTime = 30;  // Reseta o tempo de cooldown
+        }
+    }, 1000);
+}
+
+// Função para enviar a mensagem
+form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const input = document.getElementById("input");
+
+    // Verifica se a mensagem não está vazia e se não está em cooldown
+    if (input.value.trim() && !isCooldown) {
+        const data = {
+            texto: input.value,
+            nome: 'Usuário',  // Este campo deve vir da sessão do usuário
+            globalRank: 1,   // Este campo deve ser calculado dinamicamente
+            data: new Date().toISOString()  // Hora atual formatada
+        };
+
+        const response = await fetch('/enviar-mensagem', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+
+        const result = await response.json();
+        if (result.sucesso) {
+            adicionarMensagem(result.mensagem);
+            input.value = '';  // Limpa o campo de entrada
+            startCooldown();  // Inicia o cooldown
+        } else {
+            console.log('Erro ao enviar mensagem:', result);
+        }
+    } else if (isCooldown) {
+        alert(`Você precisa esperar ${cooldownTime} segundos para enviar uma nova mensagem.`);
+    }
+});
+
+// Carrega as mensagens ao iniciar a página
+fetch('/historico-mensagens')
+    .then(response => response.json())
+    .then(data => {
+        data.mensagens.forEach(adicionarMensagem);
+    })
+    .catch(err => {
+        console.error('Erro ao carregar mensagens:', err);
+    });
+  
+</script>
+  <div class="container2">
+        <div class="dropdown">
+        <button class="dropdown-button">☰</button>
+        <div class="dropdown-content">
+            <a href="/" class="rank-button">🏆 VER RANK</a>
+            <a href="/change-password" class="change-password-button">🔑 ALTERAR SENHA</a>
+            <!-- Agora a opção "Baixar Músicas" vem após "Alterar Senha" -->
+            <a href="/docs" class="music-button">🃏 JOGAR</a>
+            <a href="#" id="logout-button">🚪 SAIR</a>
+        </div>
+    </div>
+    <style>
+    #user-info .info-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+        padding: 12px;
+        border-radius: 8px;
+        background-color: #ffffff;
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+    }
+    #user-info .info-label {
+        color: #4A90E2;
+        font-weight: bold;
+    }
+    #user-info .info-value {
+        color: #2d3748;
+        font-size: 1.2em;
+        font-weight: bold;
+    }
+    #user-info .info-row:hover {
+        background-color: #f0f7ff;
+        transform: translateY(-5px);
+        transition: 0.3s ease;
+    }
+
+    /* Estilos do Menu Dropdown */
+/* Estilos do Menu Dropdown */
+.dropdown {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    z-index: 1000; /* Garante que fique acima de outros elementos */
+}
+
+.dropdown-button {
+    background-color: #4A90E2;
+    color: white;
+    padding: 12px 16px;
+    font-size: 18px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.dropdown-button:hover {
+    background-color: #357ABD;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #ffffff;
+    min-width: 160px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1001; /* Garante que o dropdown apareça corretamente */
+    border-radius: 8px;
+    margin-top: 5px;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.dropdown-content a {
+    color: #4A90E2;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.dropdown-content a:hover {
+    background-color: #f0f7ff;
+}
+
+/* Ajustes para garantir centralização do buscador */
+
+</style>
+
+
+    <!-- Menu Dropdown (Sempre visível) -->
+
+</div>
+  <style>
+    .container2 {
+        position: relative;
+    }
+
+    /* Estilo do menu dropdown */
+    .dropdown {
+        position: fixed; /* Fixa o menu na tela */
+        top: 20px;       /* Distância do topo da tela */
+        left: 20px;      /* Distância da borda esquerda (agora está à esquerda) */
+        z-index: 1000;   /* Garante que fique acima de outros elementos */
+    }
+
+    .dropdown-button {
+        background: #2575fc;
+        color: white;
+        font-size: 1.5em;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+        transition: background 0.3s ease, transform 0.3s ease;
+    }
+
+    .dropdown-button:hover {
+        background: #6a11cb;
+        transform: scale(1.1);
+    }
+
+    /* Conteúdo do menu dropdown */
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #333;
+        min-width: 200px;
+        z-index: 1;
+        border-radius: 5px;
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .dropdown:hover .dropdown-content {
+        display: block;
+    }
+
+    .dropdown-content a {
+        color: white;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+        border-bottom: 1px solid #ddd;
+        transition: background 0.3s ease;
+    }
+
+    .dropdown-content a:hover {
+        background-color: #2575fc;
+    }
+
+    /* Botões estilizados */
+    .rank-button, .play-button, .mine-button, .change-password-button, #logout-button {
+        color: white;
+        font-size: 1.5em;
+        padding: 15px 30px;
+        text-decoration: none;
+        display: inline-block;
+        border-radius: 50px;
+        cursor: pointer;
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+        transition: all 0.3s ease;
+        margin: 5px 0;
+    }
+
+    .rank-button:hover {
+        background: linear-gradient(45deg, #FFD700, #FFA500);
+        transform: scale(1.1);
+    }
+
+    .play-button:hover {
+        background: linear-gradient(45deg, #32CD32, #228B22);
+        transform: scale(1.1);
+    }
+
+    .mine-button:hover {
+        background: linear-gradient(45deg, #8B4513, #D2691E);
+        transform: scale(1.1);
+    }
+
+    #logout-button:hover {
+        background: #cc0000;
+        transform: scale(1.1);
+    }
+
+    .change-password-button:hover {
+        background: #FFD700;
+        transform: scale(1.1);
+    }
+</style>
+  
+  
+
+
+
+<div class="container3">
+  <h2>Fabi Music 🎶</h2>
+  <p class="intro-text">Qual música você deseja ouvir? 🤔</p>
+  <input type="text" id="input3" placeholder="Digite o nome da música" />
+  <button id="searchButton3">Buscar Música</button>
+
+  <!-- Área de carregamento e resultados -->
+  <div class="loading3" id="loadingMessage3">
+    <span>🔄 Buscando sua música...</span>
+  </div>
+  
+  <div class="message3" id="message3"></div>
+
+  <div class="audio-controls3" id="audioControls3">
+    <audio id="audioElement3" controls></audio>
+    <button id="downloadButton3">Baixar Música 🎵</button>
+  </div>
+
+  <div id="cooldownMessage3" class="hidden cooldown-message3">
+    Aguardando <span id="countdown3"></span> segundos para buscar novamente.
+  </div>
+</div>
+
+<div class="container07">
+  <h1>Top Músicas Pedidas</h1>
+  <div class="loading" id="loading">Carregando músicas...</div>
+  <ul id="lista-musicas">
+    <!-- Músicas serão carregadas aqui -->
+  </ul>
+</div>
+
+<script>
+  const searchButton3 = document.getElementById("searchButton3");
+  const input3 = document.getElementById("input3");
+  const loadingMessage3 = document.getElementById("loadingMessage3");
+  const messageDiv3 = document.getElementById("message3");
+  const audioElement3 = document.getElementById("audioElement3");
+  const audioControls3 = document.getElementById("audioControls3");
+  const downloadButton3 = document.getElementById("downloadButton3");
+  const cooldownMessage3 = document.getElementById("cooldownMessage3");
+  const countdownElement3 = document.getElementById("countdown3");
+
+  let usuario3 = '<%= numero %>'; // ID real do usuário
+
+  // Função para iniciar o cooldown
+  function startCooldown3(timeRemaining) {
+    searchButton3.disabled = true;
+    searchButton3.textContent = `Espere ${timeRemaining}s`;
+
+    const countdown = setInterval(() => {
+      timeRemaining--;
+      countdownElement3.textContent = timeRemaining;
+      searchButton3.textContent = `Espere ${timeRemaining}s`;
+
+      if (timeRemaining <= 0) {
+        clearInterval(countdown);
+        searchButton3.disabled = false;
+        searchButton3.textContent = "Buscar Música";
+        cooldownMessage3.classList.add('hidden');
+      }
+    }, 1000);
+  }
+
+  searchButton3.addEventListener("click", async () => {
+    const query3 = input3.value.trim();
+
+    if (query3) {
+      // Verifica o cooldown antes de continuar
+      const responseCooldown3 = await fetch('/verificarCooldown', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ usuario: usuario3, tipoCooldown: 'buscaMusica' })
+      });
+      const dataCooldown3 = await responseCooldown3.json();
+
+      if (!dataCooldown3.podeJogar) {
+        messageDiv3.innerHTML = `⏳ Aguardando o cooldown de ${Math.ceil(dataCooldown3.tempoRestante / 1000)} segundos.`;
+        startCooldown3(Math.ceil(dataCooldown3.tempoRestante / 1000));
+        return;
+      }
+
+      // Inicia o processo de busca
+      searchButton3.disabled = true;
+      messageDiv3.innerHTML = "🔍 Buscando sua música...";
+      loadingMessage3.style.display = "block"; // Exibe o carregamento
+
+      try {
+        // Busca pela música no backend
+        const response3 = await fetch(`/play`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ query: query3, userId: usuario3 })
+        });
+
+        loadingMessage3.style.display = "none"; // Esconde a mensagem de carregamento
+
+        if (response3.ok) {
+          const audioBlob3 = await response3.blob();
+          const audioUrl3 = URL.createObjectURL(audioBlob3);
+          audioElement3.src = audioUrl3;
+
+          // Música pronta, exibe o player
+          audioControls3.style.display = "block";
+          messageDiv3.innerHTML = `✅ Música pronta! Agora você pode ouvir ou baixar.`;
+
+          downloadButton3.onclick = () => {
+            const a3 = document.createElement("a");
+            a3.href = audioUrl3;
+            a3.download = "audio3.mp3";
+            document.body.appendChild(a3);
+            a3.click();
+            document.body.removeChild(a3);
+          };
+
+          // Atualiza o cooldown após a busca
+          await fetch('/atualizarCooldown', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ usuario: usuario3, tipoCooldown: 'buscaMusica', tempoCooldown: 30000 })
+          });
+
+          startCooldown3(30);
+        } else {
+          messageDiv3.innerHTML = `❌ Música não encontrada. Tente novamente.`;
+        }
+      } catch (error) {
+        loadingMessage3.style.display = "none"; // Esconde o carregamento
+        messageDiv3.innerHTML = `❌ Ocorreu um erro ao buscar a música.`;
+        console.error("Erro ao buscar a música:", error);
+      }
+    } else {
+      messageDiv3.innerHTML = `❌ Por favor, insira o nome da música.`;
+    }
+  });
+
+  // Função para carregar as músicas e exibir no HTML
+  function carregarMusicas() {
+    fetch('/top-musicas', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    .then(response => response.json())
+    .then(musicas => {
+      const listaElement = document.getElementById("lista-musicas");
+      const loadingElement = document.getElementById("loading");
+      
+      listaElement.innerHTML = ''; // Limpar a lista antes de adicionar novas músicas
+      loadingElement.style.display = 'none'; // Esconder a mensagem de carregamento
+
+      if (musicas.length === 0) {
+        listaElement.innerHTML = '<li><span>Não há músicas ainda no ranking.</span></li>';
+      } else {
+        musicas.forEach(musica => {
+          const li = document.createElement("li");
+          li.classList.add("musica-info");
+          li.innerHTML = `${musica.nome} <span>Pedidos: ${musica.quantidade}</span>`;
+          listaElement.appendChild(li);
+        });
+      }
+    })
+    .catch(error => {
+      console.error('Erro ao carregar as músicas:', error);
+      const listaElement = document.getElementById("lista-musicas");
+      listaElement.innerHTML = '<li><span>Erro ao carregar as músicas.</span></li>';
+    });
+  }
+
+  // Carregar as músicas ao carregar a página
+  window.onload = carregarMusicas;
+</script>
+
+<style>
+/* Estilos para a página de buscador de músicas */
+.container3 {
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  width: 100%;
+  max-width: 400px;
+  margin-top: 20px;
+  margin-bottom: 50px;
+  position: relative;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.container07 {
+  width: 80%;
+  margin: 0 auto;
+  padding-top: 30px;
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0.6);
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+h1, h2 {
+  font-size: 24px;
+  color: #ffcc00;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+li {
+  background-color: #333;
+  border: 1px solid #ffcc00;
+  padding: 15px;
+  margin: 10px 0;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #ffcc00;
+  font-size: 18px;
+}
+
+li span {
+  font-weight: bold;
+  color: #ffcc00;
+}
+
+.loading, .loading3 {
+  font-size: 18px;
+  color: #ffcc00;
+  display: none;
+}
+
+#input3 {
+  font-size: 16px;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ffcc00;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  width: 70%;
+  transition: all 0.3s ease;
+}
+
+#input3:focus {
+  outline: none;
+  background-color: rgba(255, 255, 255, 0.2);
+  border-color: #ffcc00;
+}
+
+button#searchButton3 {
+  background-color: #ffcc00;
+  color: #000;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button#searchButton3:hover {
+  background-color: #ffb300;
+}
+
+#cooldownMessage3 {
+  animation: slideUp 1s ease-in-out;
+  display: none;
+}
+
+#message3 {
+  font-size: 18px;
+  color: #ffcc00;
+  margin-top: 20px;
+  display: none;
+}
+
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@keyframes slideUp {
+  0% { transform: translateY(50px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+</style>
+  
+<script>
+  
+  document.getElementById("logout-button").addEventListener("click", () => {
+    window.location.href = "/logout"; // Redireciona para a rota de logout
+});
+  
+</script>
+
+    <!-- Chat flutuante -->
+
+
+
+
+
+
+</body>

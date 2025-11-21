@@ -1,0 +1,2823 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Samá Bank - Conectando Fortunas</title>
+<link rel="icon" type="image/png" href="/flogo.jpg"> <!-- LOGO NA ABA -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<meta name="theme-color" content="#0d0d0d">
+<!-- Adicione isso no seu HTML (ex: no topo da página) -->
+<div class="notificacao-rolante">
+<div class="conteudo-rolante">
+Deus é fiel
+</div>
+
+<script>
+function atualizarContagemTemporada() {
+    // Fuso horário brasileiro
+    const agora = new Date(new Date().toLocaleString("en-US", { timeZone: "America/Sao_Paulo" }));
+
+    // Próximo reset: dia 1º do próximo mês às 00:00
+    let proximoReset = new Date(agora.getFullYear(), agora.getMonth() + 1, 1, 0, 0, 0);
+
+    // Tempo restante
+    const diff = proximoReset - agora;
+
+    if (diff <= 0) {
+        document.getElementById("countdown-temporada").innerText = "Resetando...";
+        return;
+    }
+
+    // Conversões
+    const dias = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const horas = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutos = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    const segundos = Math.floor((diff % (1000 * 60)) / 1000);
+
+    // Atualiza no texto rolante
+    document.getElementById("countdown-temporada").innerText =
+        `${dias}d ${horas}h ${minutos}m ${segundos}s`;
+}
+
+// Atualizar a cada segundo
+setInterval(atualizarContagemTemporada, 1000);
+atualizarContagemTemporada();
+</script>
+
+
+</div>
+
+
+<style>  
+.notificacao-rolante {  
+  width: 100%;  
+  overflow: hidden;  
+  background: #000;  
+  color: #fff;  
+  font-weight: bold;  
+  font-size: 18px;  
+  padding: 10px 0;  
+  border-top: 3px solid #f00;  
+  border-bottom: 3px solid #f00;  
+  position: relative;  
+}  
+  
+.conteudo-rolante {  
+  display: inline-block;  
+  white-space: nowrap;  
+  padding-left: 100%;  
+  animation: rolando 15s linear infinite;  
+}  
+  
+@keyframes rolando {  
+  0% {  
+    transform: translateX(0%);  
+  }  
+  100% {  
+    transform: translateX(-100%);  
+  }  
+}  
+</style>
+  <style>
+    :root {
+        --primary-color: #FFD700;
+        --secondary-color: #FFA500;
+        --dark-color: #1A1A1A;
+        --light-color: #FFFFFF;
+        --success-color: #4CAF50;
+        --danger-color: #F44336;
+        --info-color: #2196F3;
+        --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        --transition: all 0.6s ease;
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #1A1A1A, #2D2D2D);
+        color: var(--light-color);
+        line-height: 1.6;
+        overflow-x: hidden;
+    }
+
+    /* Header Styles */
+    header {
+        padding: 2rem 0;
+        background: rgba(0, 0, 0, 0.8);
+        box-shadow: var(--shadow);
+        position: relative;
+        z-index: 10;
+    }
+
+    .header-content {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 2rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .logo-container {
+        display: flex;
+        align-items: center;
+        margin-bottom: 1.5rem;
+    }
+
+    .logo {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid var(--primary-color);
+        box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        transition: var(--transition);
+    }
+
+    .logo:hover {
+        transform: rotate(15deg) scale(1.1);
+    }
+
+    .header-text {
+        text-align: center;
+        margin-left: 1.5rem;
+    }
+
+    h1 {
+        font-size: 2.5rem;
+        color: var(--primary-color);
+        margin-bottom: 0.5rem;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .tagline {
+        font-size: 1.2rem;
+        color: rgba(255, 255, 255, 0.8);
+        margin-bottom: 1rem;
+    }
+
+    /* Main Content */
+    main {
+        max-width: 1200px;
+        margin: 2rem auto;
+        padding: 0 2rem;
+    }
+
+    /* Section Styles */
+    .section {
+        background: rgba(0, 0, 0, 0.6);
+        border-radius: 12px;
+        padding: 2rem;
+        margin-bottom: 2.5rem;
+        box-shadow: var(--shadow);
+        border: 1px solid rgba(255, 215, 0, 0.1);
+        transition: var(--transition);
+    }
+
+    .section:hover {
+        border-color: rgba(255, 215, 0, 0.3);
+        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .section-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 1.5rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 2px solid var(--primary-color);
+    }
+
+    .section-title {
+        font-size: 1.8rem;
+        color: var(--primary-color);
+        margin-right: auto;
+    }
+
+    /* Ranking Styles */
+/* Área de grupos */
+#available-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px;
+  background: linear-gradient(145deg, #0f0f0f, #1a1a1a);
+  min-height: 100vh;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Card base */
+.ranking-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 18px;
+  border-radius: 14px;
+  background: #121826;
+  border: 1px solid #2f3e53;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.6);
+}
+
+
+.foto-nome {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.foto-perfil {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.ranking-item::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: conic-gradient(
+    from 180deg at 50% 50%,
+    #00ffe1,
+    #3a86ff,
+    #8338ec,
+    #ff006e,
+    #00ffe1
+  );
+  animation: rotate 6s linear infinite;
+  z-index: 0;
+  opacity: 0.08;
+}
+
+@keyframes rotate {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.ranking-item > * {
+  z-index: 1;
+}
+
+.ranking-item.clickable {
+  cursor: pointer;
+}
+.ranking-item.clickable:hover {
+  transform: scale(1.015);
+  box-shadow: 0 0 16px #3a86ff66;
+}
+
+/* Item bloqueado */
+.ranking-item.locked {
+  opacity: 0.5;
+  filter: grayscale(0.7);
+  cursor: not-allowed;
+  background: #2a2a2a;
+  border-style: dashed;
+  border-color: #555;
+}
+
+/* Avatar do grupo */
+.group-thumb {
+  width: 64px;
+  height: 64px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #1e1e1e;
+  flex-shrink: 0;
+  border: 2px solid #00ffe1;
+  position: relative;
+  box-shadow: 0 0 12px #00ffe177;
+}
+
+.group-thumb::after {
+  content: "⭐";
+  position: absolute;
+  bottom: -6px;
+  right: -6px;
+  background: #00ffe1;
+  color: #000;
+  padding: 4px 6px;
+  border-radius: 50%;
+  font-size: 14px;
+  font-weight: bold;
+  box-shadow: 0 0 8px #00ffe1aa;
+}
+
+.group-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Badge VIP */
+.vip .vip-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: #ffd700;
+  color: #000;
+  font-weight: bold;
+  font-size: 12px;
+  padding: 3px 7px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px #ffd700aa;
+  animation: pulseVip 1.5s infinite ease-in-out;
+  z-index: 2;
+}
+
+@keyframes pulseVip {
+  0% { transform: scale(1); box-shadow: 0 0 10px #ffd700aa; }
+  50% { transform: scale(1.1); box-shadow: 0 0 20px #ffd700ee; }
+  100% { transform: scale(1); box-shadow: 0 0 10px #ffd700aa; }
+}
+
+/* Info do grupo */
+.group-info {
+  flex-grow: 1;
+}
+
+.rank-name {
+  font-size: 18px;
+  font-weight: bold;
+  color: #f0f0f0;
+  letter-spacing: 0.5px;
+}
+
+.rank-value {
+  font-size: 14px;
+  color: #94a3b8;
+  margin-top: 5px;
+}
+
+/* VIP brabo */
+.ranking-item.vip {
+  border: 2px solid transparent;
+  background: linear-gradient(#121212, #1e1e1e) padding-box,
+              linear-gradient(90deg, #ffdd00, #ff006e, #7b2ff7) border-box;
+  box-shadow: 0 0 24px rgba(255, 221, 0, 0.3);
+  animation: vipGlow 5s ease-in-out infinite;
+}
+
+@keyframes vipGlow {
+  0%, 100% {
+    box-shadow: 0 0 16px #ffdd0077;
+  }
+  50% {
+    box-shadow: 0 0 28px #ff007755;
+  }
+}
+
+.ranking-item.vip .rank-name {
+  color: #ffdd00;
+  text-shadow: 0 0 4px #ffdd00aa;
+}
+
+.ranking-item.vip .rank-value {
+  color: #ffe066;
+}
+.ranking-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.ranking-item .foto img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+    /* News Styles */
+    .news-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 1.5rem;
+        margin-top: 1.5rem;
+    }
+
+    .news-card {
+        background: rgba(30, 30, 30, 0.7);
+        border-radius: 8px;
+        padding: 1.5rem;
+        transition: var(--transition);
+        border-left: 4px solid;
+    }
+
+    .news-card.positive {
+        border-left-color: var(--success-color);
+    }
+
+    .news-card.negative {
+        border-left-color: var(--danger-color);
+    }
+
+    .news-card.neutral {
+        border-left-color: var(--info-color);
+    }
+
+    .news-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .news-title {
+        font-size: 1.3rem;
+        margin-bottom: 0.8rem;
+        color: var(--primary-color);
+    }
+
+    .news-meta {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 1rem;
+        font-size: 0.9rem;
+        color: rgba(255, 255, 255, 0.6);
+    }
+
+    .news-content {
+        margin-bottom: 1rem;
+    }
+
+    .news-chart {
+        height: 150px;
+        margin-top: 1rem;
+    }
+
+
+    .stat-card {
+        background: rgba(30, 30, 30, 0.7);
+        border-radius: 8px;
+        padding: 1.5rem;
+        text-align: center;
+        transition: var(--transition);
+    }
+
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .stat-icon {
+        font-size: 2.5rem;
+        color: var(--primary-color);
+        margin-bottom: 1rem;
+    }
+
+    .stat-value {
+        font-size: 2rem;
+        font-weight: bold;
+        color: var(--light-color);
+        margin-bottom: 0.5rem;
+    }
+
+    .stat-label {
+        font-size: 1rem;
+        color: rgba(255, 255, 255, 0.7);
+    }
+
+    /* Button Styles */
+    .btn {
+        display: inline-block;
+        padding: 0.8rem 1.5rem;
+        font-size: 1rem;
+        font-weight: 600;
+        text-align: center;
+        text-decoration: none;
+        border-radius: 50px;
+        transition: var(--transition);
+        cursor: pointer;
+        border: none;
+        outline: none;
+    }
+
+    .btn-primary {
+        background: var(--primary-color);
+        color: var(--dark-color);
+    }
+
+    .btn-primary:hover {
+        background: #FFC000;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4);
+    }
+
+    .btn-secondary {
+        background: var(--secondary-color);
+        color: var(--dark-color);
+    }
+
+    .btn-secondary:hover {
+        background: #FF8C00;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(255, 165, 0, 0.4);
+    }
+
+    .btn-group {
+        display: flex;
+        gap: 1rem;
+        margin-top: 1.5rem;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    /* Dropdown Menu */
+    .dropdown {
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        z-index: 1000;
+    }
+
+    .dropdown-btn {
+        background: var(--primary-color);
+        color: var(--dark-color);
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        cursor: pointer;
+        transition: var(--transition);
+        box-shadow: var(--shadow);
+        border: none;
+    }
+
+    .dropdown-btn:hover {
+        transform: rotate(90deg) scale(1.1);
+        background: #FFC000;
+    }
+
+    .dropdown-content {
+        position: absolute;
+        top: 60px;
+        left: 0;
+        background: rgba(30, 30, 30, 0.95);
+        min-width: 220px;
+        border-radius: 8px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        padding: 0.5rem 0;
+        display: none;
+        z-index: 1001;
+        backdrop-filter: blur(10px);
+    }
+
+    .dropdown:hover .dropdown-content {
+        display: block;
+    }
+
+    .dropdown-item {
+        display: flex;
+        align-items: center;
+        padding: 0.8rem 1.5rem;
+        color: var(--light-color);
+        text-decoration: none;
+        transition: var(--transition);
+    }
+
+    .dropdown-item:hover {
+        background: rgba(255, 215, 0, 0.1);
+        color: var(--primary-color);
+    }
+
+    .dropdown-item i {
+        margin-right: 1rem;
+        width: 20px;
+        text-align: center;
+    }
+
+    /* Music Player */
+    .music-player {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 1000;
+    }
+
+    .music-btn {
+        background: var(--primary-color);
+        color: var(--dark-color);
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.8rem;
+        cursor: pointer;
+        transition: var(--transition);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        border: none;
+    }
+
+    .music-btn:hover {
+        transform: scale(1.1) rotate(15deg);
+        box-shadow: 0 8px 25px rgba(255, 215, 0, 0.5);
+    }
+
+    /* Promo Banner */
+    .promo-banner {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(0, 0, 0, 0.9);
+        color: var(--primary-color);
+        padding: 1rem 2rem;
+        border-radius: 50px;
+        box-shadow: 0 5px 25px rgba(0, 0, 0, 0.5);
+        display: flex;
+        align-items: center;
+        z-index: 999;
+        max-width: 90%;
+        animation: slideUp 0.5s ease-out;
+        backdrop-filter: blur(5px);
+        border: 1px solid rgba(255, 215, 0, 0.3);
+    }
+
+    @keyframes slideUp {
+        from {
+            transform: translateX(-50%) translateY(100px);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+    }
+
+    .promo-content {
+        display: flex;
+        align-items: center;
+        margin-right: 1rem;
+    }
+
+    .promo-icon {
+        font-size: 1.5rem;
+        margin-right: 1rem;
+        color: var(--primary-color);
+    }
+
+    .promo-text {
+        font-size: 1rem;
+    }
+
+    .promo-btn {
+        background: var(--primary-color);
+        color: var(--dark-color);
+        padding: 0.5rem 1.5rem;
+        border-radius: 50px;
+        font-weight: bold;
+        text-decoration: none;
+        transition: var(--transition);
+        white-space: nowrap;
+    }
+
+    .promo-btn:hover {
+        background: #FFC000;
+        transform: scale(1.05);
+    }
+
+    .close-btn {
+        background: none;
+        border: none;
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 1.2rem;
+        margin-left: 1rem;
+        cursor: pointer;
+        transition: var(--transition);
+    }
+
+    .close-btn:hover {
+        color: var(--danger-color);
+    }
+
+    /* Clock Styles */
+    .clock-container {
+        display: flex;
+        justify-content: center;
+        margin-top: 1rem;
+    }
+
+    .clock {
+        background: rgba(0, 0, 0, 0.5);
+        padding: 0.8rem 1.5rem;
+        border-radius: 50px;
+        font-size: 1.1rem;
+        color: var(--primary-color);
+        font-weight: bold;
+        display: inline-flex;
+        align-items: center;
+    }
+
+    .clock i {
+        margin-right: 0.5rem;
+    }
+
+    /* Footer Styles */
+    footer {
+        background: rgba(0, 0, 0, 0.8);
+        padding: 2rem 0;
+        text-align: center;
+        margin-top: 3rem;
+    }
+
+    .footer-content {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 2rem;
+    }
+
+    .footer-links {
+        display: flex;
+        justify-content: center;
+        gap: 2rem;
+        margin-bottom: 1.5rem;
+        flex-wrap: wrap;
+    }
+
+    .footer-link {
+        color: rgba(255, 255, 255, 0.7);
+        text-decoration: none;
+        transition: var(--transition);
+    }
+
+    .footer-link:hover {
+        color: var(--primary-color);
+    }
+
+    .copyright {
+        color: rgba(255, 255, 255, 0.5);
+        font-size: 0.9rem;
+    }
+
+    .highlight {
+        color: var(--primary-color);
+        font-weight: bold;
+    }
+
+    /* Responsive Styles */
+    @media (max-width: 768px) {
+        .header-content {
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .logo-container {
+            flex-direction: column;
+            margin-bottom: 1rem;
+        }
+
+        .header-text {
+            margin-left: 0;
+            margin-top: 1rem;
+        }
+
+.section {
+            padding: 1.5rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+        }
+
+        .promo-banner {
+            flex-direction: column;
+            text-align: center;
+            padding: 1rem;
+            border-radius: 8px;
+            width: 90%;
+        }
+
+        .promo-content {
+            margin-right: 0;
+            margin-bottom: 0.5rem;
+        }
+
+        .promo-btn {
+            width: 100%;
+        }
+    }
+
+    /* Animations */
+    @keyframes pulse {
+        0% {
+            transform: scale(1);
+            box-shadow: 0 0 0 rgba(255, 215, 0, 0.7);
+        }
+        70% {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.7);
+        }
+        100% {
+            transform: scale(1);
+            box-shadow: 0 0 0 rgba(255, 215, 0, 0);
+        }
+    }
+
+    /* Utility Classes */
+    .text-center {
+        text-align: center;
+    }
+
+    .mb-1 {
+        margin-bottom: 1rem;
+    }
+
+    .mb-2 {
+        margin-bottom: 2rem;
+    }
+
+    .hidden {
+        display: none !important;
+    }
+
+    .visible {
+        display: block !important;
+    }
+</style>
+<button id="chat-button">💬</button>
+
+<!-- Chat container -->
+<div class="chat-container hidden" id="chat-container">
+    <h2>CHAT</h2>
+    <ul id="messages"></ul>
+    <form id="form" method="POST" action="#">
+        <input id="input" name="texto" autocomplete="off" placeholder="Digite sua mensagem..." required />
+        <button type="submit">Enviar</button>
+    </form>
+</div>
+
+<style>/* === CHAT ESTILIZADO: EFEITO FLUTUANTE, MODERNO E EXCLUSIVO === */
+.floating-wallet {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  background: rgba(20, 20, 20, 0.85);
+  border-left: 4px solid #00ff88;
+  color: #fff;
+  padding: 1rem 1.2rem;
+  border-radius: 12px;
+  box-shadow: 0 0 15px rgba(0, 255, 136, 0.3);
+  font-family: 'Orbitron', monospace;
+  font-size: 0.95rem;
+  z-index: 999;
+  min-width: 200px;
+  animation: slideIn 0.5s ease;
+}
+
+.loader {
+  border: 3px solid #fff;
+  border-top: 3px solid #00ff88;
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  animation: spin 0.8s linear infinite;
+  display: inline-block;
+  margin: 0 auto;
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.wallet-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.wallet-row i {
+  color: #00ff88;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0px);
+    opacity: 1;
+  }
+}
+.chat-container {
+  position: fixed;
+  bottom: 90px;
+  left: 25px;
+  width: 360px;
+  height: 500px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: rgba(25, 25, 25, 0.9);
+  border: 1px solid rgba(255, 215, 0, 0.25);
+  border-radius: 18px;
+  padding: 20px;
+  backdrop-filter: blur(10px);
+  box-shadow:
+    0 0 30px rgba(255, 215, 0, 0.2),
+    inset 0 0 10px rgba(255, 215, 0, 0.1);
+  z-index: 999;
+  overflow: hidden;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  font-family: 'Orbitron', monospace;
+  color: rgba(255, 215, 0, 0.85);
+}
+.chat-container.hidden {
+  opacity: 0;
+  transform: translateY(100%);
+  pointer-events: none;
+}
+.chat-container.open {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Botão de abrir chat */
+#chat-button {
+  position: fixed;
+  bottom: 25px;
+  left: 25px;
+  width: 64px;
+  height: 64px;
+  background: linear-gradient(145deg, #ffd700, #ffcc00);
+  border-radius: 50%;
+  border: 2px solid rgba(255, 215, 0, 0.5);
+  box-shadow:
+    0 0 12px rgba(255, 215, 0, 0.6),
+    0 0 24px rgba(255, 215, 0, 0.4);
+  color: #1e1e1e;
+  font-size: 28px;
+  font-weight: bold;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  z-index: 1000;
+  transition: all 0.3s ease;
+}
+#chat-button:hover {
+  transform: scale(1.1);
+  box-shadow:
+    0 0 25px rgba(255, 215, 0, 0.9),
+    0 0 50px rgba(255, 215, 0, 0.6);
+}
+
+/* Cabeçalho */
+.chat-container h2 {
+  font-size: 24px;
+  text-align: center;
+  color: rgba(255, 215, 0, 0.95);
+  margin-bottom: 12px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-weight: 800;
+  text-shadow:
+    0 0 6px rgba(255, 215, 0, 0.6),
+    0 0 12px rgba(255, 215, 0, 0.4);
+}
+
+/* Lista de mensagens */
+#messages {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding-right: 4px;
+  margin-bottom: 20px;
+}
+#messages li {
+  animation: fadeSlideIn 0.3s ease-in;
+}
+
+@keyframes fadeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0px);
+  }
+}
+#messages li:hover {
+  transform: translateX(6px);
+}
+#messages li.minha-msg {
+  background: linear-gradient(135deg, #003300, #004d00);
+  color: #ccffcc;
+}
+.message-header {
+  font-weight: 700;
+  margin-bottom: 6px;
+  display: flex;
+  justify-content: space-between;
+}
+.rank {
+  background: linear-gradient(45deg, #ffd700, #ffaa00);
+  color: #1e1e1e;
+  padding: 2px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 800;
+}
+.rank.top1 {
+  animation: pulseRank 1.2s infinite;
+}
+@keyframes pulseRank {
+  0% { box-shadow: 0 0 0px rgba(255, 215, 0, 0.6); }
+  50% { box-shadow: 0 0 12px rgba(255, 215, 0, 0.9); }
+  100% { box-shadow: 0 0 0px rgba(255, 215, 0, 0.6); }
+}
+.message-time {
+  font-size: 11px;
+  color: rgba(255, 215, 0, 0.6);
+}
+.message-body {
+  font-size: 15px;
+  margin-top: 4px;
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+/* Formulário de envio */
+form {
+  display: flex;
+  gap: 10px;
+  border-top: 1px solid rgba(255, 215, 0, 0.15);
+  padding-top: 12px;
+}
+input {
+  flex: 1;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-size: 15px;
+  color: rgba(255, 215, 0, 0.85);
+  outline: none;
+  transition: all 0.2s ease;
+}
+input:focus {
+  border-color: rgba(255, 215, 0, 0.8);
+  background: rgba(255, 215, 0, 0.05);
+}
+input::placeholder {
+  color: rgba(255, 215, 0, 0.4);
+}
+
+button {
+  background: linear-gradient(to right, #ffd700, #ffcc00);
+  color: #1e1e1e;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 30px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow:
+    0 0 10px rgba(255, 215, 0, 0.6);
+  transition: transform 0.2s ease;
+}
+button:hover {
+  transform: scale(1.05);
+}
+
+/* Scrollbar */
+#messages::-webkit-scrollbar {
+  width: 8px;
+}
+#messages::-webkit-scrollbar-thumb {
+  background: rgba(255, 215, 0, 0.6);
+  border-radius: 10px;
+}
+/* Estilo para mensagens da IA (administradora) */
+#messages li.admin {
+  background: linear-gradient(135deg, #ffcc00, #ffe066);
+  color: #1a1a1a;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  box-shadow:
+    0 0 10px rgba(255, 255, 255, 0.4),
+    inset 0 0 10px rgba(255, 255, 255, 0.2);
+}
+#messages li.admin .message-header {
+  color: #000;
+}
+#messages li.admin .rank {
+  background: #000;
+  color: #ffd700;
+}
+#chat-button.notificacao::after {
+  content: "!";
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 16px;
+  height: 16px;
+  font-size: 12px;
+  background: red;
+  color: white;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-weight: bold;
+}
+.atualizacao-info {
+  text-align: center;
+  font-size: 0.9em;
+  margin-bottom: 10px;
+  color: #888;
+}
+</style>
+<style>
+  .player-container {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 20px;
+    background: #1e1e1e;
+    border-radius: 15px;
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
+    color: white;
+    text-align: center;
+  }
+
+  .player-container input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    margin-top: 10px;
+    margin-bottom: 15px;
+    font-size: 16px;
+    background-color: #2d2d2d;
+    color: white;
+  }
+
+  .player-container button {
+    padding: 10px 20px;
+    background-color: gold;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    color: black;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+
+  .player-container button:hover {
+    background-color: #ffd700;
+  }
+
+  #audio-player img {
+    border-radius: 10px;
+    margin: 10px 0;
+  }
+
+  audio {
+    width: 100%;
+    margin-top: 10px;
+    outline: none;
+    border-radius: 8px;
+    background-color: #111;
+  }
+
+  #status-message {
+    margin-top: 10px;
+    font-weight: bold;
+  }
+
+  .top-musicas {
+    max-width: 500px;
+    margin: 40px auto;
+    padding: 20px;
+    background: #121212;
+    border-radius: 12px;
+    color: white;
+  }
+
+  .top-musicas h2 {
+    margin-bottom: 15px;
+  }
+
+  #lista-musicas {
+    list-style: none;
+    padding: 0;
+  }
+
+  #lista-musicas li {
+    background: #1a1a1a;
+    padding: 10px;
+    margin-bottom: 8px;
+    border-radius: 6px;
+  }
+</style>
+
+<script> const fotoUsuario = "<%= foto %>"</script>
+<script>
+  // transforma o array registro em JSON para JS
+  window.registro = <%- JSON.stringify(registro) %>;
+</script>
+<script>
+  
+const chatButton = document.getElementById("chat-button");
+const chatContainer = document.getElementById("chat-container");
+const messages = document.getElementById("messages");
+const inputButton = document.querySelector('button[type="submit"]');
+const input = document.getElementById("input");
+let ultimaQtdMensagens = 0;
+let ultimaMensagemId = null;
+let isCooldown = false;
+let cooldownTime = 10;
+
+// Formata hora pt-BR
+function formatarHora(data) {
+  const date = new Date(data);
+  return date.toLocaleTimeString('pt-BR', {
+    timeZone: 'America/Sao_Paulo',
+    hour12: false,
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit'
+  });
+}
+
+
+  
+
+// Gera HTML da mensagem com estilo personalizado
+function adicionarMensagem(data, index = 0) {
+  const li = document.createElement("li");
+
+  const nomeOriginal = data.nome || "Desconhecido";
+  const textoOriginal = data.texto || "";
+  const hora = formatarHora(data.data || new Date());
+  const rank = data.globalRank || index + 1;
+
+  // Busca no registro local a foto pelo nome do usuário (case insensitive)
+  const userRegistro = registro.find(u => u.nome.toLowerCase() === nomeOriginal.toLowerCase());
+  const foto = userRegistro?.fotoPerfil || '/flogo.jpg';
+
+  const isBot = nomeOriginal.trim().toLowerCase() === "fabi";
+  const prefixosSistema = ["[TIGRINHO]", "[LIQUIDAR]", "[COMPRAR]"];
+  const isSistema = prefixosSistema.some(prefix => textoOriginal.toUpperCase().startsWith(prefix));
+
+  let texto = textoOriginal;
+  if (isSistema) {
+    for (const prefix of prefixosSistema) {
+      if (texto.toUpperCase().startsWith(prefix)) {
+        texto = texto.substring(prefix.length).trim();
+        break;
+      }
+    }
+  }
+
+  const nome = isSistema ? "🎰 Sistema de Jogo" : nomeOriginal;
+  const corNome = isSistema ? "#0a0a0a" : isBot ? "#ff4fd8" : "#000";
+  const corFundo = isSistema ? "#e0e0e0" : isBot ? "#ffe0f7" : "#f5f5f5";
+  const fonte = isSistema ? "'Courier New', monospace" : "'Segoe UI', 'Arial Black', sans-serif";
+  const icone = isSistema ? "🛠️" : rank === 1 ? "🏆" : rank === 2 ? "🥈" : rank === 3 ? "🥉" : "💬";
+
+  li.innerHTML = `
+    <div style="display: flex; align-items: flex-start; margin: 8px 0;">
+      <img src="${foto}" alt="Foto de ${nome}" style="width: 42px; height: 42px; border-radius: 50%; margin-right: 10px; object-fit: cover; border: 2px solid #ccc;">
+      <div style="background: ${corFundo}; padding: 8px 12px; border-radius: 12px; max-width: 85%; font-family: ${fonte};">
+        <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.85em;">
+          <span style="color: ${corNome}; font-weight: bold;">
+            ${icone} ${nome}
+            ${!isSistema ? `<span style="font-size: 0.75em; background: #ddd; padding: 2px 6px; border-radius: 8px;">#${rank}</span>` : ""}
+          </span>
+          <span style="font-style: italic; color: gray;">${hora}</span>
+        </div>
+        <div style="margin-top: 4px; font-size: 0.95em; color: #000;">${texto}</div>
+      </div>
+    </div>
+  `;
+
+  messages.appendChild(li);
+  messages.scrollTop = messages.scrollHeight;
+}
+
+function buscarFoto(nome) {
+  if (!registro || !Array.isArray(registro)) return '/flogo.jpg';
+
+  const usuario = registro.find(u =>
+    u.nome && u.nome.toLowerCase() === (nome || '').toLowerCase()
+  );
+
+  return usuario ? usuario.fotoPerfil : '/flogo.jpg';
+}
+// Atualiza mensagens a cada 2s e exibe com estilo
+function atualizarMensagens() {
+  fetch("/historico-mensagens")
+    .then(res => res.json())
+    .then(data => {
+      const msgs = data.mensagens || [];
+
+      // Evita re-renderização se não há novas
+      if (msgs.length === ultimaQtdMensagens) return;
+
+      messages.innerHTML = "";
+      msgs.forEach((msg, index) => adicionarMensagem(msg, index));
+
+      const shouldScroll =
+        messages.scrollTop + messages.clientHeight >= messages.scrollHeight - 50;
+
+      if (shouldScroll) {
+        messages.scrollTop = messages.scrollHeight;
+      }
+
+      // Notificação se houver mensagem nova e chat estiver fechado
+      if (msgs.length > ultimaQtdMensagens && chatContainer.classList.contains("hidden")) {
+        chatButton.classList.add("notificacao");
+      }
+
+      ultimaQtdMensagens = msgs.length;
+    })
+    .catch(e => console.error("Erro ao atualizar mensagens:", e));
+}
+
+// Executa atualização a cada 2s
+setInterval(atualizarMensagens, 2000);
+
+// Alterna visibilidade do chat e remove notificação
+chatButton.addEventListener("click", () => {
+  chatContainer.classList.toggle("hidden");
+  if (!chatContainer.classList.contains("hidden")) {
+    chatButton.classList.remove("notificacao");
+    messages.scrollTop = messages.scrollHeight;
+  }
+});
+
+// Cooldown após envio
+function startCooldown() {
+  isCooldown = true;
+  inputButton.disabled = true;
+  inputButton.textContent = `Espere ${cooldownTime}s`;
+
+  const countdown = setInterval(() => {
+    cooldownTime--;
+    inputButton.textContent = `Espere ${cooldownTime}s`;
+
+    if (cooldownTime <= 0) {
+      clearInterval(countdown);
+      isCooldown = false;
+      inputButton.disabled = false;
+      inputButton.textContent = "Enviar";
+      cooldownTime = 30;
+    }
+  }, 1000);
+}
+
+// Envio de mensagem
+form.addEventListener("submit", async (event) => {
+  event.preventDefault();
+  if (input.value.trim() && !isCooldown) {
+    const data = {
+      texto: input.value,
+      nome: "Usuário", // personalize se desejar
+      globalRank: 1,
+      data: new Date().toISOString()
+    };
+
+    try {
+      const response = await fetch("/enviar-mensagem", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      });
+
+      const result = await response.json();
+      if (result.sucesso) {
+        adicionarMensagem(result.mensagem, 0);
+        input.value = "";
+      } else {
+        console.log("Erro ao enviar mensagem:", result);
+      }
+    } catch (error) {
+      console.error("Erro na requisição:", error);
+    }
+
+    startCooldown();
+  } else if (isCooldown) {
+    alert(`Aguarde ${cooldownTime}s para enviar nova mensagem.`);
+  }
+});
+
+// Inicializa mensagens ao abrir a página
+fetch("/historico-mensagens")
+  .then((response) => response.json())
+  .then((data) => {
+    data.mensagens.forEach((msg, index) => adicionarMensagem(msg, index));
+    ultimaQtdMensagens = data.mensagens.length;
+  })
+  .catch((err) => {
+    console.error("Erro ao carregar mensagens:", err);
+  });
+
+</script> 
+</head>
+<body>
+    <!-- Dropdown Menu -->
+<div class="dropdown">
+    <button class="dropdown-btn"><i class="fas fa-bars"></i></button>
+    <div class="dropdown-content">
+        <a href="#ranking" class="dropdown-item"><i class="fas fa-trophy"></i> Ranking</a>
+        <a href="#assets" class="dropdown-item"><i class="fas fa-chart-line"></i> Ativos</a>
+        <a href="#available-groups" class="dropdown-item"><i class="fas fa-users"></i> Grupos</a>
+        <a href="#tigrinho2" class="dropdown-item"><i class="fas fa-dice"></i> Tigrinho</a>
+        <a href="/corrida" class="dropdown-item"><i class="fas fa-gamepad"></i> Jogar</a>
+        <a href="/docs" class="dropdown-item"><i class="fas fa-cog"></i>Configurações</a>
+        <a href="/logout" class="dropdown-item"><i class="fas fa-sign-out-alt"></i> Sair</a>
+        <a href="https://wa.me/5521989047220" target="_blank" class="dropdown-item"><i class="fas fa-headset"></i> Suporte</a>
+    </div>
+</div>
+
+<!-- Header -->
+<header>
+  <div class="header-content">
+    <div class="logo-container">
+      <img src="<%= foto %>" alt="Foto da Pessoa" class="logo pulse">
+      <div class="header-text">
+        <h1>Samá Bank</h1>
+        <p class="tagline"> — 🧠 Seu IP: <%= typeof ip !== 'undefined' ? ip : 'Desconhecido' %></p>
+      </div>
+    </div>
+
+    <% if (typeof username !== 'undefined' && username) { %>
+      <!-- ✅ Usuário logado -->
+      <div class="floating-wallet">
+        <div class="wallet-row">
+          <i class="fas fa-user"></i> <span id="wallet-user"><%= username %></span>
+        </div>
+        <div class="wallet-row">
+          <i class="fas fa-coins"></i> <span id="wallet-golds"><%= golds.toLocaleString() %> Golds</span>
+        </div>
+        <div class="wallet-row">
+          <i class="fas fa-trophy"></i> <span id="wallet-rank">Top #<%= globalRank %></span>
+        </div>
+      </div>
+    <% } else { %>
+      <!-- 🔒 Visitante (não logado) -->
+      <div class="promo-video-container">
+        <video id="fabibot-video" class="promo-video" preload="metadata" poster="/flogo.jpg">
+          <source src="/fabibot.mp4" type="video/mp4">
+          Seu navegador não suporta vídeos HTML5.
+        </video>
+
+        <div class="promo-overlay" id="video-overlay">
+          <h2>✨ Conheça a <span>Fabi Bot</span></h2>
+          <p>Assista e veja como automatizar seu grupo com inteligência e diversão!</p>
+          <button id="play-button" class="play-btn"><i class="fas fa-play"></i> Assistir</button>
+          <a href="/login" class="login-link">Já tem conta? Entrar</a>
+        </div>
+      </div>
+    <% } %>
+
+  <div class="btn-group">
+      <a href="https://wa.me/5521989047220" class="btn btn-secondary" target="_blank"><i class="fas fa-handshake"></i> Alugar</a>
+  <a href="#ranking" class="btn btn-secondary"><i class="fas fa-trophy"></i> Ver Rank</a>
+  <a href="#available-groups" class="btn btn-secondary"><i class="fas fa-users"></i> Ver Grupos</a>
+  <a href="#assets" class="btn btn-secondary"><i class="fas fa-chart-line"></i> Investir</a>
+  <a href="#tigrinho2" class="btn btn-secondary"><i class="fas fa-dice"></i> Tigrinho</a>
+  <a href="/docs" class="btn btn-primary"><i class="fas fa-cog"></i> Configurar seu Grupo</a>
+</div>
+
+    <div class="clock-container">
+      <div class="clock">
+        <i class="fas fa-clock"></i>
+        <span id="clock">Carregando...</span>
+      </div>
+      <div class="clock-container">
+        <i class="fas fa-user-friends"></i>
+        <span><%= online %> online</span>
+      </div>
+      <div class="clock-container">
+        <i class="fas fa-eye"></i>
+        <span><%= visitas %> visitas</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- 💅 Estilos e script -->
+<style>
+  .promo-video-container {
+    position: relative;
+    width: 100%;
+    height: 400px;
+    overflow: hidden;
+    border-radius: 15px;
+    margin-top: 1.5rem;
+    box-shadow: 0 0 25px rgba(0,0,0,0.4);
+  }
+
+  .promo-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.6);
+    border-radius: 15px;
+  }
+
+  .promo-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.55);
+    backdrop-filter: blur(3px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: white;
+    transition: opacity 0.5s ease;
+  }
+
+  .promo-overlay.hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .promo-overlay h2 {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .promo-overlay span {
+    color: var(--primary-color);
+  }
+
+  .promo-overlay p {
+    font-size: 1.1rem;
+    max-width: 600px;
+    margin-bottom: 1.5rem;
+  }
+
+  .play-btn {
+    background: var(--primary-color);
+    color: #fff;
+    border: none;
+    padding: 12px 26px;
+    font-size: 1.1rem;
+    border-radius: 50px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+  }
+
+  .play-btn:hover {
+    background: #ff7b00;
+    transform: scale(1.05);
+  }
+
+  .login-link {
+    color: #fff;
+    margin-top: 12px;
+    text-decoration: underline;
+    opacity: 0.8;
+  }
+
+  .login-link:hover {
+    opacity: 1;
+  }
+
+  @media (max-width: 600px) {
+    .promo-video-container { height: 300px; }
+    .promo-overlay h2 { font-size: 1.5rem; }
+    .promo-overlay p { font-size: 0.9rem; }
+    .play-btn { font-size: 1rem; padding: 10px 20px; }
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const video = document.getElementById('fabibot-video');
+    const overlay = document.getElementById('video-overlay');
+    const playBtn = document.getElementById('play-button');
+
+    if (video && playBtn && overlay) {
+      playBtn.addEventListener('click', () => {
+        overlay.classList.add('hidden');
+        video.play();
+      });
+
+      video.addEventListener('ended', () => {
+        overlay.classList.remove('hidden');
+      });
+    }
+  });
+</script>
+
+    <!-- Main Content -->
+    <main>
+      
+      
+<style>
+#player-ranking {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.player-item {
+  display: flex;
+  align-items: center;
+  background: #1a1a1a;
+  border-radius: 8px;
+  padding: 8px 12px;
+  color: white;
+}
+
+.player-rank {
+  font-weight: bold;
+  font-size: 20px;
+  width: 30px;
+  text-align: center;
+  color: var(--primary-color);
+}
+
+.player-photo img {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  margin: 0 12px;
+  object-fit: cover;
+  border: 2px solid var(--primary-color);
+}
+
+.player-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.player-name {
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.player-golds {
+  font-size: 14px;
+  opacity: 0.8;
+}
+.player-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+  #btn-download {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 12px 25px;
+    background: linear-gradient(45deg, #ff416c, #ff4b2b);
+    color: white;
+    font-weight: 700;
+    font-size: 1.1rem;
+    text-decoration: none;
+    border-radius: 30px;
+    box-shadow: 0 8px 15px rgba(255, 75, 43, 0.3);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    user-select: none;
+    letter-spacing: 1px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  #btn-download:hover {
+    background: linear-gradient(45deg, #ff4b2b, #ff416c);
+    box-shadow: 0 15px 20px rgba(255, 75, 43, 0.6);
+    transform: translateY(-3px);
+  }
+
+  #btn-download::before {
+    content: "🎵 ";
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% {
+      transform: translateY(-50%) scale(1);
+      opacity: 1;
+    }
+    50% {
+      transform: translateY(-50%) scale(1.3);
+      opacity: 0.7;
+    }
+  }
+
+  .bolao-container {
+    background: #111;
+    color: #f1f1f1;
+    padding: 24px;
+    margin: 30px 0;
+    border-radius: 16px;
+    box-shadow: 0 0 20px rgba(0, 255, 128, 0.15);
+    transition: transform 0.3s ease;
+  }
+
+  .bolao-container:hover {
+    transform: translateY(-4px);
+  }
+
+  .times {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    gap: 16px;
+    margin: 20px 0;
+    text-align: center;
+  }
+
+  .time {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 1em;
+    max-width: 120px;
+  }
+
+  .time img {
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin-bottom: 8px;
+    border: 2px solid #0f0;
+    background: #000;
+  }
+
+  .versus {
+    color: #0f0;
+    font-weight: 700;
+    font-size: 1.5em;
+  }
+
+  .golds {
+    font-weight: bold;
+    font-size: 1.1em;
+    margin-bottom: 20px;
+    color: gold;
+  }
+
+  .aposta-form {
+    background: #1c1c1c;
+    padding: 20px;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    box-shadow: inset 0 0 10px rgba(0, 255, 128, 0.15);
+  }
+
+  .aposta-form select {
+    background: #2a2a2a;
+    color: #fff;
+    border: none;
+    padding: 12px;
+    font-size: 1em;
+    border-radius: 6px;
+  }
+
+  .aposta-form button {
+    padding: 14px;
+    border: none;
+    border-radius: 8px;
+    background: linear-gradient(90deg, #00ff99, #00c7a2);
+    font-weight: bold;
+    font-size: 1em;
+    color: #000;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+
+  .aposta-form button:hover {
+    background: linear-gradient(90deg, #00e68a, #00a78a);
+  }
+
+  .premio-bolao {
+    background: #1a1a1a;
+    border-left: 6px solid #0f0;
+    padding: 16px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    box-shadow: inset 0 0 15px rgba(0, 255, 128, 0.15);
+  }
+
+  .valor-acumulado {
+    font-size: 1.4em;
+    margin: 10px 0;
+    font-weight: bold;
+    color: #ffd700;
+    text-shadow: 0 0 8px rgba(255, 215, 0, 0.4);
+  }
+
+  .brilho-dourado {
+    color: gold;
+    text-shadow: 0 0 5px rgba(255, 215, 0, 0.6), 0 0 10px rgba(255, 215, 0, 0.4);
+    font-size: 1.6em;
+    font-weight: 900;
+  }
+
+  .regras-bolao {
+    font-size: 0.9em;
+    color: #ccc;
+    margin-top: 8px;
+    line-height: 1.5;
+  }
+
+  .placar-preview {
+    font-size: 1.2em;
+    color: #0f0;
+    font-weight: 600;
+    text-align: center;
+  }
+
+  .palpites-tabela {
+    margin-top: 20px;
+  }
+
+  .palpites-tabela table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #222;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .palpites-tabela th, .palpites-tabela td {
+    padding: 12px;
+    text-align: center;
+    border: 1px solid #333;
+  }
+
+  .palpites-tabela th {
+    background: #0f0;
+    color: #000;
+  }
+
+  @media (max-width: 600px) {
+    .times {
+      flex-direction: column;
+    }
+
+    .aposta-form {
+      gap: 10px;
+    }
+
+    .time img {
+      width: 60px;
+      height: 60px;
+    }
+  }
+</style>
+
+
+
+        <!-- Ranking Section -->
+<section id="ranking" class="section">
+    <div class="section-header">
+        <h2 class="section-title"><i class="fas fa-trophy"></i> Top Jogadores</h2>
+        <div class="tooltip">
+            <i class="fas fa-info-circle" style="color: var(--primary-color);"></i>
+            <span class="tooltiptext">Veja os TOP 10 Mais Ricos</span>
+        </div>
+    </div>
+    <div id="player-ranking"></div>
+
+    <!-- Contagem Regressiva -->
+    <div id="reset-countdown" class="countdown">
+        <i class="fas fa-hourglass-half"></i>
+        <span>Próximo reset dos Golds em: <strong id="countdown-timer"></strong></span>
+    </div>
+</section>
+
+<script>
+function atualizarContagem() {
+    // Fuso horário brasileiro
+    const agora = new Date(new Date().toLocaleString("en-US", { timeZone: "America/Sao_Paulo" }));
+
+    // Próximo reset: dia 1º do próximo mês às 00:00
+    let proximoReset = new Date(agora.getFullYear(), agora.getMonth() + 1, 1, 0, 0, 0);
+
+    // Tempo restante em milissegundos
+    const diff = proximoReset - agora;
+
+    if (diff <= 0) {
+        document.getElementById("countdown-timer").innerText = "⏳ Resetando...";
+        return;
+    }
+
+    // Conversões
+    const dias = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const horas = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutos = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    const segundos = Math.floor((diff % (1000 * 60)) / 1000);
+
+    // Exibir no elemento
+    document.getElementById("countdown-timer").innerText =
+        `${dias}d ${horas}h ${minutos}m ${segundos}s`;
+}
+
+// Atualiza a cada segundo
+setInterval(atualizarContagem, 1000);
+atualizarContagem();
+</script>
+
+<style>
+.countdown {
+    margin-top: 15px;
+    padding: 10px;
+    background: #111;
+    color: #fff;
+    border-radius: 10px;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.countdown i {
+    color: var(--primary-color);
+}
+#countdown-timer {
+    color: var(--primary-color);
+    font-weight: bold;
+}
+</style>
+
+    <!-- Available Groups Section -->
+<section id="groups-available" class="section">
+  <div class="section-header">
+    <h2 class="section-title"><i class="fas fa-link"></i> Grupos Disponíveis</h2>
+    <div class="tooltip">
+      <i class="fas fa-info-circle" style="color: var(--primary-color);"></i>
+      <span class="tooltiptext">Grupos em que a Fabi Bot está</span>
+    </div>
+  </div>
+
+  <!-- Contador de grupos -->
+  <div id="group-counter" class="group-counter"></div>
+
+  <div id="available-groups"></div>
+</section>
+
+<style>
+  .group-counter {
+    text-align: center;
+    font-weight: 600;
+    font-size: 1.2rem;
+    color: var(--primary-color);
+    background: rgba(255,255,255,0.1);
+    border-radius: 12px;
+    padding: 10px 15px;
+    margin: 10px auto 20px auto;
+    width: fit-content;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    animation: fadeIn 1s ease-in-out;
+  }
+
+  .group-counter i {
+    color: gold;
+    animation: pulse 1.5s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 0.9; }
+    50% { transform: scale(1.2); opacity: 1; }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+
+<!-- Botão flutuante -->
+<button id="open-music-player" title="Tocar Música 🎵">
+  🎧
+</button>
+<div id="music-player-widget" class="player-container hidden">
+  <div class="widget-header">
+    <span>🎧 Tocar Música</span>
+    <button id="close-music-player">✖</button>
+  </div>
+
+  <input type="text" id="query" placeholder="Digite o nome da música" />
+  <button onclick="playMusic()" id="btn-play">Tocar</button>
+
+  <div id="audio-player" style="margin-top: 20px; display: none;">
+    <h3 id="song-title"></h3>
+    <img id="song-thumb" width="200" />
+    <audio controls id="audio" autoplay></audio>
+    <a id="btn-download" href="#" download style="display:none; margin-top:10px;">⬇️ Baixar Música</a>
+  </div>
+
+  <p id="status-message" style="color: gold;"></p>
+
+  <div style="margin-top: 30px;">
+    <a href="https://whatsapp.com/channel/0029VatppnH4o7qSzKKm0X3x/2126" target="_blank" class="channel-button">
+      📡 Ver Código para Integrar no seu Bot
+    </a>
+  </div>
+</div>
+
+<style>
+  
+  #open-music-player {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #25D366;
+  color: white;
+  border: none;
+  padding: 15px;
+  font-size: 22px;
+  border-radius: 50%;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  cursor: pointer;
+  z-index: 999;
+}
+
+#music-player-widget {
+  position: fixed;
+  bottom: 90px;
+  right: 20px;
+  background-color: #1c1c1c;
+  border-radius: 12px;
+  padding: 20px;
+  width: 300px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+  z-index: 1000;
+  color: white;
+}
+
+.hidden {
+  display: none;
+}
+
+.widget-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.widget-header button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.channel-button {
+  display: inline-block;
+  background-color: #25D366;
+  color: white;
+  padding: 10px 20px;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: bold;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+  
+</style>
+<script>
+  async function playMusic() {
+    const query = document.getElementById("query").value.trim();
+    const status = document.getElementById("status-message");
+    const player = document.getElementById("audio-player");
+    const btnDownload = document.getElementById("btn-download");
+    const audio = document.getElementById("audio");
+    const title = document.getElementById("song-title");
+    const thumb = document.getElementById("song-thumb");
+
+    if (!query) {
+      alert("Digite o nome da música!");
+      return;
+    }
+
+    // Estado inicial de carregamento
+    status.textContent = "🎵 Procurando sua música...";
+    player.style.display = "none";
+    btnDownload.style.display = "none";
+    audio.src = "";
+    title.textContent = "";
+    thumb.src = "";
+
+    try {
+      const response = await fetch("/play", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ query, userId: "site", User: "site" })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok || data.erro) {
+        status.textContent = data.erro || "❌ Erro ao buscar a música.";
+        return;
+      }
+
+      // Preenche os dados da música
+      title.textContent = data.title;
+      thumb.src = data.thumb;
+      audio.src = data.download;
+      audio.play();
+
+      player.style.display = "block";
+      status.textContent = "✅ Pronto! Sua música está tocando 🎶";
+
+      // Botão de download configurado
+      btnDownload.href = data.download;
+      btnDownload.download = `${data.title}.mp3`;
+      btnDownload.style.display = "inline-block";
+
+    } catch (err) {
+      console.error(err);
+      status.textContent = "❌ Erro ao buscar a música.";
+    }
+  }
+</script>
+<script>
+  const widget = document.getElementById("music-player-widget");
+  const openBtn = document.getElementById("open-music-player");
+  const closeBtn = document.getElementById("close-music-player");
+
+  // Botão flutuante: abre ou fecha (toggle)
+  openBtn.addEventListener("click", () => {
+    widget.classList.toggle("hidden");
+  });
+
+  // Botão ✖: fecha o player
+  closeBtn.addEventListener("click", () => {
+    widget.classList.add("hidden");
+  });
+</script>
+<hr>
+
+
+
+ 
+
+<div id="tigrinho2">
+    <h2>🐯 Tigrinho - Caça-níquel</h2>
+    <p>Aposte seus Golds e tente a sorte! GANHE ATÉ 59X 💰</p>
+
+    <input type="number" id="tigrinhoBet2" placeholder="Digite sua aposta" min="1">
+    <button id="tigrinhoBetButton2">🎰 Apostar</button>
+
+    <div id="tigrinhoSlot2">
+        <div class="slot-box2">❓</div>
+        <div class="slot-box2">❓</div>
+        <div class="slot-box2">❓</div>
+        <div class="slot-box2">❓</div>
+        <div class="slot-box2">❓</div>
+        <div class="slot-box2">❓</div>
+        <div class="slot-box2">❓</div>
+        <div class="slot-box2">❓</div>
+        <div class="slot-box2">❓</div>
+    </div>
+
+    <p id="tigrinhoResult2"></p>
+    <p id="cooldownTimer2"></p>
+</div>
+
+<div id="effectsContainer"></div>
+
+<script>
+let isPlayingTigrinho2 = false;
+const cooldownTime2 = 30 * 1000; // 30 segundos
+const sounds = {
+    win: new Audio('/emoji-ganho.mp3'),
+    lose: new Audio('/emoji-derrota.mp3')
+};
+
+function playSound(type){ if(sounds[type]){ sounds[type].currentTime=0; sounds[type].play(); } }
+
+// Eventos de slot
+const symbols2 = ['🎰','🍒','🍊','🃏','🐯','🍉'];
+const values2 = { '🎰': 10, '🍒': 3, '🍊': 4, '🐯': 15, '🃏': 5, '🍉': 2 };
+
+document.getElementById("tigrinhoBetButton2").addEventListener("click", (e)=>{
+    e.preventDefault();
+    const usuario3 = "<%= username %>";
+    if(!usuario3 || window.usuario3===""){
+        alert("🔒 Você precisa estar logado!");
+        window.location.href="/users/login";
+        return;
+    }
+    playTigrinho2();
+});
+
+function showEffect(type){
+    const container = document.getElementById("effectsContainer");
+    if(type==="win"){
+        for(let i=0;i<30;i++){
+            const coin=document.createElement('div');
+            coin.textContent='💰';
+            coin.style.position='absolute';
+            coin.style.fontSize=Math.random()*20+15+'px';
+            coin.style.left=Math.random()*window.innerWidth+'px';
+            coin.style.top='-50px';
+            coin.style.opacity=Math.random();
+            coin.style.transition='all 2s linear';
+            container.appendChild(coin);
+            setTimeout(()=>{coin.style.top=window.innerHeight+'px'; coin.style.opacity=0;},50);
+            setTimeout(()=>{container.removeChild(coin);},2100);
+        }
+    } else if(type==="lose"){
+        const skull=document.createElement('div');
+        skull.textContent='💀';
+        skull.style.position='absolute';
+        skull.style.fontSize='5rem';
+        skull.style.left='50%';
+        skull.style.top='50%';
+        skull.style.transform='translate(-50%, -50%)';
+        skull.style.opacity=1;
+        container.appendChild(skull);
+        setTimeout(()=>{skull.style.opacity=0;},1500);
+        setTimeout(()=>{container.removeChild(skull);},1600);
+    }
+}
+
+function playTigrinho2(){
+    const usuario2 = "<%= numero %>";
+    const nomed2 = "<%= username %>";
+    let golds2 = <%= golds %>;
+
+    if(isPlayingTigrinho2) return;
+    isPlayingTigrinho2 = true;
+
+    // Verificar cooldown
+    fetch('/verificarCooldown',{method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({usuario:usuario2,tipoCooldown:'tigrinho'})})
+    .then(r=>r.json())
+    .then(data=>{
+        if(!data.podeJogar){
+            document.getElementById("tigrinhoResult2").textContent=`⏳ Aguarde ${Math.ceil(data.tempoRestante/1000)}s para jogar novamente`;
+            isPlayingTigrinho2 = false;
+            return;
+        }
+
+        const bet = parseInt(document.getElementById("tigrinhoBet2").value);
+        if(isNaN(bet) || bet < 1){ document.getElementById("tigrinhoResult2").textContent="⚠️ Valor inválido"; isPlayingTigrinho2=false; return; }
+        if(bet>golds2){ document.getElementById("tigrinhoResult2").textContent="⚠️ Golds insuficientes"; isPlayingTigrinho2=false; return; }
+
+        // Girar slots
+        const reels2 = Array(3).fill(null).map(()=>Array(3).fill(null).map(()=>symbols2[Math.floor(Math.random()*symbols2.length)]));
+        const slotBoxes2 = document.querySelectorAll(".slot-box2");
+        slotBoxes2.forEach((slotBox,i)=>{
+            const row = Math.floor(i/3);
+            const col = i%3;
+            let interval = setInterval(()=>{ slotBox.textContent = symbols2[Math.floor(Math.random()*symbols2.length)]; },100);
+            setTimeout(()=>{ clearInterval(interval); slotBox.textContent=reels2[row][col]; },2000);
+        });
+
+        let ganho2=0;
+        // Linhas
+        for(let i=0;i<3;i++){ if(reels2[i].every(s=>s===reels2[i][0])) ganho2+=bet*(values2[reels2[i][0]]||1); }
+        // Colunas
+        for(let j=0;j<3;j++){ if(reels2[0][j]===reels2[1][j] && reels2[1][j]===reels2[2][j]) ganho2+=bet*(values2[reels2[0][j]]||1); }
+        // Diagonais
+        if(reels2[0][0]===reels2[1][1] && reels2[1][1]===reels2[2][2]) ganho2+=bet*(values2[reels2[0][0]]||1);
+        if(reels2[0][2]===reels2[1][1] && reels2[1][1]===reels2[2][0]) ganho2+=bet*(values2[reels2[0][2]]||1);
+
+        setTimeout(()=>{
+            let resultMsg="";
+            if(ganho2>0){
+                golds2+=ganho2;
+                playSound('win');
+                showEffect('win');
+                resultMsg=`🎉 Parabéns ${nomed2}! Você ganhou ${ganho2} Golds! 🎉`;
+            } else {
+                golds2-=bet;
+                playSound('lose');
+                showEffect('lose');
+                resultMsg=`💔 Que azar, ${nomed2}! Você perdeu ${bet} Golds!`;
+            }
+            document.getElementById("tigrinhoResult2").textContent=resultMsg;
+
+            // Registrar no histórico
+            const frasesWin=[`💰 ${nomed2} voltou rico com +${ganho2} Golds!`, `🤑 ${nomed2} saiu cheio de Golds: +${ganho2}!`, `🐯 Sorte de campeão! Ganhou ${ganho2} Golds!`];
+            const frasesLose=[`💸 ${nomed2} perdeu ${bet} Golds...`, `🎲 Azar bateu: -${bet} Golds!`, `☠️ Tentou a sorte e perdeu ${bet} Golds!`];
+            const mensagemHistorico = ganho2>0 ? frasesWin[Math.floor(Math.random()*frasesWin.length)] : frasesLose[Math.floor(Math.random()*frasesLose.length)];
+            fetch('/enviar-mensagem',{method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({nome:"Sistema", texto:`[TIGRINHO] ${mensagemHistorico}`, data:new Date().toISOString(), globalRank:007})});
+
+            // Atualizar Golds no backend
+            fetch('/atualizarGolds',{method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({grupo:"<%= grupo %>", id:usuario2, goldChange: ganho2 - bet})})
+            .then(r=>r.json()).then(data=>{golds2=data.golds; atualizarGolds();}).catch(console.error);
+
+            // Atualizar cooldown
+            fetch('/atualizarCooldown',{method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({usuario:usuario2, tipoCooldown:'tigrinho', tempoCooldown:cooldownTime2})});
+        },2000);
+
+        // Cooldown local
+        let timer2 = cooldownTime2/1000;
+        const cdEl = document.getElementById("cooldownTimer2");
+        cdEl.textContent=`⏳ Aguarde ${timer2}s...`;
+        const interval2=setInterval(()=>{
+            timer2--;
+            cdEl.textContent=`⏳ Aguarde ${timer2}s...`;
+            if(timer2<=0){ clearInterval(interval2); cdEl.textContent="✅ Você pode jogar novamente!"; isPlayingTigrinho2=false; }
+        },1000);
+    });
+}
+</script>
+
+<style>
+#tigrinho2 { background: linear-gradient(145deg,#333,#111); border-radius:16px; padding:2.5rem; margin:3rem auto; max-width:900px; text-align:center; box-shadow:0 10px 25px rgba(0,0,0,0.3);}
+#tigrinho2 h2 {font-size:2rem; color:#FFD700; margin-bottom:1rem; text-shadow:0 0 5px #000;}
+#tigrinho2 p {color:#fff; font-size:1rem; margin-bottom:2rem;}
+#tigrinhoSlot2 { display:grid; grid-template-columns:repeat(3,80px); gap:1rem; justify-content:center; margin:2rem 0; }
+.slot-box2 { width:80px; height:80px; background:linear-gradient(145deg,#222,#111); border:2px solid #FFD700; border-radius:12px; font-size:2rem; display:flex; align-items:center; justify-content:center; color:#FFD700; box-shadow:0 6px 15px rgba(255,215,0,0.2); transition:0.2s;}
+.slot-box2:hover{transform:scale(1.1); box-shadow:0 10px 25px rgba(255,215,0,0.5);}
+#tigrinho2 input[type="number"]{padding:0.75rem 1rem; width:220px; border-radius:8px; border:1px solid #FFD700; background:rgba(0,0,0,0.5); color:#FFD700; font-size:1rem; margin-bottom:1rem; outline:none;}
+#tigrinho2 input::placeholder{color:rgba(255,215,0,0.4);}
+#tigrinho2 button{padding:0.75rem 2rem; background:#FFD700; color:#111; font-size:1rem; border-radius:50px; font-weight:bold; border:none; cursor:pointer; transition:0.2s; box-shadow:0 5px 15px rgba(255,215,0,0.3);}
+#tigrinho2 button:hover{background:#FFC000; transform:translateY(-2px); box-shadow:0 8px 20px rgba(255,215,0,0.5);}
+#tigrinhoResult2{font-size:1.2rem; font-weight:bold; margin-top:1.5rem; color:#FFD700; text-shadow:0 0 8px #000;}
+#cooldownTimer2{font-size:1rem; margin-top:0.5rem; color:red;}
+#effectsContainer{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;overflow:hidden;z-index:999;}
+</style>
+
+
+
+
+
+<!-- Assets Section -->
+<section id="assets" class="section">
+    <div class="section-header">
+        <h2 class="section-title"><i class="fas fa-chart-line"></i> Mercado de Ativos</h2>
+        <div class="tooltip">
+            <i class="fas fa-info-circle" style="color: var(--primary-color);"></i>
+            <span class="tooltiptext">Valores atualizados em tempo real dos ativos negociáveis</span>
+        </div>
+    </div>
+
+    <!-- Container dos Cards de Ativos -->
+    <div id="atualizacao-info" class="atualizacao-info">🔄 Atualizado agora</div>
+    <div class="news-container" id="assets-news">
+        <!-- Os cards serão inseridos aqui via JS -->
+    </div>
+</section>
+
+      
+
+
+        <!-- Groups Ranking Section -->
+        <section id="groups" class="section">
+            <div class="section-header">
+                <h2 class="section-title"><i class="fas fa-users"></i> Top Grupos</h2>
+                <div class="tooltip">
+                    <i class="fas fa-info-circle" style="color: var(--primary-color);"></i>
+                    <span class="tooltiptext">Grupos com maior soma de Golds de seus membros</span>
+                </div>
+            </div>
+            <div id="group-ranking"></div>
+        </section>
+
+
+
+
+
+
+    </main>
+    
+
+    
+
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="/terms" class="footer-link">Termos de Uso</a>
+                <a href="/privacy" class="footer-link">Política de Privacidade</a>
+                <a href="/support" class="footer-link">Suporte</a>
+                <a href="/about" class="footer-link">Sobre Nós</a>
+            </div>
+            <p class="copyright">
+                &copy; 2025 <a href="https://wa.link/brgbaw" class="highlight">Gabriel Samá</a>. Todos os direitos reservados.
+            </p>
+        </div>
+    </footer>
+
+
+<script>
+    // Relógio no horário de Brasília
+    function updateClock() {
+        const options = {
+            timeZone: "America/Sao_Paulo",
+            hour12: true,
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric"
+        };
+        const now = new Date().toLocaleString("pt-BR", options);
+        document.getElementById("clock").textContent = now;
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+  
+
+    // Controle de música
+
+
+  
+    document.addEventListener("DOMContentLoaded", () => {
+  async function atualizarAtivosENoticias() {
+    try {
+      const ativosRes = await fetch("/ativos.json");
+      const ativosData = await ativosRes.json();
+
+      const noticiasRes = await fetch("/noticias.json");
+      const noticiasData = await noticiasRes.json();
+      
+      const rankgoldsRes = await fetch("/rankgolds.json");
+      const rankgoldsData = await rankgoldsRes.json();
+
+      console.log("Ativos:", rankgoldsRes);
+      console.log("Notícias:", rankgoldsData);
+      
+            const rankgruposRes = await fetch("/rankgrupos.json");
+      const rankgruposData = await rankgruposRes.json();
+
+      console.log("Ativos:", rankgruposRes);
+      console.log("Notícias:", rankgruposData);
+      
+      const gruposRes = await fetch("/grupos.json");
+      const gruposData = await gruposRes.json();
+
+      console.log("Ativos:", gruposRes);
+      console.log("Notícias:", gruposData);
+      
+      renderAvailableGroups(gruposData)
+renderGroupRanking(rankgruposData)
+      renderAssetsNews(ativosData, noticiasData);
+      renderPlayerRanking(rankgoldsData)
+    } catch (error) {
+      console.error("Erro ao carregar dados:", error);
+    }
+  }
+
+  // Atualiza imediatamente ao carregar
+  atualizarAtivosENoticias();
+
+  // Atualiza a cada 1 segundo
+  setInterval(atualizarAtivosENoticias, 1000);
+});
+
+    function renderAssetsNews(ativosData, noticiasData) {
+    const container = document.getElementById("assets-news");
+    container.innerHTML = "";
+
+    const numero = "<%= numero %>";
+    const ativosUsuario = ativosData.usuarios?.[numero] || [];
+
+    ativosData.ativo.forEach((ativo) => {
+        const noticia = noticiasData.noticias.find(n => n.ativoId === ativo.id);
+const isPositive = noticia?.tendencia === "positiva";
+        const variation = (Math.random() * 10).toFixed(2);
+        const variationClass = isPositive ? "positive" : "negative";
+        const variationIcon = isPositive ? "fa-arrow-up" : "fa-arrow-down";
+
+        const ativoUsuario = ativosUsuario.find(a => String(a.id) === String(ativo.id));
+        const possuiAtivo = !!ativoUsuario;
+        const quantidade = ativoUsuario?.quantidade || 0;
+        const precoCompra = ativoUsuario?.valorCompra || 0;
+        const lucro = ativo.valor - precoCompra;
+        const estaLucrando = lucro > 0;
+
+        const lucroTexto = possuiAtivo
+            ? `
+                <div class="ativo-detalhes">
+                    <p>📦 <strong>${quantidade}</strong> unidades</p>
+                    <p>💰 Compra: <strong>${precoCompra.toLocaleString()}</strong></p>
+                    <p class="${estaLucrando ? "lucro" : "prejuizo"}">
+                        ${estaLucrando ? "🟢 <code>Lucro:</code>" : "🔴 <code>Prejuízo:</code>"} 
+                        <strong>${Math.abs(lucro).toLocaleString()}</strong> por unidade
+                    </p>
+                </div>
+            `
+            : `<p class="sem-ativo">🚫 <code>Você ainda não investiu neste ativo.</code></p>`;
+
+        const card = document.createElement("div");
+        const cardClass = possuiAtivo
+    ? estaLucrando ? "positive" : "negative"
+    : variationClass;
+
+card.className = `news-card ${cardClass}`;
+        card.innerHTML = `
+            <h3 class="news-title">🎯 ${ativo.nome}</h3>
+            <div class="news-meta">
+                <span>📊 ${ativo.descricao}</span>
+                <span class="variation ${variationClass}">
+                    <i class="fas ${variationIcon}"></i> 
+                    ${isPositive ? "+" : "-"}${variation}%
+                </span>
+            </div>
+            <p>💸 Valor atual: <strong>${ativo.valor.toLocaleString()}</strong> Golds</p>
+            ${lucroTexto}
+            <div class="card-buttons">
+                <button onclick="comprarAtivo(${ativo.id}, '${ativo.nome}')">🛒 Comprar</button>
+                <button onclick="liquidarAtivo(${ativo.id}, '${ativo.nome}')">💸 Liquidar</button>
+            </div>
+        `;
+        container.appendChild(card);
+    });
+
+    const hora = new Date().toLocaleTimeString("pt-BR", { timeZone: "America/Sao_Paulo" });
+    document.getElementById("atualizacao-info").textContent = `🔄 Atualizado às ${hora}`;
+}
+
+
+async function renderPlayerRanking(players) {
+  const container = document.getElementById("player-ranking");
+
+  // Busca o registro com nomes verdadeiros
+  const registro = await fetch('/registro.json').then(res => res.json());
+
+  // Pega os 10 primeiros
+  const top10 = players.slice(0, 10);
+
+  container.innerHTML = top10.map(player => {
+    const numero = player.id?.replace(/@s\.whatsapp\.net$/, "") || "";
+    const linkWhatsapp = `https://wa.me/${numero}`;
+
+    // Busca no registro o nome verdadeiro
+    const registroMatch = registro.find(p => p.numero === player.id);
+    const nome = registroMatch?.nome || numero;
+
+    const foto = player.fotoPerfil || registroMatch?.fotoPerfil || "https://via.placeholder.com/96?text=Sem+Foto";
+    const golds = player.golds?.toLocaleString() || "0";
+    const posicao = player.posicao;
+
+    return `
+      <a href="${linkWhatsapp}" target="_blank" class="player-link">
+        <div class="player-item">
+          <div class="player-rank">${posicao}</div>
+          <div class="player-photo">
+            <img src="${foto}" alt="Foto de ${nome}" />
+          </div>
+          <div class="player-info">
+            <div class="player-name">${nome}</div>
+            <div class="player-golds">💰 ${golds} Golds</div>
+          </div>
+        </div>
+      </a>
+    `;
+  }).join("");
+}
+  async function atualizarGoldsCarteira() {
+    try {
+      const res = await fetch('/meus-golds');
+
+      // Verifica se está tudo ok
+      if (!res.ok) return;
+
+      const data = await res.json();
+
+      if (data && data.golds !== undefined) {
+        const carteira = document.getElementById('wallet-golds');
+        if (carteira) {
+          carteira.innerText = `${data.golds.toLocaleString()} Golds`;
+        }
+      }
+    } catch (err) {
+      // Ignora erros (ex: usuário não logado)
+    }
+  }
+
+  // Roda apenas se existir o elemento da carteira no HTML
+  if (document.getElementById('wallet-golds')) {
+    setInterval(atualizarGoldsCarteira, 1000); // Atualiza a cada 10 segundos
+  }
+
+
+    function renderGroupRanking(groups) {
+        const container = document.getElementById("group-ranking");
+        container.innerHTML = groups.map((g) => `
+            <div class="ranking-item" onclick="${g.linkGrupo !== 'Link indisponivel' ? `window.open('${g.linkGrupo}', '_blank')` : ''}">
+                <div class="posicao">🏅${g.posicao}</div>
+                <div class="nome">👥${g.grupoNome}</div>
+                <div class="golds">🪙${g.golds.toLocaleString()}</div>
+            </div>
+        `).join("");
+    }
+
+function renderAvailableGroups(groups) {
+  const container = document.getElementById("available-groups");
+  const counter = document.getElementById("group-counter");
+
+  const gruposVIP = groups.filter(g => g.link && g.link.startsWith("https://"));
+  const gruposFree = groups.filter(g => !g.link || !g.link.startsWith("https://"));
+  const gruposOrdenados = [...gruposVIP, ...gruposFree];
+
+  // Mostra o contador criativo
+  const total = gruposOrdenados.length;
+  const totalVIP = gruposVIP.length;
+  const totalFree = gruposFree.length;
+
+  counter.innerHTML = `
+  <i class="fas fa-users"></i>
+  ${
+    total > 0 
+      ? `Grupos <b>${total}</b> <span style="color:gold;"></span>`
+      : `😢 Nenhum grupo disponível no momento. Volte em breve!`
+  }
+`;
+
+  // Renderiza os grupos
+  container.innerHTML = gruposOrdenados.map((g) => {
+    const hasLink = g.link && g.link.startsWith("https://");
+    const imagem = g.imagem || "https://dl.dropboxusercontent.com/scl/fi/clgqpcyuxeaylenghkuvd/1753924517569.jpeg?rlkey=r9mi3tbqhlbfax0l803gnyisp&dl=0";
+
+    return `
+      <div class="ranking-item ${hasLink ? 'clickable vip' : 'locked'}"
+           ${hasLink ? `onclick="window.open('${g.link}', '_blank')"` : ''}>
+        
+        <div class="group-thumb">
+          <img src="${imagem}" alt="Foto do grupo">
+          ${hasLink ? '<div class="vip-flare"></div><div class="vip-crown">👑</div>' : ''}
+        </div>
+
+        <div class="group-info">
+          <div class="rank-name">${g.nome}</div>
+          <div class="rank-value">
+            ${hasLink ? '✨ Grupo VIP <i class="fas fa-arrow-right"></i>' : '🔒 Grupo fechado'}
+          </div>
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+// Função para atualizar os dados após compra/liquidação (você deve ter essa função já)
+// Vou assumir que ela chama seu fetch para ativos e notícias e renderiza com renderAssetsNews
+function formatarHorarioAgora() {
+    const agora = new Date();
+    return agora.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+}
+
+
+
+
+
+function comprarAtivo(id, nome) {
+    const quantidade = prompt(`Quantos de ${nome} você quer comprar?`);
+    const qnt = parseInt(quantidade);
+    let golds2 = <%= golds %>;
+    if (!qnt || qnt <= 0) return alert("Quantidade inválida.");
+
+    fetch("/comprar-ativo", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ id, quantidade: qnt })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            alert(data.mensagem);
+
+            // Mensagem criativa para histórico
+            const jogador = data.nome || "Jogador";
+            const gasto = data.gasto || 0;
+
+            const frases = [
+                `🛒 ${jogador} investiu forte: comprou ${qnt}x ${nome} gastando ${gasto} Golds!`,
+                `💼 ${jogador} fez um investimento esperto com ${gasto} Golds em ${nome}.`,
+                `📈 ${jogador} adquiriu ${qnt} unidades de ${nome} por ${gasto} Golds!`
+            ];
+
+            const mensagemHistorico = frases[Math.floor(Math.random() * frases.length)];
+
+            const mensagem = {
+                nome: "Sistema",
+                texto: `[COMPRAR] ${mensagemHistorico}`,
+                data: new Date().toISOString(),
+                globalRank: 7
+            };
+
+            adicionarMensagem(mensagem, 7);
+
+            fetch('/enviar-mensagem', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(mensagem)
+            }).catch(err => console.error("Erro ao registrar histórico:", err));
+
+        } else {
+            alert("Erro: " + data.error);
+        }
+    })
+    .catch(() => alert("Erro ao comprar ativo."));
+}
+
+function liquidarAtivo(id, nome) {
+  const quantidade = prompt(`Quantas unidades de "${nome}" você deseja liquidar?\n(Digite "tudo" para liquidar o total)`);
+
+  if (!quantidade) return alert("Operação cancelada.");
+
+  let qtd = quantidade.toLowerCase() === "tudo" ? "tudo" : parseInt(quantidade);
+
+  if (qtd !== "tudo" && (isNaN(qtd) || qtd <= 0)) {
+      return alert("Quantidade inválida.");
+  }
+
+  fetch("/liquidar-ativo", {
+      method: "POST",
+      headers: {
+          "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ id: parseInt(id), quantidade: qtd })
+  })
+  .then(res => res.json())  // <=== ESSA LINHA ESTÁ FALTANDO NA SUA FUNÇÃO
+  .then(data => {
+      if (data.success) {
+          alert(data.mensagem);
+
+          let mensagemHistorico = "";
+          const lucro = data.recebido;
+          const jogador = data.nome || "Jogador";
+
+          const frasesPositivas = [
+              `📈 ${jogador} vendeu ativos e ganhou ${lucro} Golds! Investimento certeiro!`,
+              `💹 ${jogador} liquidou e saiu no lucro de ${lucro} Golds!`,
+              `💰 ${jogador} fez uma bela venda e recebeu +${lucro} Golds!`
+          ];
+          const frasesNeutras = [
+              `🤝 ${jogador} vendeu seus ativos sem lucro nem prejuízo. Equilíbrio é tudo!`
+          ];
+          const frasesNegativas = [
+              `📉 ${jogador} vendeu ativos mas não teve lucro.`,
+              `🔻 ${jogador} liquidou ativos mas saiu zerado.`,
+          ];
+
+          if (lucro > 0) {
+              mensagemHistorico = frasesPositivas[Math.floor(Math.random() * frasesPositivas.length)];
+          } else if (lucro === 0) {
+              mensagemHistorico = frasesNeutras[Math.floor(Math.random() * frasesNeutras.length)];
+          } else {
+              mensagemHistorico = frasesNegativas[Math.floor(Math.random() * frasesNegativas.length)];
+          }
+
+          const mensagem = {
+              nome: "Sistema",
+              texto: `[LIQUIDAR] ${mensagemHistorico}`,
+              data: new Date().toISOString(),
+              globalRank: 7
+          };
+
+          adicionarMensagem(mensagem, 7);
+
+          fetch('/enviar-mensagem', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(mensagem)
+          }).catch(err => console.error("Erro ao registrar histórico:", err));
+
+      } else {
+          alert("Erro: " + data.error);
+      }
+  })
+  .catch(() => alert("Erro ao liquidar ativo."));
+}
+
+</script>
+
+
+
+</body>
+</html>

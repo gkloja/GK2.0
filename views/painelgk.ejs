@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Painel GK - Controle de Estoque</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+body { font-family: 'Segoe UI', sans-serif; background: #0d0f1a; color: #fff; margin: 0; }
+header { background: linear-gradient(90deg, #ffbb00, #ff8800); padding: 20px; text-align: center; font-size: 24px; font-weight: 700; color: #000; letter-spacing: 1px; }
+.container { width: 94%; margin: auto; margin-top: 20px; }
+
+/* Busca */
+#busca { width: 100%; padding: 12px; border-radius: 10px; border: none; outline: none; font-size: 16px; margin-bottom: 22px; background: #1a1e30; color: #fff; }
+
+/* GRID DE PRODUTOS */
+.grid { display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+.card { background: #141726; border-radius: 14px; padding: 15px; box-shadow: 0 0 12px #0007; transition: 0.2s; }
+.card:hover { transform: scale(1.02); box-shadow: 0 0 20px #0009; }
+.card img { width: 100%; height: 180px; object-fit: contain; border-radius: 10px; background: #1b1f31; }
+.titulo { font-size: 18px; font-weight: bold; margin-top: 10px; min-height: 50px; }
+.info { margin: 4px 0; font-size: 14px; }
+.negativo { color: #ff3b3b !important; font-weight: bold; }
+
+/* BOTÕES */
+.btn { display: inline-block; padding: 7px 14px; border-radius: 6px; text-decoration: none; font-weight: bold; margin-top: 8px; cursor: pointer; }
+.editar { background: #ffe047; color: #000; }
+.excluir { background: #ff4747; color: #fff; }
+.novo { background: #4cd137; color: #000; }
+
+/* Modal */
+.modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0009; display: none; justify-content: center; align-items: center; padding: 20px; z-index: 9999; }
+.modal-content { background: #1a1d2d; padding: 20px; border-radius: 12px; width: 100%; max-width: 520px; }
+.modal input, .modal input[type="file"] { width: 100%; margin-bottom: 12px; padding: 10px; border-radius: 6px; border: none; outline: none; background: #121520; color: white; }
+.close { float: right; font-size: 22px; cursor: pointer; }
+
+/* RESUMO */
+.resumo-box { background: #191d2c; padding: 20px; border-radius: 14px; margin-bottom: 25px; }
+.resumo-item { font-size: 15px; margin: 6px 0; }
+canvas { margin-top: 10px; background: #111423; border-radius: 12px; padding: 10px; }
+
+/* small responsive tweak */
+@media (max-width: 420px) {
+    .modal-content { padding: 14px; }
+    .card img { height: 140px; }
+}
+</style>
+</head>
+<body>
+
+<header>PAINEL GK — GERENCIAMENTO DE ESTOQUE 🔥</header>
+
+<!-- BOTÃO NOVO PRODUTO -->
+<div style="text-align:right; width:94%; margin:auto; margin-top:10px;">
+    <button onclick="abrirModalNovo()" class="btn novo" style="padding:10px 18px;font-size:15px;">
+        <i class="fa fa-plus"></i> Novo Produto
+    </button>
+</div>
+
+<div class="container">
+
+    <!-- RESUMO -->
+    <div class="resumo-box">
+        <h2>📊 Resumo Geral</h2>
+        <div class="resumo-item">🛒 Total comprado: <b id="rcTotalComprado"></b></div>
+        <div class="resumo-item">📦 Em estoque: <b id="rcEstoque"></b></div>
+        <div class="resumo-item">💰 Total vendido: <b id="rcVendido"></b></div>
+        <div class="resumo-item">📈 Lucro real: <b id="rcLucro"></b></div>
+        <canvas id="grafico" height="120"></canvas>
+    </div>
+
+    <!-- BUSCA -->
+    <input type="text" id="busca" placeholder="🔎 Pesquisar produto..." onkeyup="filtrarProdutos()">
+
+    <!-- GRID -->
+    <div class="grid" id="produtosGrid">
+        <% produtos.forEach(p => { let desc = String(p.Descrição || '').replace(/<[^>]+>/g, ''); %>
+        <div class="card" data-nome="<%= desc.toLowerCase() %>">
+            <img src="<%= p.Imagem || '/semfoto.png' %>" alt="Imagem do Produto" onerror="this.src='https://via.placeholder.com/300x200?text=Sem+Imagem'">
+            <div class="titulo"><%= desc %></div>
+            <div class="info">📦 Quantidade: <%= p.Quantidade %></div>
+            <div class="info">🎯 Vendidos: <%= p["Vendido (QNTD)"] %></div>
+            <div class="info">💰 Valor Unitário: R$ <%= p["Valor Unitário (R$)"] %></div>
+            <div class="info <%= Number(p["ESTOQUE "]) < 0 ? 'negativo' : '' %>">🏷️ Estoque: <%= p["ESTOQUE "] %></div>
+            <div class="info">📈 Valor Venda: R$ <%= p["Valor Venda (R$)"] %></div>
+<a class="btn editar" data-produto='<%- JSON.stringify(p) %>'>
+    <i class="fa fa-pen"></i> Editar
+</a>
+            <a href="/painelgk/excluir/<%= p.Item %>" class="btn excluir" style="margin-left:8px;"><i class="fa fa-trash"></i> Excluir</a>
+        </div>
+        <% }) %>
+    </div>
+</div>
+
+<!-- MODAL EDITAR -->
+<div class="modal" id="modalEditar" aria-hidden="true">
+    <div class="modal-content">
+        <span class="close" onclick="fecharModal()">×</span>
+        <form id="formEditar" method="POST" enctype="multipart/form-data">
+            <h2 style="margin-bottom: 10px;">Editar Produto</h2>
+            <input type="text" name="descricao" id="edDescricao" placeholder="Descrição">
+            <input type="number" step="1" name="quantidade" id="edQuantidade" placeholder="Quantidade">
+            <input type="number" step="1" name="vendidos" id="edVendidos" placeholder="Vendidos">
+            <input type="number" step="1" name="estoque" id="edEstoque" placeholder="Estoque (opcional)">
+            <input type="number" step="0.01" name="preco" id="edPreco" placeholder="Valor Venda (R$)">
+            <input type="number" step="0.01" name="valorunit" id="edUnit" placeholder="Valor Unitário (R$)">
+            <input type="text" name="imagem" id="edImagem" placeholder="Link da Imagem (opcional)">
+            <input type="file" name="imagemFile" id="edImagemFile" accept="image/*">
+            <button type="submit" class="btn editar" style="width:100%;margin-top:10px;">Salvar Alterações</button>
+        </form>
+    </div>
+</div>
+
+<!-- MODAL NOVO PRODUTO -->
+<div class="modal" id="modalNovo" aria-hidden="true">
+    <div class="modal-content">
+        <span class="close" onclick="fecharModalNovo()">×</span>
+        <form id="formNovo" method="POST" action="/painelgk/novo" enctype="multipart/form-data">
+            <h2 style="margin-bottom: 10px;">Cadastrar Novo Produto</h2>
+
+            <input type="text" name="descricao" id="addDescricao" placeholder="Descrição" required value="">
+            <input type="number" step="1" name="quantidade" id="addQuantidade" placeholder="Quantidade" required value="0">
+            <input type="number" step="1" name="vendidos" id="addVendidos" placeholder="Vendidos" value="0">
+            <input type="number" step="1" name="estoque" id="addEstoque" placeholder="Estoque (opcional)" value="0">
+            <input type="number" step="0.01" name="preco" id="addPreco" placeholder="Valor Venda (R$)" required value="0.00">
+            <input type="number" step="0.01" name="valorunit" id="addUnit" placeholder="Valor Unitário (R$)" required value="0.00">
+            <input type="text" name="imagem" id="addImagem" placeholder="Link da Imagem (opcional)" value="">
+            <input type="file" name="imagemFile" id="addImagemFile" accept="image/*">
+
+            <button type="submit" class="btn novo" style="width:100%;margin-top:10px;">Adicionar Produto</button>
+        </form>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<script>
+  const produtosGrid = document.getElementById('produtosGrid');
+
+    produtosGrid.addEventListener('click', function(e) {
+        const btn = e.target.closest('.btn.editar');
+        if (!btn) return;
+
+        const produto = JSON.parse(btn.dataset.produto);
+        abrirModal(produto);
+    });
+function filtrarProdutos() {
+    const termo = document.getElementById("busca").value.toLowerCase();
+    document.querySelectorAll(".card").forEach(card => {
+        card.style.display = card.getAttribute("data-nome").includes(termo) ? "block" : "none";
+    });
+}
+
+function abrirModal(p) {
+    document.getElementById("modalEditar").style.display = "flex";
+    document.getElementById("modalEditar").ariaHidden = "false";
+    document.getElementById("edDescricao").value = p.Descrição || '';
+    document.getElementById("edQuantidade").value = Number(p.Quantidade) || 0;
+    document.getElementById("edVendidos").value = Number(p["Vendido (QNTD)"]) || 0;
+    document.getElementById("edEstoque").value = Number(p["ESTOQUE "]) || '';
+    document.getElementById("edPreco").value = Number(p["Valor Venda (R$)"]) || '';
+    document.getElementById("edUnit").value = Number(p["Valor Unitário (R$)"]) || '';
+    document.getElementById("edImagem").value = p.Imagem || '';
+    document.getElementById("formEditar").action = "/painelgk/editar/" + p.Item;
+}
+
+function fecharModal() { document.getElementById("modalEditar").style.display = "none"; document.getElementById("modalEditar").ariaHidden = "true"; }
+function abrirModalNovo() { document.getElementById("modalNovo").style.display = "flex"; document.getElementById("modalNovo").ariaHidden = "false"; }
+function fecharModalNovo() { document.getElementById("modalNovo").style.display = "none"; document.getElementById("modalNovo").ariaHidden = "true"; }
+window.addEventListener('click', function(e) { if(e.target === document.getElementById('modalEditar')) fecharModal(); if(e.target === document.getElementById('modalNovo')) fecharModalNovo(); });
+
+const ctx = document.getElementById("grafico");
+const produtos = <%- JSON.stringify(produtos) %> || [];
+let totalCompra=0,totalEstoque=0,totalVendido=0,lucroReal=0;
+produtos.forEach(p=>{
+    const qtd=Number(p.Quantidade)||0;
+    const unit=Number(p["Valor Unitário (R$)"])||0;
+    const vendido=Number(p["Vendido (QNTD)"])||0;
+    const venda=Number(p["Valor Venda (R$)"])||0;
+    totalCompra += qtd*unit;
+    totalVendido += vendido*venda;
+    totalEstoque += (Number(p["ESTOQUE "])||(qtd-vendido))*venda;
+    lucroReal += vendido*venda - qtd*unit;
+});
+document.getElementById("rcTotalComprado").innerText="R$ "+totalCompra.toFixed(2);
+document.getElementById("rcEstoque").innerText="R$ "+totalEstoque.toFixed(2);
+document.getElementById("rcVendido").innerText="R$ "+totalVendido.toFixed(2);
+document.getElementById("rcLucro").innerText="R$ "+lucroReal.toFixed(2);
+
+new Chart(ctx,{
+    type:"bar",
+    data:{labels:["Comprado","Estoque","Vendido","Lucro"],datasets:[{data:[totalCompra,totalEstoque,totalVendido,lucroReal],backgroundColor:["#ffdd33","#44ccff","#55ff99","#ff5555"]}]},
+    options:{plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{color:'#fff'}},x:{ticks:{color:'#fff'}}},responsive:true,maintainAspectRatio:true}
+});
+</script>
+</body>
+</html>

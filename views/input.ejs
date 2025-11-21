@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adicionar Grupo - <%- nome_site %></title>
+    <meta name="description" content="Adicione seu grupo de WhatsApp e ajude outros a se conectarem!">
+    <meta name="author" content="Guxta Developer">
+
+    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" href="/css/vendor.css">
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <script src="/js/modernizr.js"></script>
+    <script src="/js/pace.min.js"></script>
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+
+    <style>
+        .form-container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-container h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .form-container input, .form-container textarea, .form-container input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .form-container button {
+            display: block;
+            background-color: #28a745;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 5px;
+            text-decoration: none;
+            text-align: center;
+            width: 100%;
+            border: none;
+            cursor: pointer;
+        }
+
+        .form-container button:hover {
+            background-color: #218838;
+        }
+
+        footer {
+            background: #333;
+            color: #fff;
+            padding: 20px 0;
+            text-align: center;
+        }
+    </style>
+
+</head>
+<body>
+
+    <header id="header" class="row">
+        <div class="header-logo">
+            <a href="/"><%- nome_site %></a>
+        </div>
+        <nav id="header-nav-wrap">
+            <ul class="header-main-nav">
+                <li><a href="/">Início</a></li>
+                <li><a href="/addgrupo">Adicionar Grupo</a></li>
+                <li><a href="https://wa.me/559185470410">Contato</a></li>
+                <li><a href="/docs">Documentação</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section id="add-group">
+        <div class="form-container">
+            <h2>Adicionar Seu Grupo</h2>
+            <form action="/submit-group" method="POST" enctype="multipart/form-data">
+                <input type="text" name="nome" placeholder="Nome do grupo" required>
+                <input type="url" name="link" placeholder="Link do grupo" required>
+                <textarea name="descricao" placeholder="Descrição do grupo" required></textarea>
+                <input type="file" name="imagem" accept="image/*" required>
+                <button type="submit">Adicionar Grupo</button>
+            </form>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-bottom">
+            <span>2024 Guxtakkkj | Todos os direitos reservados</span>
+        </div>
+    </footer>
+
+    <script src="/js/jquery-2.1.3.min.js"></script>
+    <script src="/js/plugins.js"></script>
+    <script src="/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrar - Samá Bank</title>
+    <style>
+        :root {
+            --primary-color: #FFD700;
+            --secondary-color: #FFA500;
+            --dark-color: #1A1A1A;
+            --light-color: #FFFFFF;
+            --success-color: #28a745;
+            --danger-color: #F44336;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1A1A1A, #2D2D2D);
+            color: var(--light-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            background: rgba(0, 0, 0, 0.7);
+            border: 2px solid rgba(255, 215, 0, 0.2);
+            box-shadow: var(--shadow);
+            padding: 30px;
+            border-radius: 15px;
+            width: 100%;
+            max-width: 360px;
+            backdrop-filter: blur(8px);
+            text-align: center;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            color: var(--primary-color);
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: transparent;
+            color: var(--light-color);
+            font-size: 15px;
+        }
+
+        input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: var(--primary-color);
+            color: var(--dark-color);
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background: #FFC000;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4);
+        }
+
+        .message {
+            margin-top: 15px;
+            font-size: 14px;
+        }
+
+        .error {
+            color: var(--danger-color);
+        }
+
+        .success {
+            color: var(--success-color);
+        }
+
+        .info {
+            background: rgba(255, 255, 255, 0.05);
+            border-left: 4px solid var(--primary-color);
+            padding: 12px;
+            font-size: 14px;
+            color: var(--light-color);
+            border-radius: 6px;
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        .info strong {
+            color: var(--primary-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Registrar-se</h2>
+
+        <div class="info">
+            Ao se registrar pelo site, você começará com <strong>600 Golds</strong>!<br><br>
+            <strong>Já possui Golds em algum grupo?</strong> Para manter seu saldo, use o comando <code>&rg</code> no grupo onde você já está cadastrado.
+        </div>
+
+        <form id="registerForm">
+            <input type="text" id="nome" placeholder="Nome de usuário" required>
+            <input type="text" id="numero" placeholder="Número do WhatsApp" required>
+            <input type="email" id="grupo" placeholder="E-mail" required>
+            <input type="password" id="id" placeholder="Senha" required>
+            <input type="password" id="confirmarId" placeholder="Confirmar Senha" required>
+            <button type="submit">Registrar</button>
+        </form>
+
+        <div id="feedback" class="message"></div>
+    </div>
+
+    <script>
+        document.getElementById("registerForm").addEventListener("submit", async function (e) {
+            e.preventDefault();
+
+            const nome = document.getElementById("nome").value.trim();
+            let numero = document.getElementById("numero").value.replace(/\D/g, '');
+            const grupo = document.getElementById("grupo").value.trim();
+            const id = document.getElementById("id").value;
+            const confirmarId = document.getElementById("confirmarId").value;
+
+            const feedback = document.getElementById("feedback");
+
+            if (id !== confirmarId) {
+                feedback.textContent = "As senhas não coincidem!";
+                feedback.className = "message error";
+                return;
+            }
+
+            if (!numero.startsWith("55")) numero = "55" + numero;
+            const numeroFormatado = `${numero}@s.whatsapp.net`;
+            const dados = { nome, numeroFormatado, grupo, id };
+
+            try {
+                const resposta = await fetch("/registrar", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(dados)
+                });
+
+                const resultado = await resposta.json();
+
+                if (resultado.sucesso) {
+                    feedback.textContent = "🎉 Registro realizado com sucesso!";
+                    feedback.className = "message success";
+                    setTimeout(() => {
+                        window.location.href = "/chat";
+                    }, 1000);
+                } else {
+                    feedback.textContent = resultado.mensagem || "Algo deu errado.";
+                    feedback.className = "message error";
+                }
+            } catch (erro) {
+                console.error("Erro ao registrar:", erro);
+                feedback.textContent = "Erro ao processar o registro.";
+                feedback.className = "message error";
+            }
+        });
+    </script>
+</body>
+</html>

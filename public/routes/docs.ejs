@@ -1,0 +1,1311 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minigame de Golds</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+
+        header {
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 3em;
+            color: #FFD700;
+        }
+
+        p {
+            font-size: 1.2em;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 20px;
+            text-align: left;
+        }
+
+        #user-info {
+            margin: 20px auto;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.5);
+            width: 80%;
+            max-width: 600px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .highlight {
+            font-weight: bold;
+            color: #FFD700;
+        }
+
+        .info-row {
+            margin-bottom: 15px;
+        }
+
+        .info-label {
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .info-value {
+            font-size: 1.3em;
+            color: #FFA500;
+        }
+
+        #minigame {
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.5);
+            width: 80%;
+            max-width: 600px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            display: inline-block;
+        }
+
+        input, select, button {
+            margin-top: 10px;
+            padding: 10px;
+            font-size: 1.2em;
+            border: none;
+            border-radius: 5px;
+        }
+
+        input, select {
+            width: 90%;
+            max-width: 250px;
+            text-align: center;
+        }
+
+        button {
+            background: #FFD700;
+            cursor: pointer;
+            color: #000;
+        }
+.music-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #222;
+            color: #FFD700;
+            padding: 15px;
+            border: none;
+            border-radius: 50%;
+            font-size: 2em;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+        button:hover {
+            background: #FFA500;
+        }
+
+        #result {
+            margin-top: 15px;
+            font-size: 1.4em;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>🃏GOLDS🃏</h1>
+    </header>
+
+   
+
+ <!-- Informações do Usuário -->
+<div id="user-info" style="background-color: #f1f3f6; padding: 30px; border-radius: 15px; box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1); max-width: 450px; margin: 20px auto; font-family: 'Arial', sans-serif;">
+    <h2 style="text-align: center; color: #2b3d51; font-size: 1.5em; margin-bottom: 20px; text-transform: uppercase; font-weight: 700;">👤 Informações do Usuário</h2>
+    
+    <!-- Informações Pessoais -->
+    <div class="info-row"><span class="info-label">Usuário:</span> <span class="info-value"> <%= username %> </span></div>
+    <div class="info-row"><span class="info-label">Número:</span> <span class="info-value"> <%= numero %> </span></div>
+    <div class="info-row"><span class="info-label">Grupo:</span> <span class="info-value"> <%= grupo %> </span></div>
+    <div class="info-row"><span class="info-label">Golds:</span> <span class="info-value">💰 <%= golds %> </span></div>
+    <div class="info-row"><span class="info-label">Ranking Global:</span> <span class="info-value">🏆 <%= globalRank %> </span></div>
+
+    <!-- Inventário -->
+    <h2 style="text-align: center; color: #2b3d51; font-size: 1.5em; margin: 20px 0 15px; text-transform: uppercase; font-weight: 700;">🎒 Inventário</h2>
+
+    <div class="info-row"><span class="info-label">🐟 Peixe:</span> <span class="info-value"> <%= peixe %> </span></div>
+    <div class="info-row"><span class="info-label">🐔 Galinha:</span> <span class="info-value"> <%= galinha %> </span></div>
+    <div class="info-row"><span class="info-label">🐇 Coelho:</span> <span class="info-value"> <%= coelho %> </span></div>
+    <div class="info-row"><span class="info-label">🐑 Ovelha:</span> <span class="info-value"> <%= ovelha %> </span></div>
+    <div class="info-row"><span class="info-label">🐄 Vaca:</span> <span class="info-value"> <%= vaca %> </span></div>
+    <div class="info-row"><span class="info-label">🐘 Elefante:</span> <span class="info-value"> <%= elefante %> </span></div>
+    <div class="info-row"><span class="info-label">🔶 Ouro:</span> <span class="info-value"> <%= ouro %> </span></div>
+    <div class="info-row"><span class="info-label">💎 Diamante:</span> <span class="info-value"> <%= diamante %> </span></div>
+    <div class="info-row"><span class="info-label">💠 Esmeralda:</span> <span class="info-value"> <%= esmeralda %> </span></div>
+    <div class="info-row"><span class="info-label">🧪 Poção:</span> <span class="info-value"> <%= pocao %> </span></div>
+    <div class="info-row"><span class="info-label">🔫 AK47:</span> <span class="info-value"> <%= ak47 %> </span></div>
+    <div class="info-row"><span class="info-label">🎯 AWM:</span> <span class="info-value"> <%= awm %> </span></div>
+    <div class="info-row"><span class="info-label">🔫 Pistola:</span> <span class="info-value"> <%= pistola %> </span></div>
+    <div class="info-row"><span class="info-label">🗡️ Adaga:</span> <span class="info-value"> <%= adaga %> </span></div>
+    <div class="info-row"><span class="info-label">❤️ Estamina:</span> <span class="info-value"> <%= estamina %>% </span></div>
+
+    <!-- Efeito de animação ao passar o mouse -->
+    <style>
+        #user-info .info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 12px;
+            border-radius: 8px;
+            background-color: #ffffff;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+        }
+        #user-info .info-label {
+            color: #4A90E2;
+            font-weight: bold;
+        }
+        #user-info .info-value {
+            color: #2d3748;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+        #user-info .info-row:hover {
+            background-color: #f0f7ff;
+            transform: translateY(-5px);
+            transition: 0.3s ease;
+        }
+    </style>
+</div>
+<div class="container">
+    <div class="button-container">
+        <a href="/" class="rank-button">
+            <button>VER RANK</button>
+        </a>
+        <a href="#minigame" class="play-button">
+            <button>JOGAR</button>
+        </a>
+        <button id="logout-button">🚪 SAIR</button>
+    </div>
+</div>
+
+<style>
+
+
+  #logout-button {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background: #ff4444;
+    color: #fff;
+    border: none;
+    padding: 12px 20px;
+    font-size: 1em;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: background 0.3s, transform 0.2s;
+}
+
+#logout-button:hover {
+    background: #cc0000;
+    transform: scale(1.05);
+}
+</style>
+<script>
+  
+  document.getElementById("logout-button").addEventListener("click", () => {
+    window.location.href = "/logout"; // Redireciona para a rota de logout
+});
+  
+</script>
+
+<style>
+    .button-container {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        margin-top: 30px;
+    }
+
+    .rank-button, .play-button {
+        text-decoration: none;
+    }
+
+    .rank-button button, .play-button button {
+        padding: 15px 30px;
+        font-size: 1.5em;
+        color: #fff;
+        border: none;
+        border-radius: 50px;
+        cursor: pointer;
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+        transition: all 0.3s ease-in-out;
+        position: relative;
+        display: inline-block;
+        overflow: hidden;
+        text-transform: uppercase;
+        font-weight: bold;
+    }
+
+    /* Botão VER RANK */
+    .rank-button button {
+        background: linear-gradient(45deg, #FFD700, #FFA500);
+    }
+
+    .rank-button button:hover {
+        background: linear-gradient(45deg, #FFA500, #FF8C00);
+        transform: scale(1.1);
+    }
+
+    .rank-button button::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.2);
+        transform: scaleX(0);
+        transform-origin: right;
+        transition: transform 0.4s ease;
+    }
+
+    .rank-button button:hover::before {
+        transform: scaleX(1);
+        transform-origin: left;
+    }
+
+    /* Botão JOGAR */
+    .play-button button {
+        background: linear-gradient(45deg, #32CD32, #228B22);
+    }
+
+    .play-button button:hover {
+        background: linear-gradient(45deg, #228B22, #006400);
+        transform: scale(1.1);
+    }
+
+    .play-button button::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.2);
+        transform: scaleX(0);
+        transform-origin: right;
+        transition: transform 0.4s ease;
+    }
+
+    .play-button button:hover::before {
+        transform: scaleX(1);
+        transform-origin: left;
+    }
+</style>
+<style>
+    #roulette {
+        font-size: 40px;
+        font-weight: bold;
+        text-align: center;
+        margin-top: 10px;
+        transition: transform 0.2s ease-in-out;
+    }
+
+    .flash {
+        animation: flashEffect 0.5s infinite alternate;
+    }
+
+    @keyframes flashEffect {
+        0% { opacity: 1; }
+        100% { opacity: 0.3; }
+    }
+</style>
+
+<audio id="background-music" src="/game.m4a" loop></audio>
+<button id="play-music" class="music-button">🎵</button>
+<!-- Minigame -->
+<!-- Minigame -->
+<div id="minigame">
+    <h2>🎰 Roleta de Cores</h2>
+    <p>Escolha uma cor e aposte Golds!</p>
+
+    <div class="color-selector">
+        <select id="colorChoice">
+            <option value="branco">⬜ Branco (x5)</option>
+            <option value="preto">⬛ Preto (x2)</option>
+            <option value="vermelho">🟥 Vermelho (x3)</option>
+        </select>
+
+        <input type="number" id="betAmount" placeholder="Digite sua aposta" min="1">
+    </div>
+
+    <button id="betButton" class="bet-btn">Apostar</button>
+
+    <div id="roulette" class="roulette-slot">❔</div>
+
+    <p id="result" class="result"></p>
+</div>
+
+<script>
+    let golds = 1000;  // Defina o valor inicial de Golds aqui
+    let isPlaying = false;
+        document.getElementById("play-music").addEventListener("click", () => {
+            const music = document.getElementById("background-music");
+            if (music.paused) {
+                music.play().catch(err => console.error("Erro ao tocar música:", err));
+            } else {
+                music.pause();
+            }
+        });
+    document.getElementById("betButton").addEventListener("click", playGame);
+
+    function playGame() {
+    if (isPlaying) {
+        document.getElementById("result").textContent = "Aguarde 30 segundos para jogar novamente!";
+        return;
+    }
+
+    const color = document.getElementById("colorChoice").value;
+    const bet = parseInt(document.getElementById("betAmount").value);
+
+    if (isNaN(bet) || bet < 1) {
+        document.getElementById("result").textContent = "Digite um valor válido para apostar!";
+        return;
+    }
+
+    if (bet > golds) {
+        document.getElementById("result").textContent = "Você não tem Golds suficientes!";
+        return;
+    }
+
+    isPlaying = true;
+    setTimeout(() => isPlaying = false, 30000);
+
+    const colors = ["preto", "vermelho", "branco"];  
+    const symbols = { "branco": "⬜", "preto": "⬛", "vermelho": "🟥" };
+    const multipliers = { "branco": 5, "preto": 2, "vermelho": 3 };
+
+    // Probabilidades ajustadas (preto tem 50%, vermelho 40%, branco 10%)
+    const weightedColors = [
+        "preto", "preto", "preto", "preto", "preto",
+        "vermelho", "vermelho", "vermelho", "vermelho",
+        "branco"
+    ];
+
+    let chosenColor = weightedColors[Math.floor(Math.random() * weightedColors.length)];
+
+    const roulette = document.getElementById("roulette");
+    let index = 0;
+    let spinTime = 3000;
+    let interval = 100;
+
+    document.getElementById("result").textContent = "Girando...";
+    let spinInterval = setInterval(() => {
+        roulette.textContent = symbols[colors[index]];
+        roulette.style.transform = `rotate(${Math.random() * 20 - 10}deg)`;
+        index = (index + 1) % colors.length;
+    }, interval);
+
+    setTimeout(() => {
+        clearInterval(spinInterval);
+        roulette.textContent = symbols[chosenColor];
+        roulette.classList.add("flash");
+
+        let goldChange = 0;
+        let resultMessage = "";
+
+        if (color === chosenColor) {
+            goldChange = bet * multipliers[chosenColor];
+            golds += goldChange;
+            resultMessage = `🎉 Caiu ${chosenColor}! Você ganhou ${goldChange} Golds! 🎉`;
+        } else {
+            goldChange = -bet;
+            golds += goldChange;
+            resultMessage = `💔 Caiu ${chosenColor}. Você perdeu ${bet} Golds.`;
+        }
+
+        document.getElementById("result").textContent = resultMessage;
+
+        setTimeout(() => roulette.classList.remove("flash"), 1500);
+
+        fetch('/atualizarGolds', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ grupo: "<%= grupo %>", id: "<%= numero %>", goldChange })
+        })
+        .then(response => response.json())
+        .then(data => {
+            golds = data.golds;
+            atualizarGolds();
+        })
+        .catch(error => console.error('Erro ao atualizar Golds:', error));
+
+    }, spinTime);
+}
+</script>
+
+<style>
+    /* Contêiner principal */
+    #minigame {
+        text-align: center;
+        background: rgba(101, 67, 33, 0.3); /* Marrom translúcido */ backdrop-filter: blur(10px); /* Dourado transparente */
+        padding: 30px;
+        border-radius: 25px;
+        width: 85%;
+        margin: 40px auto;
+        box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
+        transition: transform 0.3s ease-in-out;
+    }
+
+    #minigame:hover {
+        transform: scale(1.05);
+    }
+
+    h2 {
+    color: #ffffff; /* Branco puro */
+    font-family: 'Roboto', sans-serif;
+    font-size: 36px; /* Um pouco maior para mais destaque */
+    font-weight: bold; /* Negrito para dar mais presença */
+    letter-spacing: 3px; /* Aumenta o espaçamento entre letras */
+    text-transform: uppercase; /* Deixa tudo em maiúsculas para mais impacto */
+    text-shadow: 
+        3px 3px 8px rgba(0, 0, 0, 0.7),  /* Sombra escura principal */
+        -3px -3px 6px rgba(255, 255, 255, 0.3), /* Efeito de brilho sutil */
+        0px 0px 10px rgba(255, 255, 255, 0.5); /* Glow branco suave */
+    padding: 10px 20px; /* Margem interna para mais destaque */
+    border-radius: 10px; /* Borda arredondada para um visual mais moderno */
+    background: linear-gradient(45deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.3)); /* Fundo sutil translúcido */
+    backdrop-filter: blur(5px); /* Adiciona um efeito de desfoque no fundo */
+    display: inline-block; /* Para envolver o texto melhor */
+}
+
+    p {
+    color: #ffffff; /* Branco puro */
+    font-family: 'Roboto', sans-serif;
+    font-size: 36px; /* Um pouco maior para mais destaque */
+    font-weight: bold; /* Negrito para dar mais presença */
+    letter-spacing: 3px; /* Aumenta o espaçamento entre letras */
+    text-transform: uppercase; /* Deixa tudo em maiúsculas para mais impacto */
+    text-shadow: 
+        3px 3px 8px rgba(0, 0, 0, 0.7),  /* Sombra escura principal */
+        -3px -3px 6px rgba(255, 255, 255, 0.3), /* Efeito de brilho sutil */
+        0px 0px 10px rgba(255, 255, 255, 0.5); /* Glow branco suave */
+    padding: 10px 20px; /* Margem interna para mais destaque */
+    border-radius: 10px; /* Borda arredondada para um visual mais moderno */
+    background: linear-gradient(45deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.3)); /* Fundo sutil translúcido */
+    backdrop-filter: blur(5px); /* Adiciona um efeito de desfoque no fundo */
+    display: inline-block; /* Para envolver o texto melhor */
+}
+
+    .color-selector {
+        margin-bottom: 20px;
+    }
+
+    select, input {
+        padding: 12px;
+        font-size: 16px;
+        border-radius: 10px;
+        margin-bottom: 15px;
+        border: 2px solid #f44336;
+        width: 220px;
+    }
+
+    select:focus, input:focus {
+        outline: none;
+        border-color: #e53935;
+    }
+
+    .bet-btn {
+        padding: 12px 25px;
+        background-color: #f44336;
+        color: white;
+        font-size: 18px;
+        border-radius: 5px;
+        border: none;
+        cursor: pointer;
+        transition: background-color 0.3s ease-in-out;
+    }
+
+    .bet-btn:hover {
+        background-color: #e53935;
+    }
+
+    .roulette-slot {
+        width: 100px;
+        height: 100px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 50px;
+        margin-top: 30px;
+        border-radius: 50%;
+        background-color: #fff;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+        transition: transform 0.3s ease-in-out;
+    }
+
+    .result {
+        font-size: 20px;
+        font-weight: bold;
+        margin-top: 25px;
+        color: #333;
+        text-transform: uppercase;
+        animation: fadeIn 2s ease-out;
+    }
+
+    /* Flash de cor quando o símbolo final é exibido */
+    .flash {
+        animation: flashAnimation 0.5s ease-in-out;
+    }
+
+    @keyframes flashAnimation {
+        0% { opacity: 1; }
+        50% { opacity: 0.3; }
+        100% { opacity: 1; }
+    }
+
+    /* Animação para fade-in do resultado */
+    @keyframes fadeIn {
+        0% { opacity: 0; }
+        100% { opacity: 1; }
+    }
+</style>
+
+<!-- Minigame Tigrinho -->
+<div id="tigrinho">
+    <h2>🐯 Tigrinho</h2>
+    <p>Aposte e tente a sorte na máquina caça-níquel! GANHE ATÉ 59X</p>
+
+    <input type="number" id="tigrinhoBet" placeholder="Digite sua aposta" min="1">
+    <button id="tigrinhoBetButton">Apostar</button>
+
+    <div id="tigrinhoSlot">
+        <div class="slot-box">❓</div>
+        <div class="slot-box">❓</div>
+        <div class="slot-box">❓</div>
+        <div class="slot-box">❓</div>
+        <div class="slot-box">❓</div>
+        <div class="slot-box">❓</div>
+        <div class="slot-box">❓</div>
+        <div class="slot-box">❓</div>
+        <div class="slot-box">❓</div>
+    </div>
+
+    <p id="tigrinhoResult"></p>
+    <p id="cooldownTimer" style="color: red; font-weight: bold;"></p>
+</div>
+
+<script>
+let isPlayingTigrinho = false;
+let cooldownTime = 30 * 1000; // 30 segundos em milissegundos
+let cooldownTimer = 0;
+
+document.getElementById("tigrinhoBetButton").addEventListener("click", playTigrinho);
+
+function playTigrinho() {
+    const usuario = "<%= numero %>"; // Substitua pelo identificador do usuário
+
+    // Verificar cooldown
+    fetch('/verificarCooldown', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ usuario, tipoCooldown: 'tigrinho' })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (!data.podeJogar) {
+            const tempoRestante = Math.ceil(data.tempoRestante / 1000); // Em segundos
+            document.getElementById("tigrinhoResult").textContent = `Aguarde ${tempoRestante} segundos para jogar novamente!`;
+            return;
+        }
+
+        const bet = parseInt(document.getElementById("tigrinhoBet").value);
+
+        if (isNaN(bet) || bet < 1) {
+            document.getElementById("tigrinhoResult").textContent = "Digite um valor válido para apostar!";
+            return;
+        }
+
+        if (bet > golds) {
+            document.getElementById("tigrinhoResult").textContent = "Você não tem Golds suficientes!";
+            return;
+        }
+
+        isPlayingTigrinho = true;
+        setCooldown();
+
+        const symbols = ['🎰', '🍒', '🍉', '🍊', '🃏', '🐯'];
+        const values = { '🎰': 10, '🍒': 3, '🍉': 2, '🍊': 4, '🐯': 15, '🃏': 5 };
+
+        const reels = Array(3).fill(null).map(() => 
+            Array(3).fill(null).map(() => symbols[Math.floor(Math.random() * symbols.length)])
+        );
+
+        let ganho = 0;
+
+        // Verificar linha
+        for (let i = 0; i < 3; i++) {
+            if (reels[i].every(symbol => symbol === reels[i][0])) {
+                ganho += bet * (values[reels[i][0]] || 1);
+            }
+        }
+
+        // Verificar coluna
+        for (let j = 0; j < 3; j++) {
+            if (reels[0][j] === reels[1][j] && reels[1][j] === reels[2][j]) {
+                ganho += bet * (values[reels[0][j]] || 1);
+            }
+        }
+
+        // Verificar diagonal
+        if (reels[0][0] === reels[1][1] && reels[1][1] === reels[2][2]) {
+            ganho += bet * (values[reels[0][0]] || 1);
+        }
+        if (reels[0][2] === reels[1][1] && reels[1][1] === reels[2][0]) {
+            ganho += bet * (values[reels[0][2]] || 1);
+        }
+
+        const slotBoxes = document.querySelectorAll(".slot-box");
+        let index = 0;
+
+        // Animação de giro dos slots
+        slotBoxes.forEach((slotBox, i) => {
+            let randomIndex = 0;
+            let randomInterval = setInterval(() => {
+                slotBox.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+            }, 100); // Muda o emoji a cada 100ms
+
+            setTimeout(() => {
+                clearInterval(randomInterval); // Para a animação após 2 segundos
+                slotBox.textContent = reels[Math.floor(i / 3)][i % 3]; // Define o emoji final
+            }, 2000); // Duração do giro antes de parar
+        });
+
+        let resultMessage = "";
+        if (ganho > 0) {
+            golds += ganho;
+            setTimeout(() => {
+                resultMessage = `🎉 Você ganhou ${ganho} Golds! 🎉`
+            }, 2000);
+            
+        } else {
+            golds -= bet;
+            resultMessage = `💔 Você perdeu ${bet} Golds. Tente novamente!`;
+        }
+setTimeout(() => {
+                document.getElementById("tigrinhoResult").textContent = resultMessage;
+            }, 2000);
+        
+
+        // Atualizar Golds
+        fetch('/atualizarGolds', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ grupo: "<%= grupo %>", id: "<%= numero %>", goldChange: ganho - bet })
+        })
+        .then(response => response.json())
+        .then(data => {
+            golds = data.golds;
+            atualizarGolds();
+        })
+        .catch(error => console.error('Erro ao atualizar Golds:', error));
+
+        // Atualizar cooldown
+        fetch('/atualizarCooldown', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ usuario, tipoCooldown: 'tigrinho', tempoCooldown: cooldownTime })
+        })
+        .then(response => response.json())
+        .then(() => {
+            // Successfully updated cooldown
+        })
+        .catch(error => console.error('Erro ao atualizar cooldown:', error));
+    })
+    .catch(error => console.error('Erro ao verificar cooldown:', error));
+}
+
+function setCooldown() {
+    let timer = cooldownTime / 1000; // Convertendo para segundos
+    const cooldownElement = document.getElementById("cooldownTimer");
+    cooldownElement.textContent = `Aguarde ${timer} segundos...`;
+
+    const countdownInterval = setInterval(() => {
+        timer--;
+        cooldownElement.textContent = `Aguarde ${timer} segundos...`;
+        if (timer <= 0) {
+            clearInterval(countdownInterval);
+            cooldownElement.textContent = "Você pode jogar novamente!";
+            isPlayingTigrinho = false; // Permite uma nova aposta
+        }
+    }, 1000); // Atualiza o contador a cada segundo
+}
+</script>
+
+<style>
+  #tigrinho {
+      text-align: center;
+      background: rgba(101, 67, 33, 0.3); /* Marrom translúcido */ backdrop-filter: blur(10px); /* Dourado transparente */
+      padding: 30px;
+      border-radius: 25px;
+      width: 85%;
+      margin: 40px auto;
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
+      transition: transform 0.3s ease-in-out;
+  }
+
+  #tigrinho:hover {
+      transform: scale(1.05);
+  }
+
+  h2 {
+    color: #ffffff; /* Branco puro */
+    font-family: 'Roboto', sans-serif;
+    font-size: 36px; /* Um pouco maior para mais destaque */
+    font-weight: bold; /* Negrito para dar mais presença */
+    letter-spacing: 3px; /* Aumenta o espaçamento entre letras */
+    text-transform: uppercase; /* Deixa tudo em maiúsculas para mais impacto */
+    text-shadow: 
+        3px 3px 8px rgba(0, 0, 0, 0.7),  /* Sombra escura principal */
+        -3px -3px 6px rgba(255, 255, 255, 0.3), /* Efeito de brilho sutil */
+        0px 0px 10px rgba(255, 255, 255, 0.5); /* Glow branco suave */
+    padding: 10px 20px; /* Margem interna para mais destaque */
+    border-radius: 10px; /* Borda arredondada para um visual mais moderno */
+    background: linear-gradient(45deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.3)); /* Fundo sutil translúcido */
+    backdrop-filter: blur(5px); /* Adiciona um efeito de desfoque no fundo */
+    display: inline-block; /* Para envolver o texto melhor */
+}
+
+  p {
+    color: #ffffff; /* Branco puro */
+    font-family: 'Roboto', sans-serif;
+    font-size: 36px; /* Um pouco maior para mais destaque */
+    font-weight: bold; /* Negrito para dar mais presença */
+    letter-spacing: 3px; /* Aumenta o espaçamento entre letras */
+    text-transform: uppercase; /* Deixa tudo em maiúsculas para mais impacto */
+    text-shadow: 
+        3px 3px 8px rgba(0, 0, 0, 0.7),  /* Sombra escura principal */
+        -3px -3px 6px rgba(255, 255, 255, 0.3), /* Efeito de brilho sutil */
+        0px 0px 10px rgba(255, 255, 255, 0.5); /* Glow branco suave */
+    padding: 10px 20px; /* Margem interna para mais destaque */
+    border-radius: 10px; /* Borda arredondada para um visual mais moderno */
+    background: linear-gradient(45deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.3)); /* Fundo sutil translúcido */
+    backdrop-filter: blur(5px); /* Adiciona um efeito de desfoque no fundo */
+    display: inline-block; /* Para envolver o texto melhor */
+}
+
+  #tigrinhoSlot {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      justify-content: center;
+      margin-top: 20px;
+  }
+
+  .slot-box {
+      width: 80px;
+      height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #f0c040;
+      border-radius: 12px;
+      font-size: 35px;
+      font-weight: bold;
+      box-shadow: 2px 2px 15px rgba(0, 0, 0, 0.3);
+      transition: transform 0.2s ease-in-out;
+  }
+
+  .slot-box:hover {
+      transform: scale(1.1);
+  }
+
+  input[type="number"] {
+      padding: 12px;
+      width: 220px;
+      border-radius: 10px;
+      border: 2px solid #f44336;
+      margin-bottom: 15px;
+      font-size: 16px;
+      transition: border-color 0.3s;
+  }
+
+  input[type="number"]:focus {
+      border-color: #e53935;
+      outline: none;
+  }
+
+  button {
+      padding: 12px 25px;
+      background-color: #f44336;
+      color: white;
+      font-size: 18px;
+      border-radius: 5px;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s ease-in-out;
+  }
+
+  button:hover {
+      background-color: #e53935;
+  }
+
+  #tigrinhoResult {
+      font-size: 20px;
+      font-weight: bold;
+      margin-top: 25px;
+      color: #333;
+      text-transform: uppercase;
+      animation: fadeIn 2s ease-out;
+  }
+
+  /* Animações */
+  @keyframes fadeIn {
+      0% { opacity: 0; }
+      100% { opacity: 1; }
+  }
+</style>
+
+<!-- Minigame de Caça -->
+<div id="caca">
+    <h2>🏹 Caça Selvagem</h2>
+    <p>Veja quais animais você encontra!</p>
+
+    <button id="cacaBetButton">Caçar</button>
+
+    <div id="cacaSlot">
+        <div class="slot-box">❓</div>
+        <div class="slot-box">❓</div>
+        <div class="slot-box">❓</div>
+    </div>
+
+    <p id="cacaResult"></p>
+    <p id="cooldownCaca" style="color: red; font-weight: bold;"></p>
+</div>
+
+<script>
+let isPlayingCaca = false;
+let cooldownTimeCaca = 2 * 60 * 1000; // 5 minutos em milissegundos
+
+document.getElementById("cacaBetButton").addEventListener("click", playCaca);
+
+function playCaca() {
+    const usuario = "<%= numero %>"; // Identificador do usuário
+
+    // Verificar cooldown
+    fetch('/verificarCooldown', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ usuario, tipoCooldown: 'caca' })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (!data.podeJogar) {
+            const tempoRestante = Math.ceil(data.tempoRestante / 1000);
+            document.getElementById("cacaResult").textContent = `Aguarde ${tempoRestante} segundos para caçar novamente!`;
+            return;
+        }
+
+        isPlayingCaca = true;
+        setCooldownCaca();
+
+        const animais = ['🐟', '🐔', '🐰', '🐑', '🐄', '🐘'];
+        const funcoes = {
+            '🐟': 'addIkan',
+            '🐔': 'addAyam',
+            '🐰': 'addKelinci',
+            '🐑': 'addDomba',
+            '🐄': 'addSapi',
+            '🐘': 'addGajah'
+        };
+
+        // Gerar um número aleatório de tentativas e sortear os animais
+        const numTentativas = Math.floor(Math.random() * 5) + 1; // Entre 1 e 6 tentativas
+        const resultados = Array(numTentativas).fill(null).map(() => animais[Math.floor(Math.random() * animais.length)]);
+        
+        const slotBoxes = document.querySelectorAll("#cacaSlot .slot-box");
+        slotBoxes.forEach((slotBox, i) => {
+            let randomInterval = setInterval(() => {
+                slotBox.textContent = animais[Math.floor(Math.random() * animais.length)];
+            }, 100);
+
+            setTimeout(() => {
+                clearInterval(randomInterval);
+                slotBox.textContent = resultados[i] || "❓"; // Preencher as slots com animais ou deixar como ❓
+            }, 2000);
+        });
+
+        let resultadoTexto = "🐾 Você encontrou: ";
+        let premiacao = {};
+        
+        resultados.forEach(animal => {
+            premiacao[animal] = (premiacao[animal] || 0) + 1;
+        });
+
+        Object.keys(premiacao).forEach(animal => {
+            resultadoTexto += `${premiacao[animal]}x ${animal} `;
+        });
+
+        document.getElementById("cacaResult").textContent = resultadoTexto;
+
+        // Atualizar os animais no banco de dados
+        Object.keys(premiacao).forEach(animal => {
+            fetch(`/atualizarAnimais`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    usuario,
+                    funcao: funcoes[animal],
+                    quantidade: premiacao[animal]
+                })
+            })
+            .catch(error => console.error('Erro ao atualizar animais:', error));
+        });
+
+        // Atualizar cooldown
+        fetch('/atualizarCooldown', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ usuario, tipoCooldown: 'caca', tempoCooldown: cooldownTimeCaca })
+        })
+        .catch(error => console.error('Erro ao atualizar cooldown:', error));
+    })
+    .catch(error => console.error('Erro ao verificar cooldown:', error));
+}
+
+function setCooldownCaca() {
+    let timer = cooldownTimeCaca / 1000;
+    const cooldownElement = document.getElementById("cooldownCaca");
+    cooldownElement.textContent = `Aguarde ${timer} segundos...`;
+
+    const countdownInterval = setInterval(() => {
+        timer--;
+        cooldownElement.textContent = `Aguarde ${timer} segundos...`;
+        if (timer <= 0) {
+            clearInterval(countdownInterval);
+            cooldownElement.textContent = "Você pode caçar novamente!";
+            isPlayingCaca = false;
+        }
+    }, 1000);
+}
+</script>
+
+
+<style> 
+
+#caca {
+    text-align: center;
+    background: rgba(34, 139, 34, 0.3);
+    backdrop-filter: blur(10px);
+    padding: 30px;
+    border-radius: 25px;
+    width: 85%;
+    margin: 40px auto;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease-in-out;
+}
+
+#caca:hover {
+    transform: scale(1.05);
+}
+
+h2 {
+    color: #ffffff;
+    font-family: 'Roboto', sans-serif;
+    font-size: 36px;
+    font-weight: bold;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    text-shadow: 3px 3px 8px rgba(0, 0, 0, 0.7);
+}
+
+p {
+    color: #ffffff;
+    font-family: 'Roboto', sans-serif;
+    font-size: 18px;
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+
+#cacaSlot {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.slot-box {
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f0c040;
+    border-radius: 12px;
+    font-size: 35px;
+    font-weight: bold;
+    box-shadow: 2px 2px 15px rgba(0, 0, 0, 0.3);
+    transition: transform 0.2s ease-in-out;
+}
+
+.slot-box:hover {
+    transform: scale(1.1);
+}
+
+input[type="number"] {
+    padding: 12px;
+    width: 220px;
+    border-radius: 10px;
+    border: 2px solid #2e7d32;
+    margin-bottom: 15px;
+    font-size: 16px;
+    transition: border-color 0.3s;
+}
+
+input[type="number"]:focus {
+    border-color: #1b5e20;
+    outline: none;
+}
+
+button {
+    padding: 12px 25px;
+    background-color: #388e3c;
+    color: white;
+    font-size: 18px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+}
+
+button:hover {
+    background-color: #2e7d32;
+}
+
+</style>
+
+<!-- Minigame de Mineração -->
+<!-- Minigame de Mineração -->
+<div id="mineracao">
+    <h2>⛏️ Mineração Profunda</h2>
+    <p>Desça nas minas e veja o que você pode encontrar!</p>
+
+    <button id="mineracaoButton">Minerar!</button>
+
+    <div id="mineracaoSlot">
+        <div class="slot-box">❓</div>
+        <div class="slot-box">❓</div>
+        <div class="slot-box">❓</div>
+    </div>
+
+    <p id="mineracaoResult"></p>
+    <p id="cooldownMineracao" style="color: red; font-weight: bold;"></p>
+</div>
+<script>
+  let isMining = false;
+let miningCooldownTime = 1 * 60 * 1000; // 5 minutos em milissegundos
+if(estamina < 0)
+document.getElementById("mineracaoButton").addEventListener("click", startMining);
+
+function startMining() {
+    const usuario = "<%= numero %>"; // Identificador do usuário
+
+    // Verificar cooldown
+    fetch('/verificarCooldown', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ usuario, tipoCooldown: 'mineracao' })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (!data.podeJogar) {
+            const tempoRestante = Math.ceil(data.tempoRestante / 1000);
+            document.getElementById("mineracaoResult").textContent = `Aguarde ${tempoRestante} segundos para minerar novamente!`;
+            return;
+        }
+
+        isMining = true;
+        setMiningCooldown();
+
+        const resources = ['🪙', '💎', '💠']; // Ouro, Diamante, Esmeralda
+        const functions = {
+            '🪙': 'addOuro',
+            '💎': 'addDiamante',
+            '💠': 'addEsmeralda'
+        };
+
+        // Gerar um número aleatório de tentativas e sortear os recursos
+        const numTries = Math.floor(Math.random() * 3) + 1; // Entre 1 e 3 tentativas
+        const results = Array(numTries).fill(null).map(() => resources[Math.floor(Math.random() * resources.length)]);
+        
+        const slotBoxes = document.querySelectorAll("#mineracaoSlot .slot-box");
+        slotBoxes.forEach((slotBox, i) => {
+            let randomInterval = setInterval(() => {
+                slotBox.textContent = resources[Math.floor(Math.random() * resources.length)];
+            }, 100);
+
+            setTimeout(() => {
+                clearInterval(randomInterval);
+                slotBox.textContent = results[i] || "❓"; // Preencher as slots com recursos ou deixar como ❓
+            }, 2000);
+        });
+
+        let resultText = "Você encontrou: ";
+        let rewards = {};
+        
+        results.forEach(resource => {
+            rewards[resource] = (rewards[resource] || 0) + 1;
+        });
+
+        Object.keys(rewards).forEach(resource => {
+            resultText += `${rewards[resource]}x ${resource} `;
+        });
+
+        setTimeout(() => {
+            document.getElementById("mineracaoResult").textContent = resultText;
+        }, 2000);
+
+        // Atualizar os recursos no banco de dados
+        Object.keys(rewards).forEach(resource => {
+            fetch(`/atualizarMineracao`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    usuario,
+                    ouro: resource === '🪙' ? rewards[resource] : 0,
+                    diamante: resource === '💎' ? rewards[resource] : 0,
+                    esmeralda: resource === '💠' ? rewards[resource] : 0,
+                    estaminaPerdida: rewards[resource] * 5 // Estimativa de estamina perdida
+                })
+            })
+            .catch(error => console.error('Erro ao atualizar mineração:', error));
+        });
+
+        // Atualizar cooldown
+        fetch('/atualizarCooldown', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ usuario, tipoCooldown: 'mineracao', tempoCooldown: miningCooldownTime })
+        })
+        .catch(error => console.error('Erro ao atualizar cooldown:', error));
+    })
+    .catch(error => console.error('Erro ao verificar cooldown:', error));
+}
+
+function setMiningCooldown() {
+    let timer = miningCooldownTime / 1000;
+    const cooldownElement = document.getElementById("cooldownMineracao");
+    cooldownElement.textContent = `Aguarde ${timer} segundos...`;
+
+    const countdownInterval = setInterval(() => {
+        timer--;
+        cooldownElement.textContent = `Aguarde ${timer} segundos...`;
+        if (timer <= 0) {
+            clearInterval(countdownInterval);
+            cooldownElement.textContent = "Você pode minerar novamente!";
+            isMining = false;
+        }
+    }, 1000);
+}</script>
+
+<style>
+#mineracao {
+    text-align: center;
+    background: rgba(70, 130, 180, 0.3);
+    backdrop-filter: blur(10px);
+    padding: 30px;
+    border-radius: 25px;
+    width: 85%;
+    margin: 40px auto;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease-in-out;
+}
+
+#mineracao:hover {
+    transform: scale(1.05);
+}
+
+h2 {
+    color: #ffffff;
+    font-family: 'Roboto', sans-serif;
+    font-size: 36px;
+    font-weight: bold;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    text-shadow: 3px 3px 8px rgba(0, 0, 0, 0.7);
+}
+
+p {
+    color: #ffffff;
+    font-family: 'Roboto', sans-serif;
+    font-size: 18px;
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+
+#mineracaoSlot {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.slot-box {
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f0c040;
+    border-radius: 12px;
+    font-size: 35px;
+    font-weight: bold;
+    box-shadow: 2px 2px 15px rgba(0, 0, 0, 0.3);
+    transition: transform 0.2s ease-in-out;
+}
+
+.slot-box:hover {
+    transform: scale(1.1);
+}
+
+button {
+    padding: 12px 25px;
+    background-color: #388e3c;
+    color: white;
+    font-size: 18px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+}
+
+button:hover {
+    background-color: #2e7d32;
+}</style>
+
+<!-- Minigame de Mineração -->
+
+
+
+
+    <footer>
+        <p>&copy; 2025 <a href="https://wa.link/brgbaw" style="color: #ffcc00;">©Gabriel Samá</a>. Todos os direitos reservados.</p>
+    </footer>
+
+
+</body>
+
+</html>
