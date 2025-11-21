@@ -3,12 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GK Premium - Maquiagem e Cosméticos de Luxo</title>
+<title>Loja GK - MaquiaGem e Kosmeticos</title>
 
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/nazuninha/uploads/main/fotos/1763313349933_rjvhcz.jpg" />
+  
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Playfair+Display:wght=400;700;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-<style>
+ <style>
   /* ====================== DESIGN SYSTEM ATUALIZADO ====================== */
   :root {
     /* Cores principais refinadas */
@@ -978,8 +981,14 @@
       <button class="filtro-btn ativo" data-filtro="todos">
         <i class="fas fa-th-large"></i> Todos
       </button>
-            <button class="filtro-btn" data-filtro="relogios">
-  <i class="fas fa-clock"></i> Relógios
+<button class="filtro-btn" data-filtro="acessorio">
+  <i class="fas fa-gem"></i> Acessórios
+</button>
+<button class="filtro-btn" data-filtro="roupas-femininas">
+  <i class="fas fa-female"></i> Roupas Femininas
+</button>
+<button class="filtro-btn" data-filtro="roupas-masculinas">
+  <i class="fas fa-male"></i> Roupas Masculinas
 </button>
       <button class="filtro-btn" data-filtro="disponivel">
         <i class="fas fa-check-circle"></i> Disponível
@@ -1398,7 +1407,14 @@ function aplicarFiltros(){
     if(filtroAtual === 'esgotado' && estoque > 0) mostrar = false;
 
     // ⭐ FILTRO NOVO: RELÓGIOS
-    if(filtroAtual === 'relogios' && !nome.includes('relogio')) {
+    if(filtroAtual === 'acessorio' && !nome.includes('acessorio')) {
+      mostrar = false;
+    }
+        if(filtroAtual === 'roupas-masculinas' && !nome.includes('roupas masculina')) {
+      mostrar = false;
+    }
+    
+        if(filtroAtual === 'roupas-femininas' && !nome.includes('roupas feminina')) {
       mostrar = false;
     }
 
