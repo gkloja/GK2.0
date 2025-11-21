@@ -990,6 +990,9 @@
 <button class="filtro-btn" data-filtro="roupas-masculinas">
   <i class="fas fa-male"></i> Roupas Masculinas
 </button>
+<button class="filtro-btn" data-filtro="novos">
+  <i class="fas fa-star"></i> Novos Produtos
+</button> 
       <button class="filtro-btn" data-filtro="disponivel">
         <i class="fas fa-check-circle"></i> Disponível
       </button>
@@ -1026,11 +1029,11 @@
          data-vendido="<%= prod.vendido %>">
       
       <% if (prod.vendido > 0) { %>
-        <div class="selo popular">⭐ Bestseller</div>
+        <div class="selo popular">⭐ TOP</div>
       <% } %>
 
       <div class="produto-img-container">
-        <img src="<%= prod.Imagem || 'https://via.placeholder.com/300/f0e9e1/333333?text=GK+Produto' %>" alt="<%= prod.descricao %>">
+        <img src="<%= prod.Imagem || 'https://raw.githubusercontent.com/nazuninha/uploads/main/fotos/1763313349933_rjvhcz.jpg' %>" alt="<%= prod.descricao %>">
       </div>
       
       <h3><%= prod.descricao %></h3>
@@ -1417,6 +1420,19 @@ function aplicarFiltros(){
         if(filtroAtual === 'roupas-femininas' && !nome.includes('roupas feminina')) {
       mostrar = false;
     }
+// Novos produtos → IDs maiores
+    if(filtroAtual === 'novos'){
+      // Aqui definimos quantos produtos “novos” você quer mostrar
+      // Ex: top 10 mais recentes
+      const topN = 10;
+      // Ordena todos pelo ID (maior primeiro)
+      const idsOrdenados = produtos
+        .map(p => parseInt(p.dataset.id) || 0)
+        .sort((a,b) => b - a)
+        .slice(0, topN);
+      if(!idsOrdenados.includes(id)) mostrar = false;
+    }
+
 
     prod.style.display = mostrar ? 'flex' : 'none';
   });
@@ -1442,9 +1458,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Adicionar o TOP 3 (com classe que altera o order no CSS Grid)
   top3.forEach((item, index) => {
-    const medalhas = ["🥇 Bestseller Ouro", "🥈 Bestseller Prata", "🥉 Bestseller Bronze"];
+    const medalhas = ["🥇 TOP Ouro", "🥈 TOP Prata", "🥉 TOP Bronze"];
     
-    // Remove o selo "Bestseller" genérico
+    // Remove o selo "TOP" genérico
     const seloPopular = item.querySelector('.selo.popular');
     if(seloPopular) seloPopular.remove(); 
     
