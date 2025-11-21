@@ -1108,9 +1108,14 @@ OneSignalDeferred.push(async function(OneSignal) {
       allowLocalhostAsSecureOrigin: true // opcional só para teste local
     });
 
-    // Solicitar permissão ao usuário
-    OneSignal.showSlidedownPrompt(); // exibe o banner de permissão bonito
-    // OneSignal.showNativePrompt(); // ou exibe a prompt nativa do navegador
+    // Checa se o usuário ainda não ativou notificações
+    const isEnabled = await OneSignal.isPushNotificationsEnabled();
+    
+    if(!isEnabled) {
+        // Mostra o prompt somente se ainda não habilitou
+        OneSignal.showSlidedownPrompt(); 
+        // ou OneSignal.showNativePrompt();
+    }
 });
 </script>
 
@@ -1233,16 +1238,29 @@ window.adicionarCarrinho = function(id){
   abrirCarrinho();
 };
 
-window.desejoComprar = function(nome){
+window.desejoComprar = async function(nome){
   if(desejos.includes(nome)) {
     mostrarNotificacao(`"${nome}" já está na sua lista de desejos.`, 'lose');
     return;
   }
+
+  // Verifica se o usuário já permitiu/negou notificações
+  const permission = await OneSignal.getNotificationPermission();
+  if(permission !== 'granted') {
+    // Mostra prompt de permissão
+    OneSignal.showSlidedownPrompt(); // ou showNativePrompt()
+    
+    // Opcional: espera o usuário responder antes de adicionar à lista de desejos
+    // Você pode simplesmente adicionar logo depois, mas assim fica mais interativo
+  }
+
+  // Agora registra o desejo
   desejos.push(nome);
   atualizarCarrinho();
   mostrarNotificacao(`❤️ Desejo registrado: ${nome}`, 'win');
   abrirCarrinho();
-};
+}
+
 
 function atualizarCarrinho(){
   listaCarrinho.innerHTML = '';
