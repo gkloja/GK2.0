@@ -1236,14 +1236,14 @@ window.adicionarCarrinho = function(id){
   abrirCarrinho();
 };
 
-window.desejoComprar = async function(nome){
+window.desejoComprar = async function(nome) {
   if (desejos.includes(nome)) {
     mostrarNotificacao(`"${nome}" já está na sua lista de desejos.`, 'lose');
     return;
   }
 
-  // Consulta o status da permissão corretamente - V16
-  const permission = await OneSignal.Notifications.permission;
+  // Consulta a permissão corretamente no OneSignal V16
+  const permission = await OneSignal.getNotificationPermission();
 
   // Se ainda não aceitou, mostrar o prompt SEMPRE
   if (permission !== "granted") {
