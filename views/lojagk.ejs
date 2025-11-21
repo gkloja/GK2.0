@@ -1236,21 +1236,23 @@ window.adicionarCarrinho = function(id){
   abrirCarrinho();
 };
 
-window.desejoComprar = async function(nome) {
+window.desejoComprar = function(nome) {
   if (desejos.includes(nome)) {
     mostrarNotificacao(`"${nome}" já está na sua lista de desejos.`, 'lose');
     return;
   }
 
-  // Consulta a permissão corretamente no OneSignal V16
-  const permission = await OneSignal.getNotificationPermission();
-
-  // Se ainda não aceitou, mostrar o prompt SEMPRE
-  if (permission !== "granted") {
-    await OneSignal.showSlidedownPrompt();
+  // Se o OneSignal estiver carregado
+  if (window.OneSignal) {
+    OneSignal.getNotificationPermission().then(permission => {
+      if (permission !== "granted") {
+        // Mostra o prompt, mas não precisa bloquear o resto
+        OneSignal.showSlidedownPrompt();
+      }
+    });
   }
 
-  // Registra o desejo
+  // Registra o desejo imediatamente
   desejos.push(nome);
   atualizarCarrinho();
   mostrarNotificacao(`❤️ Desejo registrado: ${nome}`, 'win');
