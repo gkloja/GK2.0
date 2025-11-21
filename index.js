@@ -7,6 +7,8 @@ import flash from "connect-flash";
 import bodyParser from "body-parser";
 import { fileURLToPath } from "url";
 import cookieParser from 'cookie-parser'
+import FileStoreFactory from "session-file-store";
+const FileStore = FileStoreFactory(session);
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
