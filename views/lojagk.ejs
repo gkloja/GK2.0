@@ -6,12 +6,17 @@
 <title>GK Premium - Maquiagem e Cosméticos de Luxo</title>
 <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
 <script>
-  window.OneSignalDeferred = window.OneSignalDeferred || [];
-  OneSignalDeferred.push(async function(OneSignal) {
+window.OneSignalDeferred = window.OneSignalDeferred || [];
+OneSignalDeferred.push(async function(OneSignal) {
     await OneSignal.init({
       appId: "fb30feba-6893-44d2-a434-6248bbc492cc",
+      allowLocalhostAsSecureOrigin: true // opcional só para teste local
     });
-  });
+
+    // Solicitar permissão ao usuário
+    OneSignal.showSlidedownPrompt(); // exibe o banner de permissão bonito
+    // OneSignal.showNativePrompt(); // ou exibe a prompt nativa do navegador
+});
 </script>
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Playfair+Display:wght=400;700;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
