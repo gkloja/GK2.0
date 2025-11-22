@@ -1503,6 +1503,7 @@ const loadingMessages = [
     "Aguarde, estamos refinando a qualidade..."
 ];
 
+// Botões do widget
 toggle.onclick = () => {
     widget.classList.toggle("hidden");
     if (!widget.classList.contains("hidden")) widget.classList.add("fade-in");
@@ -1521,31 +1522,47 @@ audio.addEventListener("timeupdate", () => {
     if (audio.duration) bar.style.width = (audio.currentTime / audio.duration) * 100 + "%";
 });
 
-// Função de progresso fake e criativo
-function startProgressAnimation(statusEl) {
+// Função para definir sugestão e buscar automaticamente
+function setSuggestion(song) {
+    document.getElementById("query").value = song;
+    playMusic();
+}
+
+// Função de progresso orgânico e criativo
+function startProgressAnimation() {
     progressContainer.classList.remove("hidden");
-    statusEl.classList.add("hidden");
+    const status = document.getElementById("status-message");
+    status.classList.add("hidden");
 
     let percent = 0;
     let messageIndex = 0;
 
-    const interval = setInterval(() => {
-        percent += Math.random() * 3 + 1;
-        if (percent >= 100) {
-            percent = 100;
+    return new Promise(resolve => {
+        const interval = setInterval(() => {
+            // Crescimento lento e variável
+            percent += Math.random() * 2 + 0.5;
+            if (percent > 99) percent = 99; // Nunca chega em 100 sozinho
+
+            progressText.textContent = Math.floor(percent) + "%";
+
+            // Mensagem dinâmica
+            if (percent % 15 < 1 && messageIndex < loadingMessages.length - 1) {
+                messageIndex++;
+                loadingMessage.textContent = loadingMessages[messageIndex];
+            }
+
+            resolve.interval = interval;
+        }, 150);
+
+        resolve.finish = () => {
             clearInterval(interval);
-        }
+            progressText.textContent = "100%";
+            progressContainer.classList.add("hidden");
+            status.classList.remove("hidden");
+        };
 
-        progressText.textContent = Math.round(percent) + "%";
-
-        if (percent % 15 < 1 && messageIndex < loadingMessages.length - 1) {
-            messageIndex++;
-            loadingMessage.textContent = loadingMessages[messageIndex];
-        }
-
-    }, 100);
-
-    return interval;
+        resolve.interval = interval;
+    });
 }
 
 // Função para tocar música usando a API
@@ -1568,20 +1585,21 @@ async function playMusic() {
     content.classList.add("hidden");
     wave.classList.add("hidden");
 
-    const progressInterval = startProgressAnimation(status);
+    const progress = startProgressAnimation();
 
     try {
         const res = await fetch("/play", {
             method: "POST",
-            headers: { "Content-Type":"application/json" },
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ query: q, userId: "site", User: "site" })
         });
-
         const data = await res.json();
 
-        clearInterval(progressInterval);
-        progressContainer.classList.add("hidden");
-        status.classList.remove("hidden");
+        // Simula tempo de busca para que a barra chegue a 100%
+        await new Promise(r => setTimeout(r, 1000 + Math.random() * 1000));
+
+        clearInterval(progress.interval);
+        progress.finish();
 
         if (!data.download) {
             status.textContent = "❌ Nenhuma API encontrou a música.";
@@ -1589,7 +1607,6 @@ async function playMusic() {
             return;
         }
 
-        // Preencher dados do player
         title.textContent = data.title;
         thumb.src = data.thumb;
         audio.src = data.download;
@@ -1612,7 +1629,6 @@ async function playMusic() {
             const randomNotif = notifications[Math.floor(Math.random() * notifications.length)];
             showNotification(randomNotif, "success");
 
-            // Efeito visual na capa
             thumb.classList.add("bounce");
             setTimeout(() => thumb.classList.remove("bounce"), 1000);
 
@@ -1623,7 +1639,7 @@ async function playMusic() {
 
     } catch (e) {
         console.error(e);
-        clearInterval(progressInterval);
+        clearInterval(progress.interval);
         progressContainer.classList.add("hidden");
         status.classList.remove("hidden");
         status.textContent = "❌ Erro ao buscar música.";
@@ -1631,7 +1647,7 @@ async function playMusic() {
     }
 }
 
-// Função para mostrar notificações
+// Função de notificação
 function showNotification(message, type = "") {
     const notif = document.getElementById("music-notif");
     notif.textContent = message;
@@ -1646,34 +1662,6 @@ function showNotification(message, type = "") {
 }
 </script>
         <style>
-        :root {
-            --bg: rgba(255,255,255,0.08);
-            --card: #f4f2ee;
-            --accent: #ac8a4c;
-            --accent-dark: #8a6c3c;
-            --shadow: 0 6px 25px rgba(0,0,0,0.25);
-            --text: #222;
-            --smooth: .25s ease;
-            --success: #4CAF50;
-            --error: #f44336;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background: linear-gradient(135deg, #1a1a2e, #16213e);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-
         /* BOTÃO FLUTUANTE */
         .floating-btn {
             position: fixed;
