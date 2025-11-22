@@ -10,6 +10,7 @@ import bodyParser from "body-parser";
 import { fileURLToPath } from "url";
 import cookieParser from 'cookie-parser'
 import FileStoreFactory from "session-file-store";
+import cors from "cors";
 const FileStore = FileStoreFactory(session);
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -18,6 +19,20 @@ const app = express();
 
 /* ---------- CONFIGURAÇÕES BÁSICAS ---------- */
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json());
+
+
+
+
+
+
+
+app.use(cors({
+  origin: "*",      // permite qualquer domínio acessar
+  methods: "GET,POST",
+  allowedHeaders: "Content-Type"
+}));
+
 app.use(express.json());
 
 app.use(session({
