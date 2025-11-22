@@ -429,278 +429,311 @@
     padding: 0 var(--espacamento-sm);
   }
 
-  /* ====================== CONTROLES MODERNIZADOS ====================== */
-  .controles-produtos {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--espacamento-sm);
-    margin-bottom: var(--espacamento-lg);
-    background: var(--cor-fundo);
-    padding: var(--espacamento-md);
-    border-radius: var(--borda-raio);
-    box-shadow: var(--sombra-leve);
-    border: 1px solid var(--cor-borda-clara);
-  }
+  /* -------------------------------------------
+   DESIGN SYSTEM PREMIUM
+------------------------------------------- */
+:root {
+  --preto: #111;
+  --preto-suave: #1c1c1c;
+  --cinza-suave: #e9e9e9;
+  --cinza-medio: #cccccc;
+  --cinza-escuro: #3a3a3a;
 
-  .pesquisa-container {
-    flex-grow: 1;
-    display: flex;
-    align-items: center;
-    border: 1px solid var(--cor-borda-clara);
-    border-radius: var(--borda-raio);
-    padding: var(--espacamento-xs) var(--espacamento-sm);
-    transition: var(--transicao);
-    min-width: 200px;
-    background: var(--cor-fundo);
-    position: relative;
-  }
+  --dourado: #c7a155;
+  --dourado-suave: #e7c98f;
+  --dourado-brilhante: #f5d389;
 
-  .pesquisa-container:focus-within {
-    border-color: var(--cor-acento);
-    box-shadow: var(--sombra-destaque);
-  }
+  --verde-wpp: #25d366;
+  --vermelho: #d9534f;
 
-  #pesquisa {
-    border: none;
-    outline: none;
-    padding: var(--espacamento-xs);
-    font-size: 1rem;
-    flex-grow: 1;
-    background: transparent;
-  }
+  --radius: 14px;
+  --shadow: 0 6px 18px rgba(0,0,0,0.18);
+  --shadow-hover: 0 10px 25px rgba(0,0,0,0.25);
+}
 
-  .pesquisa-container i {
-    color: #999;
-    margin-right: var(--espacamento-xs);
-  }
+/* -------------------------------------------
+   ÁREA DE CONTROLES
+------------------------------------------- */
+.controles-produtos {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin-bottom: 25px;
+}
 
-  .filtros-container {
-    display: flex;
-    gap: var(--espacamento-xs);
-    flex-wrap: wrap;
-  }
+.pesquisa-container {
+  display: flex;
+  align-items: center;
+  background: var(--cinza-suave);
+  padding: 12px 15px;
+  border-radius: var(--radius);
+  gap: 10px;
+}
 
-  .filtro-btn {
-    background-color: var(--cor-fundo);
-    color: var(--cor-texto);
-    border: 1px solid var(--cor-borda-clara);
-    padding: var(--espacamento-xs) var(--espacamento-sm);
-    border-radius: var(--borda-raio);
-    cursor: pointer;
-    font-weight: 500;
-    transition: var(--transicao);
-    display: flex;
-    align-items: center;
-    position: relative;
-    overflow: hidden;
-  }
+.pesquisa-container i {
+  color: var(--preto-suave);
+  font-size: 1.2rem;
+}
 
-  .filtro-btn::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(184, 159, 90, 0.1), transparent);
-    transition: left 0.5s;
-  }
+.pesquisa-container input {
+  width: 100%;
+  border: none;
+  background: transparent;
+  outline: none;
+  font-size: 1rem;
+  color: var(--preto-suave);
+}
 
-  .filtro-btn:hover::before {
-    left: 100%;
-  }
+/* -------------------------------------------
+   BOTÕES DE FILTRO
+------------------------------------------- */
+.filtros-container {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
 
-  .filtro-btn.ativo, .filtro-btn:hover {
-    background-color: var(--cor-acento);
-    color: var(--cor-texto-claro);
-    border-color: var(--cor-acento);
-    transform: translateY(-2px);
-    box-shadow: var(--sombra-media);
-  }
+.filtro-btn {
+  padding: 10px 18px;
+  font-size: .87rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--cinza-medio);
+  background: white;
+  cursor: pointer;
+  transition: .25s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
 
-  .filtro-btn i {
-    margin-right: 5px;
-  }
+.filtro-btn i {
+  font-size: .9rem;
+}
 
-  /* ====================== PRODUTOS GRID ATUALIZADO ====================== */
-  .produtos {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: var(--espacamento-lg);
-  }
+.filtro-btn:hover {
+  background: var(--dourado);
+  color: #fff;
+  border-color: var(--dourado);
+}
 
-  .produto {
-    background: var(--cor-fundo);
-    border-radius: var(--borda-raio);
-    overflow: hidden;
-    box-shadow: var(--sombra-leve);
-    padding: var(--espacamento-md);
-    display: flex;
-    flex-direction: column;
-    transition: var(--transicao);
-    position: relative;
-    text-align: center;
-    border: 1px solid var(--cor-borda-clara);
-  }
+.filtro-btn.ativo {
+  background: var(--dourado);
+  color: white;
+  border-color: var(--dourado);
+}
 
-  .produto:hover {
-    transform: translateY(-8px);
-    box-shadow: var(--sombra-intensa);
-    border-color: var(--cor-acento-claro);
+/* -------------------------------------------
+   GRID DE PRODUTOS
+------------------------------------------- */
+.grid-premium {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 22px;
+}
+
+/* -------------------------------------------
+   CARTÃO PREMIUM
+------------------------------------------- */
+.card-premium {
+  background: white;
+  border-radius: var(--radius);
+  padding: 15px;
+  box-shadow: var(--shadow);
+  position: relative;
+  transition: transform .25s ease, box-shadow .25s ease;
+  overflow: hidden;
+}
+
+.card-premium:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-hover);
+}
+
+/* -------------------------------------------
+   TAGS DINÂMICAS
+------------------------------------------- */
+.tag-dinamica {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: var(--dourado);
+  color: white;
+  padding: 6px 12px;
+  border-radius: var(--radius);
+  font-size: .75rem;
+  font-weight: bold;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+}
+
+/* Efeito pulsante suave */
+.pulse-premium {
+  animation: pulse 2.2s infinite ease-in-out;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); opacity: .9; }
+  50% { transform: scale(1.05); opacity: 1; }
+  100% { transform: scale(1); opacity: .9; }
+}
+
+/* -------------------------------------------
+   IMAGENS
+------------------------------------------- */
+.produto-img-container {
+  width: 100%;
+  height: 220px;
+  overflow: hidden;
+  border-radius: var(--radius);
+  margin-bottom: 12px;
+}
+
+.produto-img-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform .5s ease;
+}
+
+.card-premium:hover .produto-img-container img {
+  transform: scale(1.07);
+}
+
+/* -------------------------------------------
+   TÍTULOS E PREÇOS
+------------------------------------------- */
+.titulo-produto {
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin: 5px 0 8px 0;
+}
+
+.preco-produto {
+  font-size: 1.2rem;
+  margin: 8px 0;
+  color: var(--dourado);
+  font-weight: bold;
+}
+
+.preco-produto span {
+  opacity: .8;
+}
+
+/* -------------------------------------------
+   AVALIAÇÃO
+------------------------------------------- */
+.avaliacao-luxo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: .8rem;
+  color: var(--cinza-escuro);
+  margin-bottom: 8px;
+}
+
+.avaliacao-luxo .stars {
+  color: var(--dourado);
+}
+
+/* -------------------------------------------
+   ESTOQUE
+------------------------------------------- */
+.estoque-premium {
+  font-size: .85rem;
+  margin-bottom: 8px;
+  color: var(--cinza-escuro);
+}
+
+.estoque-premium i {
+  color: var(--dourado);
+  margin-right: 4px;
+}
+
+/* -------------------------------------------
+   POPULARIDADE
+------------------------------------------- */
+.popularidade-bar {
+  width: 100%;
+  height: 7px;
+  background: var(--cinza-suave);
+  border-radius: var(--radius);
+  overflow: hidden;
+  margin: 6px 0;
+}
+
+.popularidade-bar .bar {
+  height: 100%;
+  background: var(--dourado);
+  border-radius: var(--radius);
+  transition: width .4s ease;
+}
+
+.popularidade-texto {
+  font-size: .75rem;
+  color: var(--cinza-escuro);
+  margin-bottom: 10px;
+}
+
+/* -------------------------------------------
+   AÇÕES DO PRODUTO
+------------------------------------------- */
+.acoes-premium {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.acoes-premium input {
+  width: 60px;
+  padding: 6px;
+  border-radius: var(--radius);
+  border: 1px solid var(--cinza-medio);
+  font-size: .9rem;
+}
+
+.btn-add-premium {
+  flex: 1;
+  padding: 10px 12px;
+  background: var(--preto-suave);
+  color: white;
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-size: .9rem;
+  transition: .25s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.btn-add-premium:hover {
+  background: var(--dourado);
+}
+
+/* Botão esgotado */
+.btn-esgotado-premium {
+  width: 100%;
+  padding: 12px;
+  background: #aaa;
+  border: none;
+  border-radius: var(--radius);
+  color: white;
+  cursor: not-allowed;
+}
+
+/* -------------------------------------------
+   RESPONSIVIDADE
+------------------------------------------- */
+@media (max-width: 600px) {
+  .grid-premium {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
   }
 
   .produto-img-container {
-    height: 250px;
-    width: 100%;
-    margin-bottom: var(--espacamento-sm);
-    overflow: hidden;
-    border-radius: var(--borda-raio-pequeno);
-    position: relative;
+    height: 180px;
   }
-
-  .produto-img-container::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 40%;
-    background: linear-gradient(transparent, rgba(0,0,0,0.1));
-    pointer-events: none;
-  }
-
-  .produto-img-container img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.7s ease;
-  }
-
-  .produto:hover img {
-    transform: scale(1.08);
-  }
-
-  .produto h3 {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.25rem;
-    font-weight: 700;
-    margin-bottom: 5px;
-    color: var(--cor-primaria);
-  }
-
-  .preco {
-    font-size: 1.4rem;
-    font-weight: 700;
-    color: var(--cor-acento);
-    margin: 10px 0;
-    position: relative;
-    display: inline-block;
-  }
-
-  .preco::after {
-    content: '';
-    position: absolute;
-    bottom: -3px;
-    left: 0;
-    width: 0;
-    height: 2px;
-    background-color: var(--cor-acento);
-    transition: width 0.3s ease;
-  }
-
-  .produto:hover .preco::after {
-    width: 100%;
-  }
-
-  .estoque {
-    font-size: 0.9rem;
-    color: #777;
-    margin-bottom: var(--espacamento-sm);
-  }
-
-  .avaliacao {
-    color: gold;
-    font-size: 0.9rem;
-    margin-bottom: var(--espacamento-sm);
-    display: flex;
-    justify-content: center;
-    gap: 2px;
-  }
-
-  .avaliacao span {
-    color: var(--cor-texto);
-    margin-left: 5px;
-  }
-
-  .controles-produto {
-    margin-top: auto;
-    display: flex;
-    gap: var(--espacamento-xs);
-    width: 100%;
-  }
-
-  .controles-produto input {
-    width: 60px;
-    text-align: center;
-    border: 1px solid var(--cor-borda-clara);
-    border-radius: var(--borda-raio-pequeno);
-    padding: var(--espacamento-xs) 5px;
-    transition: var(--transicao);
-  }
-
-  .controles-produto input:focus {
-    border-color: var(--cor-acento);
-    box-shadow: 0 0 0 2px rgba(184, 159, 90, 0.2);
-  }
-
-  .controles-produto button {
-    flex-grow: 1;
-    background-color: var(--cor-primaria);
-    color: var(--cor-texto-claro);
-    border: none;
-    padding: var(--espacamento-xs) var(--espacamento-sm);
-    border-radius: var(--borda-raio-pequeno);
-    cursor: pointer;
-    font-weight: 500;
-    transition: var(--transicao);
-    position: relative;
-    overflow: hidden;
-  }
-
-  .controles-produto button::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 5px;
-    height: 5px;
-    background: rgba(255, 255, 255, 0.5);
-    opacity: 0;
-    border-radius: 100%;
-    transform: scale(1, 1) translate(-50%);
-    transform-origin: 50% 50%;
-  }
-
-  .controles-produto button:focus:not(:active)::after {
-    animation: ripple 1s ease-out;
-  }
-
-  @keyframes ripple {
-    0% {
-      transform: scale(0, 0);
-      opacity: 0.5;
-    }
-    100% {
-      transform: scale(20, 20);
-      opacity: 0;
-    }
-  }
-
-  .controles-produto button:hover {
-    background-color: #333;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  }
+}
 
   /* ====================== SELOS E BADGES ATUALIZADOS ====================== */
   .selo {
@@ -1200,137 +1233,157 @@
 </div>
 
 <div class="container">
+
+  <!-- 🔍 ÁREA DE CONTROLES -->
   <div class="controles-produtos">
+
+    <!-- Barra de pesquisa -->
     <div class="pesquisa-container">
       <i class="fas fa-search"></i>
-      <input type="text" id="pesquisa" placeholder="Buscar produtos por nome...">
+      <input type="text" id="pesquisa" placeholder="Buscar produtos...">
     </div>
+
+    <!-- Filtros aprimorados -->
     <div class="filtros-container">
       <button class="filtro-btn ativo" data-filtro="todos">
         <i class="fas fa-th-large"></i> Todos
       </button>
-<button class="filtro-btn" data-filtro="acessorio">
-  <i class="fas fa-gem"></i> Acessórios
-</button>
-<button class="filtro-btn" data-filtro="roupas-femininas">
-  <i class="fas fa-female"></i> Roupas Femininas
-</button>
-<button class="filtro-btn" data-filtro="roupas-masculinas">
-  <i class="fas fa-male"></i> Roupas Masculinas
-</button>
-<button class="filtro-btn" data-filtro="novos">
-  <i class="fas fa-star"></i> Novos Produtos
-</button> 
+
+      <button class="filtro-btn" data-filtro="acessorio">
+        <i class="fas fa-gem"></i> Acessórios
+      </button>
+
+      <button class="filtro-btn" data-filtro="roupas-femininas">
+        <i class="fas fa-female"></i> Femininas
+      </button>
+
+      <button class="filtro-btn" data-filtro="roupas-masculinas">
+        <i class="fas fa-male"></i> Masculinas
+      </button>
+
+      <button class="filtro-btn" data-filtro="novos">
+        <i class="fas fa-star"></i> Novidades
+      </button>
+
       <button class="filtro-btn" data-filtro="disponivel">
         <i class="fas fa-check-circle"></i> Disponível
       </button>
+
       <button class="filtro-btn" data-filtro="esgotado">
         <i class="fas fa-times-circle"></i> Esgotado
       </button>
     </div>
   </div>
 
-<div class="produtos grid-premium" id="produtos">
-  <%
-    function safeParseFloatEJS(v){ 
-      const val = String(v).replace(',', '.');
-      const num = parseFloat(val); 
-      return isNaN(num) ? 0 : num;
-    }
 
-    const produtosComId = produtos.map(prod => ({
-      ...prod,
-      id: prod.Item,
-      estoque: prod["ESTOQUE "] || prod.ESTOQUE,
-      vendido: prod["Vendido (QNTD)"] || 0,
-      valorVenda: prod["Valor Venda (R$)"],
-      descricao: prod.Descrição
-    }));
+  <!-- 🔥 GRID PREMIUM DE PRODUTOS -->
+  <div class="produtos grid-premium" id="produtos">
 
-    function getTagEspecial(prod) {
-      if (prod.estoque === 0) return "🔥 SOLD OUT";
-      if (prod.vendido >= 10) return "🏆 BEST SELLER";
-      if (prod.vendido > 0) return "⭐ Muito procurado";
-      return "✨ Novo";
-    }
-  %>
+    <% 
+      function safeParseFloatEJS(v){ 
+        const val = String(v).replace(',', '.');
+        const num = parseFloat(val); 
+        return isNaN(num) ? 0 : num;
+      }
 
-  <% produtosComId.forEach(prod => { %>
-    <div class="produto card-premium"
-         data-id="<%= prod.id %>"
-         data-nome="<%= prod.descricao.toLowerCase() %>"
-         data-estoque="<%= prod.estoque %>"
-         data-vendido="<%= prod.vendido %>">
+      const produtosComId = produtos.map(prod => ({
+        ...prod,
+        id: prod.Item,
+        estoque: prod["ESTOQUE "] || prod.ESTOQUE,
+        vendido: prod["Vendido (QNTD)"] || 0,
+        valorVenda: prod["Valor Venda (R$)"],
+        descricao: prod.Descrição
+      }));
 
-      <!-- SELO DINÂMICO PREMIUM -->
-      <div class="tag-dinamica">
-        <%= getTagEspecial(prod) %>
-      </div>
+      function getTagEspecial(prod) {
+        if (prod.estoque === 0) return "🚫 Indisponível";
+        if (prod.vendido >= 10) return "🔥 Alta procura";
+        if (prod.vendido > 0) return "⭐ Saindo bastante";
+        return "✨ Novo";
+      }
+    %>
 
-      <!-- Imagem com hover animado -->
-      <div class="produto-img-container premium-img">
-        <img src="<%= prod.Imagem || 'https://raw.githubusercontent.com/nazuninha/uploads/main/fotos/1763313349933_rjvhcz.jpg' %>"
-             alt="<%= prod.descricao %>">
-      </div>
+    <% produtosComId.forEach(prod => { %>
 
-      <!-- Nome -->
-      <h3 class="titulo-produto">
-        <%= prod.descricao %>
-      </h3>
+      <div class="produto card-premium"
+        data-id="<%= prod.id %>"
+        data-nome="<%= prod.descricao.toLowerCase() %>"
+        data-estoque="<%= prod.estoque %>"
+        data-vendido="<%= prod.vendido %>"
+      >
 
-      <!-- Preço Premium -->
-      <p class="preco-produto">
-        <span>R$</span>
-        <strong><%= safeParseFloatEJS(prod.valorVenda).toFixed(2) %></strong>
-      </p>
-
-      <!-- Avaliação Visual -->
-      <div class="avaliacao-luxo">
-        <div class="stars">
-          <i class="fas fa-star"></i><i class="fas fa-star"></i>
-          <i class="fas fa-star"></i><i class="fas fa-star"></i>
-          <i class="fas fa-star"></i>
+        <!-- ⭐ TAG ESPECIAL MELHORADA -->
+        <div class="tag-dinamica pulse-premium">
+          <%= getTagEspecial(prod) %>
         </div>
-        <span>5.0 • Favorito dos clientes</span>
-      </div>
 
-      <!-- Estoque -->
-      <p class="estoque-premium">
-        <i class="fas fa-box"></i> 
-        <%= prod.estoque > 0 ? prod.estoque + ' unidades disponíveis' : 'Sem estoque' %>
-      </p>
+        <!-- 📸 IMAGEM -->
+        <div class="produto-img-container premium-img">
+          <img src="<%= prod.Imagem || 'https://raw.githubusercontent.com/nazuninha/uploads/main/fotos/1763313349933_rjvhcz.jpg' %>"
+               alt="<%= prod.descricao %>">
+        </div>
 
-      <!-- Barra de Popularidade -->
-      <%
-        const totalEstimado = prod.vendido + prod.estoque;
-        const popularidade = totalEstimado > 0 ? Math.round((prod.vendido / totalEstimado) * 100) : 0;
-      %>
+        <!-- 🏷️ NOME -->
+        <h3 class="titulo-produto"><%= prod.descricao %></h3>
 
-      <div class="popularidade-bar">
-        <div class="bar" style="width: <%= popularidade %>%"></div>
-      </div>
-      <p class="popularidade-texto">
-        <%= popularidade %>% dos clientes escolheram este item
-      </p>
+        <!-- 💵 PREÇO -->
+        <p class="preco-produto">
+          <span>R$</span>
+          <strong><%= safeParseFloatEJS(prod.valorVenda).toFixed(2) %></strong>
+        </p>
 
-      <!-- Ações -->
-      <% if (prod.estoque > 0) { %>
-        <div class="acoes-premium">
-          <input type="number" min="1" max="<%= prod.estoque %>" value="1" id="qtd-<%= prod.id %>">
+        <!-- ⭐ AVALIAÇÃO -->
+        <div class="avaliacao-luxo">
+          <div class="stars">
+            <i class="fas fa-star"></i><i class="fas fa-star"></i>
+            <i class="fas fa-star"></i><i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+          </div>
+          <span>Favorito dos clientes</span>
+        </div>
 
-          <button class="btn-add-premium" onclick="adicionarCarrinho('<%= prod.id %>')">
-            <i class="fas fa-shopping-bag"></i> Comprar Agora
+        <!-- 📦 ESTOQUE -->
+        <p class="estoque-premium">
+          <i class="fas fa-box"></i>
+          <%= prod.estoque > 0 ? prod.estoque + ' unidades' : 'Sem estoque' %>
+        </p>
+
+        <!-- 📊 POPULARIDADE -->
+        <%
+          const totalEstimado = prod.vendido + prod.estoque;
+          const popularidade = totalEstimado > 0 ? Math.round((prod.vendido / totalEstimado) * 100) : 0;
+        %>
+
+        <div class="popularidade-bar melhorada">
+          <div class="bar" style="width: <%= popularidade %>%"></div>
+        </div>
+
+        <p class="popularidade-texto"><%= popularidade %>% dos clientes escolheram</p>
+
+        <!-- 🛒 AÇÕES -->
+        <% if (prod.estoque > 0) { %>
+          <div class="acoes-premium">
+
+            <input type="number" min="1" max="<%= prod.estoque %>" value="1" id="qtd-<%= prod.id %>">
+
+            <button class="btn-add-premium" onclick="adicionarCarrinho('<%= prod.id %>')">
+              <i class="fas fa-shopping-bag"></i> Comprar
+            </button>
+
+          </div>
+        <% } else { %>
+
+          <button class="btn-esgotado-premium" onclick="desejoComprar('<%= prod.descricao %>')">
+            <i class="fas fa-bell"></i> Avise-me
           </button>
-        </div>
-      <% } else { %>
-        <button class="btn-esgotado-premium" onclick="desejoComprar('<%= prod.descricao %>')">
-          <i class="fas fa-bell"></i> Avise-me quando voltar
-        </button>
-      <% } %>
 
-    </div>
-  <% }) %>
-</div>
+        <% } %>
+
+      </div>
+
+    <% }) %>
+
+  </div>
 </div>
 
 <footer>
