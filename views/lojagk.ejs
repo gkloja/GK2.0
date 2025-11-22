@@ -1609,10 +1609,16 @@ body { font-family: 'Poppins', sans-serif; background: var(--bg); margin: 0; }
 
 <div id="music-notif" class="notif hidden"></div>
 
-<button id="music-toggle" class="floating-btn">▶️</button> <!-- ícone inicial ▶️ -->
+<!-- BOTÃO 1: abrir o widget -->
+<button id="widget-toggle" class="floating-btn">🎧</button>
+
+<!-- BOTÃO 2: play/pause -->
+<button id="music-toggle" class="floating-btn music-control">▶️</button>
 
 <script>
 const toggle = document.getElementById("music-toggle");
+const widgetToggle = document.getElementById("widget-toggle"); // abre/fecha widget
+const musicToggle = document.getElementById("music-toggle");   // play/pause
 const closeBtn = document.getElementById("music-close");
 const widget = document.getElementById("music-widget");
 const audio = document.getElementById("audio");
@@ -1659,29 +1665,6 @@ function showNotification(message, type = "success") {
     }, 4000);
 }
 
-// WIDGET CONTROLS
-// Alterna play/pause
-toggle.onclick = () => {
-    if (!audio.src) {
-        widget.classList.toggle("hidden"); // abre/fecha widget se não há música
-        return;
-    }
-    if (audio.paused) {
-        audio.play();
-    } else {
-        audio.pause();
-    }
-};
-
-// Atualiza o ícone de acordo com o estado do áudio
-audio.onplay = () => toggle.textContent = "⏸️";
-audio.onpause = () => toggle.textContent = "▶️";
-audio.onended = () => toggle.textContent = "▶️";
-
-// X fecha o widget sem pausar
-closeBtn.onclick = () => {
-    widget.classList.add("hidden");
-};
 
 // AUDIO EVENTS
 audio.onplay = () => equalizer.classList.remove("hidden");
@@ -1709,6 +1692,28 @@ function setSuggestion(song) {
     playMusic();
 }
 
+
+widgetToggle.onclick = () => {
+    widget.classList.toggle("hidden");
+};
+
+musicToggle.onclick = () => {
+    if (!audio.src) {
+        showNotification("Nenhuma música carregada ainda!", "error");
+        return;
+    }
+
+    if (audio.paused) {
+        audio.play();
+    } else {
+        audio.pause();
+    }
+};
+
+// muda o ícone
+audio.onplay = () => musicToggle.textContent = "⏸️";
+audio.onpause = () => musicToggle.textContent = "▶️";
+audio.onended = () => musicToggle.textContent = "▶️";
 // PROGRESS ANIMATION
 let progressAnimation;
 let progressValue = 0;
