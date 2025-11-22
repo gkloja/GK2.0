@@ -1408,206 +1408,628 @@
     <p>&copy; 2025 maquiaGem e Kosmeticos. Todos os direitos reservados.</p>
   </div>
 </footer>
-<!-- BOTÃO FLUTUANTE -->
-<button id="music-toggle" class="floating-btn">🎧</button>
 
-<!-- WIDGET -->
-<div id="music-widget" class="widget hidden">
-  <div class="widget-header">
-    <span class="title">🎵 Music Player</span>
-    <button id="music-close" class="close-btn">✖</button>
-  </div>
+    <!-- BOTÃO FLUTUANTE -->
+    <button id="music-toggle" class="floating-btn">🎧</button>
 
-  <div id="music-search">
-    <input id="query" type="text" placeholder="Buscar música..." />
-    <button onclick="playMusic()" id="search-btn">🔍</button>
-  </div>
+    <!-- WIDGET -->
+    <div id="music-widget" class="widget hidden">
+        <div class="widget-header">
+            <span class="title">🎵 Music Player</span>
+            <button id="music-close" class="close-btn">✖</button>
+        </div>
 
-  <p id="status-message" class="status-msg">Digite o nome de uma música 🎶</p>
+        <div id="music-search">
+            <input id="query" type="text" placeholder="Buscar música..." />
+            <button onclick="playMusic()" id="search-btn">🔍</button>
+        </div>
 
-  <!-- CONTEÚDO SÓ APARECE APÓS ENCONTRAR MÚSICA -->
-  <div id="music-content" class="hidden">
-    <div class="thumb-box">
-      <img id="song-thumb" class="thumb" />
-      <div class="shine"></div>
+        <!-- SUGESTÕES -->
+        <div class="suggestions">
+            <div class="suggestion-tag" onclick="setSuggestion('The Weeknd Blinding Lights')">The Weeknd</div>
+            <div class="suggestion-tag" onclick="setSuggestion('Dua Lipa Levitating')">Dua Lipa</div>
+            <div class="suggestion-tag" onclick="setSuggestion('Coldplay A Sky Full of Stars')">Coldplay</div>
+            <div class="suggestion-tag" onclick="setSuggestion('Bruno Mars Leave The Door Open')">Bruno Mars</div>
+        </div>
+
+        <p id="status-message" class="status-msg">Digite o nome de uma música 🎶</p>
+
+        <!-- ANIMAÇÃO DE PROGRESSO -->
+        <div id="progress-container" class="progress-container hidden">
+            <div class="progress-circle">
+                <svg viewBox="0 0 36 36">
+                    <path class="progress-circle-bg"
+                        d="M18 2.0845
+                        a 15.9155 15.9155 0 0 1 0 31.831
+                        a 15.9155 15.9155 0 0 1 0 -31.831"
+                    />
+                    <path class="progress-circle-fill"
+                        d="M18 2.0845
+                        a 15.9155 15.9155 0 0 1 0 31.831
+                        a 15.9155 15.9155 0 0 1 0 -31.831"
+                        stroke-dasharray="100, 100"
+                        id="progress-path"
+                    />
+                </svg>
+                <div class="progress-text" id="progress-text">0%</div>
+            </div>
+            <div class="loading-message" id="loading-message">Iniciando busca...</div>
+        </div>
+
+        <!-- CONTEÚDO SÓ APARECE APÓS ENCONTRAR MÚSICA -->
+        <div id="music-content" class="hidden">
+            <div class="thumb-box">
+                <img id="song-thumb" class="thumb" />
+                <div class="shine"></div>
+            </div>
+
+            <h3 id="song-title"></h3>
+
+            <audio id="audio" controls></audio>
+
+            <div class="progress">
+                <div id="progress-bar"></div>
+            </div>
+
+            <div id="wave" class="wave hidden"></div>
+
+            <span id="audio-duration" class="duration"></span>
+
+            <a id="btn-download" class="download-btn" download>⬇ Baixar</a>
+        </div>
     </div>
 
-    <h3 id="song-title"></h3>
+    <!-- NOTIFICAÇÃO -->
+    <div id="music-notif" class="notif hidden">🎵 Música pronta! Clique ▶️ para curtir!</div>
 
-    <audio id="audio" controls></audio>
-
-    <div class="progress">
-      <div id="progress-bar"></div>
-    </div>
-
-    <div id="wave" class="wave hidden"></div>
-
-    <span id="audio-duration" class="duration"></span>
-
-    <a id="btn-download" class="download-btn" download>⬇ Baixar</a>
-  </div>
-</div>
-
-<!-- NOTIFICAÇÃO -->
-<div id="music-notif" class="notif hidden">🎵 Música pronta! Clique ▶️ para curtir!</div>
-
-<style>
-:root{
-  --bg: rgba(255,255,255,0.08);
-  --card:#f4f2ee;
-  --accent:#ac8a4c;
-  --accent-dark:#8a6c3c;
-  --shadow:0 6px 25px rgba(0,0,0,0.25);
-  --text:#222;
-  --smooth:.25s ease;
-}
-
-/* BOTÃO FLUTUANTE */
-.floating-btn{
-  position:fixed; bottom:90px; right:25px;
-  width:70px; height:70px;
-  border-radius:50%; border:none; cursor:pointer;
-  font-size:28px; color:white;
-  background:linear-gradient(135deg,#ac8a4c,#926f48);
-  box-shadow:var(--shadow);
-  z-index:1000;
-  display:flex; align-items:center; justify-content:center;
-  transition:transform var(--smooth);
-}
-.floating-btn:hover{transform:scale(1.15);}
-
-/* WIDGET */
-.widget{
-  position:fixed; bottom:170px; right:25px;
-  width:360px;
-  background:var(--card);
-  border-radius:20px;
-  padding:18px;
-  box-shadow:var(--shadow);
-  transition:all var(--smooth);
-  z-index:999;
-}
-.hidden{display:none;}
-.widget-header{display:flex; justify-content:space-between; align-items:center; font-weight:bold; color:var(--text);}
-.close-btn{background:none;border:none;font-size:20px;cursor:pointer;}
-.close-btn:hover{color:var(--accent);}
-
-/* BUSCA */
-#music-search{display:flex; gap:5px; margin-top:10px;}
-#music-search input{flex:1; padding:8px; border-radius:10px; border:1px solid #bbb; font-size:.95rem;}
-#music-search button{background:var(--accent); border:none; padding:8px 12px; border-radius:10px; cursor:pointer; color:white;}
-#music-search button:hover{background:var(--accent-dark);}
-
-/* STATUS */
-.status-msg{margin-top:10px;text-align:center;font-size:.9rem;color:var(--text);}
-
-/* CONTENT */
-#music-content{opacity:0; transition:opacity var(--smooth);}
-#music-content:not(.hidden){opacity:1;}
-
-.thumb-box{position:relative; border-radius:14px;}
-.thumb{width:100%; border-radius:14px; margin-top:10px; box-shadow:0 0 15px var(--shadow);}
-.shine{position:absolute; inset:0; border-radius:14px; background:linear-gradient(120deg,rgba(255,255,255,0.3),transparent 70%); mix-blend-mode:overlay;}
-
-.progress{width:100%; height:6px; background:rgba(200,200,200,0.3); border-radius:5px; overflow:hidden; margin-top:8px;}
-#progress-bar{height:100%; width:0%; background:var(--accent); transition:width .2s linear;}
-
-.wave{height:7px; margin-top:10px; background:repeating-linear-gradient(45deg,var(--accent),transparent 6px); animation:wave 1s infinite linear; border-radius:5px;}
-.hidden{display:none !important;}
-
-.download-btn{display:block; margin-top:10px; background:var(--accent); color:white; text-align:center; padding:6px; border-radius:10px; font-weight:bold; text-decoration:none;}
-.download-btn:hover{background:var(--accent-dark);}
-
-.duration{display:block; margin-top:5px; font-size:.85rem; color:var(--text);}
-
-/* NOTIF */
-.notif{
-  position:fixed; top:40px; right:25px;
-  background:var(--accent); color:white;
-  padding:12px 16px; border-radius:12px;
-  box-shadow:var(--shadow); font-weight:bold;
-  opacity:0; transform:translateY(-20px); transition:all var(--smooth);
-}
-.notif.show{opacity:1; transform:translateY(0);}
-</style>
 
 <script>
-const toggle=document.getElementById("music-toggle");
-const closeBtn=document.getElementById("music-close");
-const widget=document.getElementById("music-widget");
+const toggle = document.getElementById("music-toggle");
+const closeBtn = document.getElementById("music-close");
+const widget = document.getElementById("music-widget");
+const progressContainer = document.getElementById("progress-container");
+const progressText = document.getElementById("progress-text");
+const loadingMessage = document.getElementById("loading-message");
 
-toggle.onclick=()=>widget.classList.toggle("hidden");
-closeBtn.onclick=()=>widget.classList.add("hidden");
+// Mensagens criativas para o carregamento
+const loadingMessages = [
+    "Procurando nas melhores fontes...",
+    "Verificando acordes e batidas...",
+    "Ouvindo as melhores opções...",
+    "Ajustando o volume da sua experiência...",
+    "Quase lá! Preparando a magia...",
+    "Só um instante, a música está chegando!",
+    "Encontrando a trilha sonora perfeita...",
+    "Aguarde, estamos refinando a qualidade..."
+];
+
+toggle.onclick = () => {
+    widget.classList.toggle("hidden");
+    if (!widget.classList.contains("hidden")) widget.classList.add("fade-in");
+};
+
+closeBtn.onclick = () => {
+    widget.classList.add("hidden");
+    const audio = document.getElementById("audio");
+    if (audio) audio.pause();
+};
 
 // Barra de progresso do áudio
-const audio=document.getElementById("audio");
-const bar=document.getElementById("progress-bar");
-audio.addEventListener("timeupdate",()=>{if(audio.duration)bar.style.width=(audio.currentTime/audio.duration)*100+"%";});
+const audio = document.getElementById("audio");
+const bar = document.getElementById("progress-bar");
+audio.addEventListener("timeupdate", () => {
+    if (audio.duration) bar.style.width = (audio.currentTime / audio.duration) * 100 + "%";
+});
 
-// Fake loading progress
-function fakeProgress(statusEl){
-  let percent=0;
-  const interval=setInterval(()=>{
-    percent+=Math.floor(Math.random()*7)+3;
-    if(percent>=99){percent=99; clearInterval(interval);}
-    statusEl.textContent=`🎧 Buscando música… ${percent}% - Enquanto isso, confira nossas promoções!`;
-  },300);
+// Função de progresso fake e criativo
+function startProgressAnimation(statusEl) {
+    progressContainer.classList.remove("hidden");
+    statusEl.classList.add("hidden");
+
+    let percent = 0;
+    let messageIndex = 0;
+
+    const interval = setInterval(() => {
+        percent += Math.random() * 3 + 1;
+        if (percent >= 100) {
+            percent = 100;
+            clearInterval(interval);
+        }
+
+        progressText.textContent = Math.round(percent) + "%";
+
+        if (percent % 15 < 1 && messageIndex < loadingMessages.length - 1) {
+            messageIndex++;
+            loadingMessage.textContent = loadingMessages[messageIndex];
+        }
+
+    }, 100);
+
+    return interval;
 }
 
-// Play music
-async function playMusic(){
-  const q=document.getElementById("query").value.trim();
-  const status=document.getElementById("status-message");
-  const content=document.getElementById("music-content");
-  const title=document.getElementById("song-title");
-  const thumb=document.getElementById("song-thumb");
-  const download=document.getElementById("btn-download");
-  const duration=document.getElementById("audio-duration");
-  const notif=document.getElementById("music-notif");
-  const wave=document.getElementById("wave");
+// Função para tocar música usando a API
+async function playMusic() {
+    const q = document.getElementById("query").value.trim();
+    const status = document.getElementById("status-message");
+    const content = document.getElementById("music-content");
+    const title = document.getElementById("song-title");
+    const thumb = document.getElementById("song-thumb");
+    const download = document.getElementById("btn-download");
+    const duration = document.getElementById("audio-duration");
+    const notif = document.getElementById("music-notif");
+    const wave = document.getElementById("wave");
 
-  if(!q){alert("Digite o nome da música!"); return;}
+    if (!q) {
+        showNotification("Digite o nome da música!", "error");
+        return;
+    }
 
-  content.classList.add("hidden");
-  wave.classList.add("hidden");
+    content.classList.add("hidden");
+    wave.classList.add("hidden");
 
-  fakeProgress(status);
+    const progressInterval = startProgressAnimation(status);
 
-  try{
-    const res=await fetch("/play",{
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({query:q,userId:"site",User:"site"})
-    });
-    const data=await res.json();
+    try {
+        const res = await fetch("/play", {
+            method: "POST",
+            headers: { "Content-Type":"application/json" },
+            body: JSON.stringify({ query: q, userId: "site", User: "site" })
+        });
 
-    if(!data.download){status.textContent="❌ Nenhuma API encontrou a música."; return;}
+        const data = await res.json();
 
-    title.textContent=data.title;
-    thumb.src=data.thumb;
-    audio.src=data.download;
-    download.href=data.download;
-    download.download=data.title+".mp3";
+        clearInterval(progressInterval);
+        progressContainer.classList.add("hidden");
+        status.classList.remove("hidden");
 
-    audio.onloadedmetadata=()=>{
-      duration.textContent=Math.floor(audio.duration/60)+":"+("0"+Math.floor(audio.duration%60)).slice(-2);
-      content.classList.remove("hidden");
-      wave.classList.remove("hidden");
-      status.textContent="🎶 Música pronta para ouvir!";
+        if (!data.download) {
+            status.textContent = "❌ Nenhuma API encontrou a música.";
+            showNotification("Não foi possível encontrar a música. Tente novamente!", "error");
+            return;
+        }
 
-      // Notificação criativa
-      notif.textContent=`🎵 Pronto! "${data.title}" está esperando por você! Aperte ▶️ e curta!`;
-      notif.classList.add("show");
-      setTimeout(()=>notif.classList.remove("show"),5000);
+        // Preencher dados do player
+        title.textContent = data.title;
+        thumb.src = data.thumb;
+        audio.src = data.download;
+        download.href = data.download;
+        download.download = data.title + ".mp3";
 
-      audio.play();
-    };
-  }catch(e){
-    console.error(e);
-    status.textContent="❌ Erro ao buscar música.";
-  }
+        audio.onloadedmetadata = () => {
+            duration.textContent = Math.floor(audio.duration / 60) + ":" + ("0" + Math.floor(audio.duration % 60)).slice(-2);
+            content.classList.remove("hidden");
+            wave.classList.remove("hidden");
+            status.textContent = "🎶 Música pronta para ouvir!";
+
+            // Notificação criativa
+            const notifications = [
+                `🎵 Pronto! "${data.title}" está esperando por você! Aperte ▶️ e curta!`,
+                `✨ Encontramos! "${data.title}" está pronta para tocar!`,
+                `🎶 Sua música favorita chegou! "${data.title}" está pronta!`,
+                `🔥 Achamos! "${data.title}" está pronta para animar seu dia!`
+            ];
+            const randomNotif = notifications[Math.floor(Math.random() * notifications.length)];
+            showNotification(randomNotif, "success");
+
+            // Efeito visual na capa
+            thumb.classList.add("bounce");
+            setTimeout(() => thumb.classList.remove("bounce"), 1000);
+
+            audio.play().catch(() => {
+                status.textContent = "Clique no ▶️ para iniciar a música.";
+            });
+        };
+
+    } catch (e) {
+        console.error(e);
+        clearInterval(progressInterval);
+        progressContainer.classList.add("hidden");
+        status.classList.remove("hidden");
+        status.textContent = "❌ Erro ao buscar música.";
+        showNotification("Ocorreu um erro. Tente novamente!", "error");
+    }
+}
+
+// Função para mostrar notificações
+function showNotification(message, type = "") {
+    const notif = document.getElementById("music-notif");
+    notif.textContent = message;
+    notif.className = "notif";
+    notif.classList.add("show");
+    if (type) notif.classList.add(type);
+
+    setTimeout(() => {
+        notif.classList.remove("show");
+        if (type) notif.classList.remove(type);
+    }, 5000);
 }
 </script>
+        <style>
+        :root {
+            --bg: rgba(255,255,255,0.08);
+            --card: #f4f2ee;
+            --accent: #ac8a4c;
+            --accent-dark: #8a6c3c;
+            --shadow: 0 6px 25px rgba(0,0,0,0.25);
+            --text: #222;
+            --smooth: .25s ease;
+            --success: #4CAF50;
+            --error: #f44336;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        /* BOTÃO FLUTUANTE */
+        .floating-btn {
+            position: fixed;
+            bottom: 90px;
+            right: 25px;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            font-size: 28px;
+            color: white;
+            background: linear-gradient(135deg, #ac8a4c, #926f48);
+            box-shadow: var(--shadow);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform var(--smooth);
+            animation: pulse 2s infinite;
+        }
+
+        .floating-btn:hover {
+            transform: scale(1.15);
+            animation: none;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(172, 138, 76, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(172, 138, 76, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(172, 138, 76, 0); }
+        }
+
+        /* WIDGET */
+        .widget {
+            position: fixed;
+            bottom: 170px;
+            right: 25px;
+            width: 360px;
+            background: var(--card);
+            border-radius: 20px;
+            padding: 18px;
+            box-shadow: var(--shadow);
+            transition: all var(--smooth);
+            z-index: 999;
+            transform-origin: bottom right;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .widget-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+            color: var(--text);
+            margin-bottom: 10px;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            transition: transform var(--smooth);
+        }
+
+        .close-btn:hover {
+            color: var(--accent);
+            transform: rotate(90deg);
+        }
+
+        /* BUSCA */
+        #music-search {
+            display: flex;
+            gap: 5px;
+            margin-top: 10px;
+        }
+
+        #music-search input {
+            flex: 1;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid #bbb;
+            font-size: .95rem;
+            transition: all var(--smooth);
+        }
+
+        #music-search input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 2px rgba(172, 138, 76, 0.2);
+        }
+
+        #music-search button {
+            background: var(--accent);
+            border: none;
+            padding: 12px 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            color: white;
+            transition: all var(--smooth);
+        }
+
+        #music-search button:hover {
+            background: var(--accent-dark);
+            transform: scale(1.05);
+        }
+
+        /* STATUS */
+        .status-msg {
+            margin-top: 10px;
+            text-align: center;
+            font-size: .9rem;
+            color: var(--text);
+        }
+
+        /* CONTENT */
+        #music-content {
+            opacity: 0;
+            transition: opacity var(--smooth);
+        }
+
+        #music-content:not(.hidden) {
+            opacity: 1;
+        }
+
+        .thumb-box {
+            position: relative;
+            border-radius: 14px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+
+        .thumb {
+            width: 100%;
+            border-radius: 14px;
+            box-shadow: 0 0 15px var(--shadow);
+            transition: transform var(--smooth);
+        }
+
+        .thumb:hover {
+            transform: scale(1.02);
+        }
+
+        .shine {
+            position: absolute;
+            inset: 0;
+            border-radius: 14px;
+            background: linear-gradient(120deg, rgba(255,255,255,0.3), transparent 70%);
+            mix-blend-mode: overlay;
+        }
+
+        .progress {
+            width: 100%;
+            height: 6px;
+            background: rgba(200,200,200,0.3);
+            border-radius: 5px;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+
+        #progress-bar {
+            height: 100%;
+            width: 0%;
+            background: var(--accent);
+            transition: width .2s linear;
+        }
+
+        .wave {
+            height: 7px;
+            margin-top: 10px;
+            background: repeating-linear-gradient(45deg, var(--accent), transparent 6px);
+            animation: wave 1s infinite linear;
+            border-radius: 5px;
+        }
+
+        @keyframes wave {
+            0% { background-position: 0 0; }
+            100% { background-position: 20px 0; }
+        }
+
+        .download-btn {
+            display: block;
+            margin-top: 10px;
+            background: var(--accent);
+            color: white;
+            text-align: center;
+            padding: 10px;
+            border-radius: 10px;
+            font-weight: bold;
+            text-decoration: none;
+            transition: all var(--smooth);
+        }
+
+        .download-btn:hover {
+            background: var(--accent-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .duration {
+            display: block;
+            margin-top: 5px;
+            font-size: .85rem;
+            color: var(--text);
+        }
+
+        /* NOTIF */
+        .notif {
+            position: fixed;
+            top: 40px;
+            right: 25px;
+            background: var(--accent);
+            color: white;
+            padding: 12px 16px;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            font-weight: bold;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: all var(--smooth);
+            z-index: 1001;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .notif.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .notif.success {
+            background: var(--success);
+        }
+
+        .notif.error {
+            background: var(--error);
+        }
+
+        /* PROGRESS ANIMATION */
+        .progress-container {
+            margin: 15px 0;
+            text-align: center;
+        }
+
+        .progress-circle {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .progress-circle-bg {
+            fill: none;
+            stroke: rgba(200,200,200,0.3);
+            stroke-width: 6;
+        }
+
+        .progress-circle-fill {
+            fill: none;
+            stroke: var(--accent);
+            stroke-width: 6;
+            stroke-linecap: round;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+            transition: stroke-dashoffset 0.5s ease;
+        }
+
+        .progress-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 16px;
+            font-weight: bold;
+            color: var(--text);
+        }
+
+        .loading-message {
+            font-size: 14px;
+            margin-top: 10px;
+            color: var(--text);
+            min-height: 20px;
+        }
+
+        /* SUGGESTIONS */
+        .suggestions {
+            margin-top: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .suggestion-tag {
+            background: rgba(172, 138, 76, 0.1);
+            border: 1px solid rgba(172, 138, 76, 0.3);
+            border-radius: 20px;
+            padding: 5px 12px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all var(--smooth);
+        }
+
+        .suggestion-tag:hover {
+            background: rgba(172, 138, 76, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* AUDIO CONTROLS */
+        audio {
+            width: 100%;
+            margin-top: 10px;
+            border-radius: 10px;
+        }
+
+        /* ANIMATIONS */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+
+        .bounce {
+            animation: bounce 1s;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 480px) {
+            .widget {
+                width: 90vw;
+                right: 5vw;
+            }
+            
+            .floating-btn {
+                right: 5vw;
+            }
+            
+            .notif {
+                right: 5vw;
+                width: 90vw;
+            }
+        }
+    </style>
 <div class="carrinho" id="carrinhoBtn" role="button" tabindex="0" aria-label="Abrir carrinho">
   <i class="fas fa-shopping-bag"></i> Carrinho 
   <span class="carrinho-count" id="carrinhoCount">0</span>
