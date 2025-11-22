@@ -1610,6 +1610,8 @@ body { font-family: 'Poppins', sans-serif; background: var(--bg); margin: 0; }
 
 <div id="music-notif" class="notif hidden"></div>
 
+<button id="music-toggle" class="floating-btn">▶️</button> <!-- ícone inicial ▶️ -->
+
 <script>
 const toggle = document.getElementById("music-toggle");
 const closeBtn = document.getElementById("music-close");
@@ -1659,22 +1661,25 @@ function showNotification(message, type = "success") {
 }
 
 // WIDGET CONTROLS
-const toggleIcon = document.getElementById("toggle-icon");
-
+// Alterna play/pause
 toggle.onclick = () => {
     if (!audio.src) {
-        widget.classList.toggle("hidden"); // abre/fecha widget se não tem música
+        widget.classList.toggle("hidden"); // abre/fecha widget se não há música
         return;
     }
     if (audio.paused) {
         audio.play();
-        toggleIcon.textContent = "⏸️";
     } else {
         audio.pause();
-        toggleIcon.textContent = "▶️";
     }
 };
 
+// Atualiza o ícone de acordo com o estado do áudio
+audio.onplay = () => toggle.textContent = "⏸️";
+audio.onpause = () => toggle.textContent = "▶️";
+audio.onended = () => toggle.textContent = "▶️";
+
+// X fecha o widget sem pausar
 closeBtn.onclick = () => {
     widget.classList.add("hidden");
 };
