@@ -1409,13 +1409,14 @@
   </div>
 </footer>
 <!-- BOTÃO FLUTUANTE -->
-<button id="music-toggle" class="floating-btn">🎧</button>
+<!-- BOTÃO FLUTUANTE -->
+<button id="music-toggle" class="floating-btn">🎧<span class="pulse"></span></button>
 
 <!-- WIDGET -->
 <div id="music-widget" class="widget hidden">
 
   <div class="widget-header">
-    <span class="title">🎵 Music Player</span>
+    <span class="title">🎶 Music Player</span>
     <button id="music-close" class="close-btn">✖</button>
   </div>
 
@@ -1424,12 +1425,13 @@
     <button onclick="playMusic()" id="search-btn">🔍</button>
   </div>
 
-  <p id="status-message" class="status-msg">Digite o nome de uma música 🎶</p>
+  <p id="status-message" class="status-msg">Digite o nome de uma música 🎵</p>
 
-  <!-- CONTEÚDO SÓ APARECE APÓS ENCONTRAR MÚSICA -->
   <div id="music-content" class="hidden">
-
-    <img id="song-thumb" class="thumb" />
+    <div class="thumb-box">
+      <img id="song-thumb" class="thumb" />
+      <div class="shine"></div>
+    </div>
 
     <h3 id="song-title"></h3>
 
@@ -1439,270 +1441,164 @@
       <div id="progress-bar"></div>
     </div>
 
+    <div id="wave" class="wave hidden"></div>
+
     <span id="audio-duration" class="duration"></span>
 
     <a id="btn-download" class="download-btn" download>⬇ Baixar</a>
-
-    <div id="wave" class="wave hidden"></div>
-
   </div>
 
 </div>
 
 <!-- NOTIFICAÇÃO -->
-<div id="music-notif" class="notif hidden">🎶 Música pronta! Aperte ▶️</div>
-
+<div id="music-notif" class="notif hidden">🎵 Música pronta! Clique ▶️</div>
 
 <style>
-:root {
-  --bg: #ffffff;
-  --card: #f4f2ee;
-  --accent: #ac8a4c;
-  --accent-dark: #8a6c3c;
-  --shadow: 0 6px 25px rgba(0,0,0,0.25);
-  --text: #222;
-  --smooth: 0.25s ease;
+:root{
+  --accent1:#9b5cff;
+  --accent2:#5ac8ff;
+  --bg:rgba(255,255,255,0.08);
+  --shadow:rgba(155,92,255,0.4);
+  --text:#fff;
+  --smooth:.3s ease;
 }
 
-.floating-btn {
-  position: fixed;
-  bottom: 90px;
-  right: 25px;
-  width: 70px;
-  height: 70px;
-  border-radius: 50%;
-  background: var(--accent);
-  color: white;
-  border: none;
-  font-size: 28px;
-  box-shadow: var(--shadow);
-  cursor: pointer;
-  transition: transform var(--smooth);
-  z-index: 1000;
+body{font-family:'Arial',sans-serif;}
+
+/* BOTÃO FLUTUANTE */
+.floating-btn{
+  position:fixed;
+  bottom:90px; right:25px;
+  width:70px; height:70px;
+  border-radius:50%;
+  border:none; cursor:pointer;
+  font-size:28px; color:#fff;
+  background:linear-gradient(135deg,var(--accent1),var(--accent2));
+  box-shadow:0 0 18px var(--shadow);
+  z-index:1000;
+  display:flex; align-items:center; justify-content:center;
+  transition:transform var(--smooth);
 }
-.floating-btn:hover { transform: scale(1.1); }
+.floating-btn:hover{transform:scale(1.15);}
+.pulse{
+  position:absolute; inset:0;
+  border-radius:50%;
+  animation:pulse 2s infinite;
+  background:radial-gradient(circle,rgba(155,92,255,0.4),transparent 70%);
+}
+@keyframes pulse{0%{transform:scale(1);opacity:.7;}100%{transform:scale(1.7);opacity:0;}}
 
 /* WIDGET */
-.widget {
-  position: fixed;
-  bottom: 170px;
-  right: 25px;
-  width: 350px;
-  background: var(--card);
-  border-radius: 18px;
-  box-shadow: var(--shadow);
-  padding: 15px;
-  transition: all var(--smooth);
-  z-index: 999;
-}
-.hidden { display:none; }
-
-.widget-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-weight: bold;
-  color: var(--text);
-}
-.close-btn {
-  background:none;
-  border:none;
-  font-size:20px;
-  cursor:pointer;
-}
-
-/* Busca */
-#music-search {
-  display:flex;
-  gap:5px;
-  margin-top:10px;
-}
-#music-search input {
-  flex:1;
-  padding:7px;
-  border-radius:10px;
-  border:1px solid #bbb;
-  font-size:0.95rem;
-}
-#music-search button {
-  background:var(--accent);
-  color:white;
-  border:none;
-  padding:7px 10px;
-  font-weight:bold;
-  border-radius:10px;
-  cursor:pointer;
-  transition:var(--smooth);
-}
-#music-search button:hover {
-  background:var(--accent-dark);
-}
-
-/* Thumb */
-.thumb {
-  width:100%;
-  border-radius:12px;
-  margin-top:10px;
-}
-
-/* Progress bar */
-.progress {
-  width:100%;
-  height:6px;
-  margin-top:10px;
-  background:#ddd;
-  border-radius:5px;
-  overflow:hidden;
-}
-#progress-bar {
-  height:100%;
-  width:0%;
-  background:var(--accent);
-  transition:width 0.2s linear;
-}
-
-/* Wave animation */
-.wave {
-  width:100%;
-  height:6px;
-  margin-top:10px;
-  background:repeating-linear-gradient(
-    -45deg,
-    rgba(160,136,87,0.5),
-    rgba(160,136,87,0.5) 3px,
-    transparent 3px,
-    transparent 6px
-  );
-  animation:wave 1s infinite linear;
-  border-radius:5px;
-}
-@keyframes wave {
-  from { background-position:0 0; }
-  to { background-position:30px 0; }
-}
-
-.download-btn {
-  margin-top:10px;
-  display:block;
-  background:var(--accent);
-  color:white;
-  text-decoration:none;
-  text-align:center;
-  padding:6px;
-  border-radius:10px;
-  font-weight:bold;
-}
-.download-btn:hover { background:var(--accent-dark); }
-
-.status-msg {
-  margin-top:10px;
-  text-align:center;
-  color:var(--text);
-  font-size:0.9rem;
-}
-
-.duration {
-  font-size:0.85rem;
-  margin-top:5px;
-  display:block;
-  color:var(--text);
-}
-
-/* Notificação */
-.notif {
+.widget{
   position:fixed;
-  bottom:25px;
-  right:25px;
-  background:var(--accent);
-  color:white;
-  padding:10px 15px;
-  border-radius:12px;
-  box-shadow:var(--shadow);
-  transition:var(--smooth);
-  opacity:0;
-  transform:translateY(20px);
+  bottom:170px; right:25px;
+  width:360px;
+  background:var(--bg);
+  border-radius:20px;
+  padding:18px;
+  backdrop-filter:blur(15px);
+  box-shadow:0 0 25px var(--shadow);
+  transition:all var(--smooth);
+  z-index:999;
 }
-.notif.show {
-  opacity:1;
-  transform:translateY(0);
-}
+.hidden{display:none;}
+
+/* HEADER */
+.widget-header{display:flex; justify-content:space-between; align-items:center; font-weight:bold; color:var(--text);}
+.close-btn{background:none;border:none;font-size:20px;cursor:pointer;color:#fff;}
+.close-btn:hover{color:var(--accent1);}
+
+/* SEARCH */
+#music-search{display:flex; gap:5px; margin-top:10px;}
+#music-search input{flex:1; padding:8px; border-radius:10px; border:1px solid rgba(255,255,255,0.2); background:rgba(255,255,255,0.1); color:#fff;}
+#music-search button{background:linear-gradient(135deg,var(--accent1),var(--accent2)); border:none; padding:8px 12px; border-radius:10px; cursor:pointer; color:#fff;}
+#music-search button:hover{background:linear-gradient(135deg,var(--accent2),var(--accent1));}
+
+/* STATUS */
+.status-msg{margin-top:10px;text-align:center;font-size:.9rem;color:#fff;}
+
+/* CONTENT */
+#music-content{opacity:0; transition:opacity var(--smooth);}
+#music-content:not(.hidden){opacity:1;}
+
+.thumb-box{position:relative; border-radius:14px;}
+.thumb{width:100%; border-radius:14px; margin-top:10px; box-shadow:0 0 15px var(--shadow);}
+.shine{position:absolute; inset:0; border-radius:14px; background:linear-gradient(120deg,rgba(255,255,255,0.3),transparent 70%); mix-blend-mode:overlay;}
+
+.progress{width:100%; height:6px; background:rgba(255,255,255,0.2); border-radius:5px; overflow:hidden; margin-top:8px;}
+#progress-bar{width:0%; height:100%; background:linear-gradient(90deg,var(--accent1),var(--accent2)); transition:width .2s linear;}
+
+.wave{height:7px; margin-top:10px; background:repeating-linear-gradient(45deg,var(--accent1),transparent 6px); animation:wave 1s infinite linear; border-radius:5px;}
+@keyframes wave{0%{background-position:0 0;}100%{background-position:40px 0;}}
+.hidden{display:none !important;}
+
+.download-btn{display:block; margin-top:10px; background:linear-gradient(135deg,var(--accent1),var(--accent2)); color:#fff; text-align:center; padding:6px; border-radius:10px; font-weight:bold; text-decoration:none;}
+.download-btn:hover{background:linear-gradient(135deg,var(--accent2),var(--accent1));}
+
+.duration{display:block; margin-top:5px; font-size:.85rem; color:#fff;}
+
+/* NOTIF */
+.notif{position:fixed; bottom:25px; right:25px; padding:12px 16px; background:linear-gradient(135deg,var(--accent1),var(--accent2)); border-radius:12px; color:#000; font-weight:bold; opacity:0; transform:translateY(20px); transition:all var(--smooth);}
+.notif.show{opacity:1; transform:translateY(0);}
 </style>
 
 <script>
 const toggle = document.getElementById("music-toggle");
 const closeBtn = document.getElementById("music-close");
 const widget = document.getElementById("music-widget");
+toggle.onclick = ()=>widget.classList.toggle("hidden");
+closeBtn.onclick = ()=>widget.classList.add("hidden");
 
-toggle.onclick = () => widget.classList.toggle("hidden");
-closeBtn.onclick = () => widget.classList.add("hidden");
-
-// Progress bar
-const audio = document.getElementById("audio");
-const bar = document.getElementById("progress-bar");
-
-audio.addEventListener("timeupdate", () => {
-  if(audio.duration){
-    bar.style.width = (audio.currentTime / audio.duration)*100 + "%";
-  }
-});
+const audio=document.getElementById("audio");
+const bar=document.getElementById("progress-bar");
+audio.addEventListener("timeupdate",()=>{if(audio.duration)bar.style.width=(audio.currentTime/audio.duration)*100+"%";});
 
 async function playMusic(){
-  const q = document.getElementById("query").value.trim();
-  const status = document.getElementById("status-message");
-  const content = document.getElementById("music-content");
-  const title = document.getElementById("song-title");
-  const thumb = document.getElementById("song-thumb");
-  const download = document.getElementById("btn-download");
-  const duration = document.getElementById("audio-duration");
-  const notif = document.getElementById("music-notif");
-  const wave = document.getElementById("wave");
+  const q=document.getElementById("query").value.trim();
+  const status=document.getElementById("status-message");
+  const content=document.getElementById("music-content");
+  const title=document.getElementById("song-title");
+  const thumb=document.getElementById("song-thumb");
+  const download=document.getElementById("btn-download");
+  const duration=document.getElementById("audio-duration");
+  const notif=document.getElementById("music-notif");
+  const wave=document.getElementById("wave");
 
-  if(!q){
-    alert("Digite o nome da música!");
-    return;
-  }
+  if(!q){alert("Digite o nome da música!");return;}
 
   content.classList.add("hidden");
   wave.classList.add("hidden");
+  status.textContent="🎧 Buscando música…";
 
-  status.textContent = "🎧 Buscando música…";
+  try{
+    const res=await fetch("/play",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({query:q,userId:"site",User:"site"})
+    });
+    const data=await res.json();
 
-  const res = await fetch("/play", {
-    method: "POST",
-    headers: { "Content-Type":"application/json" },
-    body: JSON.stringify({ query:q })
-  });
+    if(!data.download){status.textContent="❌ Nenhuma API encontrou a música.";return;}
 
-  const data = await res.json();
+    title.textContent=data.title;
+    thumb.src=data.thumb;
+    audio.src=data.download;
+    download.href=data.download;
+    download.download=data.title+".mp3";
 
-  if(!data.download){
-    status.textContent = "❌ Nenhuma API encontrou a música.";
-    return;
+    audio.onloadedmetadata=()=>{
+      duration.textContent=Math.floor(audio.duration/60)+":"+("0"+Math.floor(audio.duration%60)).slice(-2);
+      content.classList.remove("hidden");
+      wave.classList.remove("hidden");
+      notif.classList.add("show");
+      setTimeout(()=>notif.classList.remove("show"),3000);
+      audio.play();
+    };
+    status.textContent="🎶 Música encontrada!";
+  }catch(e){
+    console.error(e);
+    status.textContent="❌ Erro ao buscar música.";
   }
-
-  // Preencher
-  title.textContent = data.title;
-  thumb.src = data.thumb;
-  audio.src = data.download;
-  download.href = data.download;
-  download.download = data.title + ".mp3";
-
-  audio.onloadedmetadata = () => {
-    duration.textContent =
-      Math.floor(audio.duration/60) + ":" +
-      ("0"+Math.floor(audio.duration%60)).slice(-2);
-
-    content.classList.remove("hidden");
-    wave.classList.remove("hidden");
-
-    // Notificação
-    notif.classList.add("show");
-    setTimeout(()=>notif.classList.remove("show"), 3000);
-
-    audio.play();
-  };
-
-  status.textContent = "🎶 Música encontrada!";
 }
 </script>
 <div class="carrinho" id="carrinhoBtn" role="button" tabindex="0" aria-label="Abrir carrinho">
