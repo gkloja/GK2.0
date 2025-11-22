@@ -2159,6 +2159,21 @@ document.addEventListener("DOMContentLoaded", () => {
   aplicarFiltros();
 });
 </script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const openBtn = document.getElementById("open-music-player");
+  const closeBtn = document.getElementById("close-music-player");
+  const widget = document.getElementById("music-player-widget");
+
+  if (!openBtn || !closeBtn || !widget) {
+    console.error("❌ Elementos do player não encontrados!");
+    return;
+  }
+
+  openBtn.onclick = () => widget.classList.remove("hidden");
+  closeBtn.onclick = () => widget.classList.add("hidden");
+});
+</script>
 </body>
 </html>
 
