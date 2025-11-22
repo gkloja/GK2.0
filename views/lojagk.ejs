@@ -1474,8 +1474,8 @@ function mostrarNotificacao(texto, tipo='win'){
 function atualizarContadorCarrinho(){
   const totalItens = carrinho.reduce((acc,p) => acc + p.qtd, 0) + desejos.length;
   carrinhoCount.textContent = totalItens;
+  carrinhoBtn.setAttribute('aria-label', `Carrinho com ${totalItens} itens`);
 }
-
 
 // ---------- SLIDE DO CARRINHO ----------
 function abrirCarrinho(){
@@ -1491,8 +1491,8 @@ function fecharCarrinho(){
 fecharBtn.addEventListener('click', () => fecharCarrinho());
 carrinhoBtn.addEventListener('click', e => {
   e.stopPropagation();
-  const aberto = finalizarDiv.getAttribute('aria-hidden') === 'false';
-  aberto ? fecharCarrinho() : abrirCarrinho();
+  const isOpen = finalizarDiv.getAttribute('aria-hidden') === 'false';
+  if(isOpen) fecharCarrinho(); else abrirCarrinho();
 });
 
 document.addEventListener('click', e => {
