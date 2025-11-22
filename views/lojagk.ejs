@@ -1659,8 +1659,25 @@ function showNotification(message, type = "success") {
 }
 
 // WIDGET CONTROLS
-toggle.onclick = () => widget.classList.toggle("hidden");
-closeBtn.onclick = () => { widget.classList.add("hidden"); audio.pause(); };
+const toggleIcon = document.getElementById("toggle-icon");
+
+toggle.onclick = () => {
+    if (!audio.src) {
+        widget.classList.toggle("hidden"); // abre/fecha widget se não tem música
+        return;
+    }
+    if (audio.paused) {
+        audio.play();
+        toggleIcon.textContent = "⏸️";
+    } else {
+        audio.pause();
+        toggleIcon.textContent = "▶️";
+    }
+};
+
+closeBtn.onclick = () => {
+    widget.classList.add("hidden");
+};
 
 // AUDIO EVENTS
 audio.onplay = () => equalizer.classList.remove("hidden");
