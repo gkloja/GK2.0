@@ -1643,7 +1643,7 @@
   <p id="status-message" class="status-msg"></p>
 </div>
 
-<script> 
+<script>
 // Abrir e fechar o player
 document.getElementById("open-music-player").onclick = () => {
   document.getElementById("music-player-widget").classList.remove("hidden");
@@ -1671,15 +1671,27 @@ async function playMusic() {
   player.classList.add("hidden");
 
   try {
-    const response = await fetch("/play", {
+    const response = await fetch("http://br2.bronxyshost.com:4009/play", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ query, userId: "site", User: "site" })
+      headers: { 
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        query,
+        userId: "site",
+        User: "site"
+      })
     });
+
+    if (!response.ok) {
+      status.textContent = "❌ Erro ao conectar com o servidor.";
+      return;
+    }
 
     const data = await response.json();
 
-    if (data.erro) {
+    // Caso retorne erro vindo da API
+    if (data.erro || !data.download) {
       status.textContent = "❌ Música não encontrada.";
       return;
     }
@@ -1698,6 +1710,7 @@ async function playMusic() {
     audio.play();
 
   } catch (e) {
+    console.log(e);
     status.textContent = "❌ Erro ao buscar música.";
   }
 }
