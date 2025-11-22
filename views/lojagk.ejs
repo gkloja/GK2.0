@@ -780,24 +780,9 @@
   }
 
   /* ====================== CARRINHO FLUTUANTE ATUALIZADO ====================== */
-    .item-carrinho {
-    display: grid;
-    grid-template-areas: 
-      "title actions"
-      "meta actions"
-      "sub actions";
-    grid-template-columns: 1fr max-content;
-    gap: 2px 15px;
-    padding: 12px 0;
-    border-bottom: 1px solid var(--cor-borda-clara);
-    transition: var(--transicao);
-  }
-
-  .item-carrinho:hover {
-    background-color: var(--cor-hover-lista);
-    padding-left: 5px;
-  }
-    .carrinho {
+  
+  /* ====================== CARRINHO FLUTUANTE ATUALIZADO ====================== */
+  .carrinho {
     position: fixed;
     bottom: 24px;
     right: 24px;
@@ -835,255 +820,208 @@
     0%, 100% { transform: scale(1); }
     50% { transform: scale(1.05); }
   }
-/* ----- BOTÃO DE CARRINHO PREMIUM ----- */
-.carrinho-premium {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: linear-gradient(135deg, #1c1c1c, #2b2b2b);
-  color: #fff;
-  padding: 12px 18px;
-  border-radius: 14px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: all 0.25s ease;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(4px);
-  position: relative;
-  user-select: none;
-}
-
-.carrinho-premium:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.22);
-}
-
-.carrinho-premium:active {
-  transform: scale(0.97);
-}
-
-/* Ícone */
-.carrinho-icon-area {
-  font-size: 1.25rem;
-  display: flex;
-  align-items: center;
-}
-
-/* Texto */
-.carrinho-label {
-  font-size: 0.95rem;
-  letter-spacing: 0.4px;
-}
-
-/* Número do carrinho */
-.carrinho-count {
-  background: #e63946;
-  color: #fff;
-  padding: 2px 7px;
-  font-size: 0.8rem;
-  border-radius: 50px;
-  font-weight: 700;
-  display: inline-block;
-  min-width: 22px;
-  text-align: center;
-  transition: transform 0.2s ease, background 0.2s;
-}
-
-/* Animação quando o número muda */
-.carrinho-count.animate {
-  animation: pulseCart 0.35s ease;
-}
-
-@keyframes pulseCart {
-  0%   { transform: scale(1); }
-  40%  { transform: scale(1.25); }
-  100% { transform: scale(1); }
-}
-
-
-/* BOTÃO FLUTUANTE DO CARRINHO */
-.carrinho-flutuante {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  background: var(--cor-primaria);
-  color: var(--cor-secundaria);
-  padding: 12px 18px;
-  border-radius: 50px;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.25);
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  cursor: pointer;
-  z-index: 99999;
-  user-select: none;
-  transition: 0.3s ease;
-  backdrop-filter: blur(6px);
-}
-
-.carrinho-flutuante:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 10px 25px rgba(0,0,0,0.35);
-}
-
-/* Ícone */
-.carrinho-flutuante i {
-  font-size: 1.3rem;
-  color: var(--cor-acento);
-}
-
-/* Texto */
-.carrinho-texto {
-  font-weight: 600;
-  font-size: 1rem;
-}
-
-/* Contador */
-.carrinho-count {
-  background: var(--cor-acento);
-  color: #fff;
-  padding: 4px 8px;
-  border-radius: 10px;
-  font-size: 0.85rem;
-  font-weight: bold;
-  min-width: 22px;
-  text-align: center;
-}
-
-/* MOBILE — fica mais compacto */
-@media (max-width: 600px) {
-  .carrinho-flutuante {
-    padding: 10px 14px;
-    gap: 8px;
-    bottom: 15px;
-    right: 15px;
-  }
-  
-  .carrinho-texto {
-    font-size: 0.9rem;
-  }
 
   .carrinho-count {
-    font-size: 0.75rem;
+    background: var(--cor-erro);
+    color: var(--cor-texto-claro);
+    border-radius: 50%;
+    padding: 4px 9px;
+    font-size: 0.85rem;
+    margin-left: 5px;
+    min-width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transition: background 0.2s, transform 0.2s;
   }
-}
+
+  .carrinho-count.animar-adicao {
+    transform: scale(1.3);
+    background: var(--cor-sucesso);
+  }
   /* ====================== PAINEL DE FINALIZAÇÃO ATUALIZADO ====================== */
- /* Painel do carrinho */
-.finalizar {
-  position: fixed;
-  top: 0;
-  right: -100%;
-  width: 380px;
-  height: 100%;
-  background: var(--cor-primaria);
-  color: var(--cor-secundaria);
-  box-shadow: -4px 0 20px rgba(0,0,0,0.25);
-  padding: 20px;
-  z-index: 9999;
-  display: flex;
-  flex-direction: column;
-  transition: 0.35s ease;
-  backdrop-filter: blur(10px);
-}
+  .finalizar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 400px;
+    max-width: 95%;
+    height: 100%;
+    background: var(--cor-fundo);
+    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.15), inset 1px 0 5px rgba(255, 255, 255, 0.1);
+    padding: 30px;
+    transform: translateX(100%);
+    transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    z-index: 6000;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+  }
 
-/* Quando aberto */
-.finalizar.ativo {
-  right: 0;
-}
+  .fechar-carrinho {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: var(--cor-fundo);
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 1.2rem;
+    color: var(--cor-erro);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15), inset 1px 1px 3px rgba(255,255,255,0.2);
+    transition: var(--transicao);
+  }
 
-/* Cabeçalho */
-.carrinho-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 25px;
-  border-bottom: 1px solid rgba(255,255,255,0.08);
-  padding-bottom: 15px;
-}
+  .fechar-carrinho:hover {
+    transform: rotate(90deg) scale(1.15);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.25), inset 1px 1px 5px rgba(255,255,255,0.3);
+  }
 
-.titulo-carrinho {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 1.3rem;
-  font-weight: 600;
-  color: var(--cor-secundaria);
-}
+  .overlay-finalizar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(3px);
+    z-index: 5500;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease-out;
+  }
 
-.fechar-carrinho {
-  background: transparent;
-  border: none;
-  font-size: 1.4rem;
-  color: var(--cor-secundaria);
-  cursor: pointer;
-  transition: 0.2s;
-}
+  .finalizar[aria-hidden="false"] {
+    transform: translateX(0);
+  }
 
-.fechar-carrinho:hover {
-  color: var(--cor-acento);
-  transform: rotate(90deg);
-}
+  .finalizar[aria-hidden="false"] ~ .overlay-finalizar {
+    opacity: 1;
+    pointer-events: auto;
+  }
 
-/* Lista de produtos */
-.lista-carrinho {
-  flex: 1;
-  overflow-y: auto;
-  padding-right: 5px;
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
+  .finalizar h2 {
+    font-family: 'Playfair Display', serif;
+    color: var(--cor-primaria);
+    font-size: 2.2rem;
+    margin-bottom: 25px;
+    border-bottom: 3px solid var(--cor-acento);
+    padding-bottom: 15px;
+  }
 
-.lista-carrinho::-webkit-scrollbar {
-  width: 6px;
-}
-.lista-carrinho::-webkit-scrollbar-thumb {
-  background: var(--cor-acento);
-  border-radius: 4px;
-}
+  #listaCarrinho {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 30px;
+    flex-grow: 1;
+  }
 
-/* Rodapé */
-.carrinho-footer {
-  border-top: 1px solid rgba(255,255,255,0.08);
-  padding-top: 15px;
-}
+  .item-carrinho {
+    display: grid;
+    grid-template-areas: 
+      "title actions"
+      "meta actions"
+      "sub actions";
+    grid-template-columns: 1fr max-content;
+    gap: 2px 15px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--cor-borda-clara);
+    transition: var(--transicao);
+  }
 
-.total {
-  font-size: 1.1rem;
-  margin-bottom: 15px;
-  display: flex;
-  justify-content: space-between;
-  color: var(--cor-secundaria);
-}
+  .item-carrinho:hover {
+    background-color: var(--cor-hover-lista);
+    padding-left: 5px;
+  }
 
-.total strong {
-  color: var(--cor-acento);
-  font-size: 1.25rem;
-}
+  .item-carrinho.desejo {
+    background-color: #fff8e1;
+    padding: 12px;
+    border-radius: 6px;
+    border-left: 5px solid var(--cor-acento);
+    margin: 10px 0;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  }
 
-/* Botão WhatsApp */
-.btn-whats {
-  width: 100%;
-  padding: 12px;
-  border: none;
-  border-radius: 10px;
-  background: #25D366;
-  color: #fff;
-  font-size: 1.05rem;
-  font-weight: bold;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  cursor: pointer;
-  transition: 0.25s ease;
-}
+  .item-title { grid-area: title; font-weight: 700; color: var(--cor-primaria); }
+  .item-meta { grid-area: meta; font-size: 0.9rem; color: #888; }
+  .item-sub { grid-area: sub; font-weight: 500; margin-top: 5px; font-style: italic;}
+  .item-actions { grid-area: actions; align-self: center; display: flex; gap: 10px;}
 
-.btn-whats:hover {
-  background: #1ebe59;
-  transform: translateY(-2px);
-}
+  .item-actions button {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    color: var(--cor-primaria);
+    opacity: 0.6;
+    transition: var(--transicao);
+  }
+
+  .item-actions button:hover {
+    opacity: 1;
+    color: var(--cor-erro);
+    transform: scale(1.1);
+  }
+
+  .total {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--cor-acento);
+    margin-top: 30px;
+    padding-top: 15px;
+    border-top: 3px dashed var(--cor-borda-clara);
+    text-align: right;
+    letter-spacing: 1px;
+  }
+
+  #enviarWhats {
+    width: 100%;
+    background-color: #25D366;
+    color: white;
+    padding: 18px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.2rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: var(--transicao);
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 10px rgba(37, 211, 102, 0.4);
+  }
+
+  #enviarWhats:hover {
+    background-color: #128C7E;
+    box-shadow: 0 6px 15px rgba(37, 211, 102, 0.6);
+    transform: translateY(-2px);
+  }
+
+  #enviarWhats:disabled {
+    background-color: #A9D5B9;
+    cursor: not-allowed;
+    box-shadow: none;
+    opacity: 0.7;
+  }
+
+  #enviarWhats i {
+    margin-right: 12px;
+    font-size: 1.5rem;
+    transition: var(--transicao);
+  }
+
+  #enviarWhats:hover i {
+    transform: rotate(5deg) scale(1.05);
+  }
   /* ====================== NOTIFICAÇÃO ATUALIZADA ====================== */
   .notificacao {
     position: fixed;
@@ -1412,6 +1350,7 @@
   <i class="fas fa-shopping-bag"></i> Carrinho 
   <span class="carrinho-count" id="carrinhoCount">0</span>
 </div>
+
 
 <!-- Painel do Carrinho (Side Panel Moderno) -->
 <div class="finalizar" id="finalizar" aria-hidden="true">
