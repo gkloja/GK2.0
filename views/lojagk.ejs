@@ -1586,7 +1586,7 @@ body { font-family: 'Poppins', sans-serif; background: var(--bg); margin: 0; }
         <span class="loader hidden"></span>
     </button>
     <!-- BOTÃO 2: play/pause dentro do widget -->
-    <button id="music-toggle" class="music-control">▶️</button>
+
 </div>
 
     <div class="suggestions">
@@ -1609,6 +1609,7 @@ body { font-family: 'Poppins', sans-serif; background: var(--bg); margin: 0; }
             <div class="progress-text" id="progress-text">0%</div>
         </div>
         <div class="loading-message" id="loading-message">Iniciando busca...</div>
+            <button id="music-toggle" class="music-control">▶️</button>
     </div>
 
     <div id="music-content" class="hidden">
@@ -2305,21 +2306,14 @@ document.addEventListener("DOMContentLoaded", () => {
 </script>
 <script>
 document.addEventListener("DOMContentLoaded", () => {
-  const openBtn = document.getElementById("open-music-player");
   const closeBtn = document.getElementById("music-close");
   const widget = document.getElementById("music-player-widget");
 
-  if (!openBtn || !closeBtn || !widget) {
+  if (!closeBtn || !widget) {
     console.error("❌ Elementos do player não encontrados!");
     return;
   }
 
-  // Toggle: abre se fechado, fecha se aberto
-  openBtn.onclick = () => {
-    widget.classList.toggle("hidden");
-  };
-
-  // Botão de fechar
   closeBtn.onclick = () => {
     widget.classList.add("hidden");
 };
