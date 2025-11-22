@@ -1422,76 +1422,85 @@ OneSignalDeferred.push(async function(OneSignal) {
 const produtosContainer = document.getElementById('produtos');
 const carrinhoBtn = document.getElementById('carrinhoBtn');
 const fecharBtn = document.getElementById('fecharCarrinho');
-
-fecharBtn.addEventListener('click', () => {
-  fecharCarrinho();
-});
 const carrinhoCount = document.getElementById('carrinhoCount');
+
 const finalizarDiv = document.getElementById('finalizar');
 const listaCarrinho = document.getElementById('listaCarrinho');
 const totalCarrinho = document.getElementById('totalCarrinho');
 const enviarWhats = document.getElementById('enviarWhats');
+
 const pesquisaInput = document.getElementById('pesquisa');
 const notificacao = document.getElementById('notificacao');
 const notificacaoTexto = document.getElementById('notificacaoTexto');
 const filtroBtns = document.querySelectorAll('.filtro-btn');
 
 
-// ---------- ESTADO E UTIL ----------
+// ---------- ESTADO GLOBAL ----------
 window.__gk_carrinho = [];
 const carrinho = window.__gk_carrinho;
 const desejos = [];
-let filtroAtual = 'todos';
+let filtroAtual = "todos";
 
-function safeParseFloat(v){ return isNaN(parseFloat(String(v).replace(',','.'))) ? 0 : parseFloat(String(v).replace(',','.')); }
+
+// ---------- FUNÇÕES UTIL ----------
+function safeParseFloat(v){
+  return isNaN(parseFloat(String(v).replace(',', '.')))
+    ? 0 
+    : parseFloat(String(v).replace(',', '.'));
+}
+
 function mostrarNotificacao(texto, tipo='win'){
-  // NOVO: Usa a propriedade background do CSS para o tipo
   notificacaoTexto.textContent = texto;
   notificacao.style.display = 'flex';
-  notificacao.style.background = (tipo === 'win') ? 'var(--cor-sucesso)' : 'var(--cor-erro)';
-  // Troca o ícone
-  notificacao.querySelector('i').className = (tipo === 'win') ? 'fas fa-check-circle' : 'fas fa-times-circle';
-  
-  // Toca som (removido para evitar erro de arquivo não encontrado)
-  // try { if(tipo==='win') win.play(); else lose.play(); } catch(e){} 
-  
+
+  notificacao.style.background = tipo === 'win'
+    ? 'var(--cor-sucesso)'
+    : 'var(--cor-erro)';
+
+  notificacao.querySelector('i').className = tipo === 'win'
+    ? 'fas fa-check-circle'
+    : 'fas fa-times-circle';
+
   notificacao.classList.add('mostrar');
-  setTimeout(()=>{
+
+  setTimeout(() => {
     notificacao.classList.remove('mostrar');
-    setTimeout(() => { notificacao.style.display = 'none'; }, 300); // 300ms de transição
+    setTimeout(() => notificacao.style.display = 'none', 300);
   }, 2300);
 }
 
+
+// ---------- CONTADOR ----------
 function atualizarContadorCarrinho(){
   const totalItens = carrinho.reduce((acc,p) => acc + p.qtd, 0) + desejos.length;
   carrinhoCount.textContent = totalItens;
-  carrinhoBtn.setAttribute('aria-label', `Carrinho com ${totalItens} itens`);
 }
 
-// ---------- ABRIR / FECHAR CARRINHO ----------
+
+// ---------- SLIDE DO CARRINHO ----------
 function abrirCarrinho(){
-  // Usa o atributo 'aria-hidden' para controlar o CSS (transform)
   finalizarDiv.style.display = 'block';
-  setTimeout(() => finalizarDiv.setAttribute('aria-hidden','false'), 10);
-}
-function fecharCarrinho(){
-  finalizarDiv.setAttribute('aria-hidden','true');
-  setTimeout(() => finalizarDiv.style.display = 'none', 400); // Espera a transição
+  setTimeout(() => finalizarDiv.setAttribute('aria-hidden', 'false'), 20);
 }
 
+function fecharCarrinho(){
+  finalizarDiv.setAttribute('aria-hidden', 'true');
+  setTimeout(() => finalizarDiv.style.display = 'none', 350);
+}
+
+fecharBtn.addEventListener('click', () => fecharCarrinho());
 carrinhoBtn.addEventListener('click', e => {
   e.stopPropagation();
-  const isOpen = finalizarDiv.getAttribute('aria-hidden') === 'false';
-  if(isOpen) fecharCarrinho(); else abrirCarrinho();
+  const aberto = finalizarDiv.getAttribute('aria-hidden') === 'false';
+  aberto ? fecharCarrinho() : abrirCarrinho();
 });
 
-finalizarDiv.addEventListener('click', e => e.stopPropagation());
-
-document.addEventListener('click', (e) => {
-  const path = e.composedPath ? e.composedPath() : (e.path || []);
-  if (path && (path.includes(finalizarDiv) || path.includes(carrinhoBtn))) return;
+document.addEventListener('click', e => {
+  const path = e.composedPath();
+  if(path.includes(finalizarDiv) || path.includes(carrinhoBtn)) return;
   fecharCarrinho();
 });
+
 
 // ---------- FILTROS ----------
 filtroBtns.forEach(btn => {
@@ -1499,59 +1508,97 @@ filtroBtns.forEach(btn => {
     filtroBtns.forEach(b => b.classList.remove('ativo'));
     btn.classList.add('ativo');
     filtroAtual = btn.dataset.filtro || 'todos';
-    aplicarFiltros();
+    aplicarFiltros?.();
   });
 });
 
-// ---------- FUNÇÕES DO CARRINHO (expostas globalmente) ----------
+
+// ======================================================
+//  🔥 CORREÇÃO COMPLETA DO ADICIONAR AO CARRINHO
+// ======================================================
 window.adicionarCarrinho = function(id){
+
   const input = document.getElementById(`qtd-${id}`);
-  if(!input) { mostrarNotificacao('Erro: campo quantidade não encontrado','lose'); return; }
+  if(!input){
+    mostrarNotificacao("Erro: Quantidade não encontrada", "lose");
+    return;
+  }
+
   const qtd = parseInt(input.value) || 0;
-  
-  // NOVO: Usa o 'data-id' para encontrar o produto
-  const prodDiv = document.querySelector(`.produto[data-id="${id}"]`);
-  if (!prodDiv) { mostrarNotificacao('Erro: produto não encontrado','lose'); return; }
-  
-  const descricao = prodDiv.querySelector('h3').textContent.trim();
-  const valor = safeParseFloat(prodDiv.querySelector('.preco').textContent.replace('R$',''));
-  const estoque = parseInt(prodDiv.dataset.estoque) || 0;
+  if(qtd < 1){
+    mostrarNotificacao("Quantidade mínima é 1!", "lose");
+    return;
+  }
 
-  if(qtd < 1){ mostrarNotificacao('Quantidade mínima é 1!','lose'); return; }
-  if(qtd > estoque){ mostrarNotificacao('Quantidade maior que o estoque disponível!','lose'); return; }
+  // ✔ FLEXIBILIDADE – aceita qualquer classe de produto
+  const prodDiv = document.querySelector(`[data-id="${id}"]`);
+  if(!prodDiv){
+    mostrarNotificacao("Erro: Produto não encontrado", "lose");
+    return;
+  }
 
+  // ✔ Título flexível
+  const titulo =
+      prodDiv.querySelector("h3, .titulo, .nome-produto")?.textContent.trim()
+      || "Produto";
+
+  // ✔ Preço flexível
+  const precoEl =
+      prodDiv.querySelector(".preco, .valor, .preco-produto");
+
+  if(!precoEl){
+    mostrarNotificacao("Preço não encontrado", "lose");
+    return;
+  }
+
+  const valor = safeParseFloat(precoEl.textContent.replace("R$", "").trim());
+
+  // ✔ Estoque seguro (fallback caso não tenha)
+  const estoque = parseInt(prodDiv.dataset.estoque || "99999");
+
+  if(qtd > estoque){
+    mostrarNotificacao(`Estoque máximo: ${estoque}`, "lose");
+    return;
+  }
+
+  // ✔ Item já existe no carrinho
   const existente = carrinho.find(p => p.id === id);
-  if(existente) {
-    if (existente.qtd + qtd > estoque) {
-      mostrarNotificacao(`Apenas ${estoque - existente.qtd} podem ser adicionados!`, 'lose');
+  if(existente){
+    if(existente.qtd + qtd > estoque){
+      mostrarNotificacao(`Só é possível adicionar mais ${estoque - existente.qtd}`, "lose");
       return;
     }
     existente.qtd += qtd;
+  } else {
+    carrinho.push({ id, descricao: titulo, valor, qtd });
   }
-  else carrinho.push({ id, descricao, valor, qtd });
 
   atualizarCarrinho();
-  mostrarNotificacao(`✅ "${descricao}" adicionado!`, 'win');
+  mostrarNotificacao(`✅ ${titulo} adicionado!`, "win");
   input.value = 1;
   abrirCarrinho();
 };
 
-window.desejoComprar = function(nome) {
-  if (desejos.includes(nome)) {
-    mostrarNotificacao(`"${nome}" já está na sua lista de desejos.`, 'lose');
+
+// ======================================================
+//  🔥 LISTA DE DESEJOS
+// ======================================================
+window.desejoComprar = function(nome){
+  if(desejos.includes(nome)){
+    mostrarNotificacao(`"${nome}" já está na lista`, 'lose');
     return;
   }
 
-
-
-  // Registra o desejo imediatamente
   desejos.push(nome);
   atualizarCarrinho();
-  mostrarNotificacao(`❤️ Desejo registrado: ${nome}`, 'win');
+  mostrarNotificacao(`❤️ Desejo adicionado: ${nome}`, 'win');
   abrirCarrinho();
 };
 
 
+// ======================================================
+//  🔥 ATUALIZA O CARRINHO VISUAL
+// ======================================================
 function atualizarCarrinho(){
   listaCarrinho.innerHTML = '';
   let total = 0;
@@ -1611,22 +1658,24 @@ function atualizarCarrinho(){
   atualizarContadorCarrinho();
 }
 
-// remover item
+
+// ---------- REMOÇÕES ----------
 window.removerCarrinho = function(index){
-  if(index < 0 || index >= carrinho.length) return;
-  const nome = carrinho[index].descricao;
-  carrinho.splice(index, 1);
-  atualizarCarrinho();
-  mostrarNotificacao(`❌ ${nome} removido`, 'lose');
+  if(carrinho[index]){
+    const nome = carrinho[index].descricao;
+    carrinho.splice(index, 1);
+    atualizarCarrinho();
+    mostrarNotificacao(`❌ ${nome} removido`, "lose");
+  }
 };
 
-// remover desejo
 window.removerDesejo = function(index){
-  if(index < 0 || index >= desejos.length) return;
-  const nome = desejos[index];
-  desejos.splice(index, 1);
-  atualizarCarrinho();
-  mostrarNotificacao(`❌ Desejo removido: ${nome}`, 'lose');
+  if(desejos[index]){
+    const nome = desejos[index];
+    desejos.splice(index, 1);
+    atualizarCarrinho();
+    mostrarNotificacao(`❌ Desejo removido: ${nome}`, "lose");
+  }
 };
 
 // ---------- FINALIZAR (WHATSAPP) ----------
