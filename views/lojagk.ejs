@@ -1409,45 +1409,54 @@
   </div>
 </footer>
 
-<!-- Botão flutuante principal -->
-<button id="open-music-player" title="Tocar música 🎵" class="floating-btn">🎧</button>
+<!-- BOTÃO FLUTUANTE LUXO -->
+<button id="open-music-player" title="Abrir Player" class="floating-btn">
+  <span class="icon">🎧</span>
+</button>
 
-<!-- Player Widget -->
+<!-- PLAYER GLASS PREMIUM -->
 <div id="music-player-widget" class="player-container hidden">
+
   <div class="widget-header">
-    <span>🎶 Music Player</span>
-    <button id="close-music-player" class="close-btn">✖</button>
+    <h2 class="title">Music Player</h2>
+    <button id="close-music-player" class="close-btn">✕</button>
   </div>
 
-  <p class="info-text">Ouça sua música enquanto explora nosso catálogo! 🎵✨</p>
+  <p class="subtitle">Ouça suas músicas com estilo ✨</p>
 
-  <div class="search-area">
-    <input type="text" id="query" placeholder="Buscar música..." />
-    <button id="btn-play" onclick="playMusic()">▶</button>
+  <!-- Campo de Busca -->
+  <div class="search-box">
+    <input type="text" id="query" placeholder="Pesquisar música..." class="input-search"/>
+    <button id="btn-play" class="btn-play" onclick="playMusic()">▶</button>
   </div>
 
+  <!-- PLAYER INTERNO -->
   <div id="audio-player" class="music-box hidden">
-    <div class="thumb-container">
-      <img id="song-thumb" class="thumb" />
-      <div class="wave-animation" id="wave"></div>
+    <div class="thumb-wrapper">
+      <img id="song-thumb" class="thumb"/>
+      <div class="thumb-glow"></div>
+      <div class="wave" id="wave"></div>
     </div>
-    <div class="music-info">
-      <h3 id="song-title"></h3>
-      <audio controls id="audio"></audio>
-      <div class="progress-container">
-        <div id="progress-bar" class="progress-bar"></div>
-      </div>
-      <span id="audio-duration" class="audio-duration"></span>
+
+    <h3 id="song-title" class="song-title"></h3>
+
+    <audio controls id="audio" class="audio-control"></audio>
+
+    <div class="progress-container">
+      <div id="progress-bar" class="progress-bar"></div>
     </div>
-    <a id="btn-download" class="download-btn" download>⬇ Baixar Música</a>
+
+    <span id="audio-duration" class="duration"></span>
+
+    <a id="btn-download" class="download-btn" download>⬇ Baixar</a>
   </div>
 
   <p id="status-message" class="status-msg"></p>
 </div>
 
-<!-- Notificação -->
+<!-- NOTIFICAÇÃO -->
 <div id="music-notification" class="music-notif hidden">
-  🎶 Música pronta! Clique no play ▶️ para ouvir.
+  Música pronta! Clique no ▶️
 </div>
 
 <script>
@@ -1455,20 +1464,15 @@ document.addEventListener("DOMContentLoaded", () => {
   const openBtn = document.getElementById("open-music-player");
   const widget = document.getElementById("music-player-widget");
   const closeBtn = document.getElementById("close-music-player");
-
-  // Toggle abrir/fechar
-  openBtn.addEventListener("click", () => {
-    widget.classList.toggle("hidden");
-  });
-  closeBtn.addEventListener("click", () => widget.classList.add("hidden"));
-
-  // Barra de progresso animada
   const audio = document.getElementById("audio");
   const progressBar = document.getElementById("progress-bar");
+
+  openBtn.onclick = () => widget.classList.toggle("hidden");
+  closeBtn.onclick = () => widget.classList.add("hidden");
+
   audio.addEventListener("timeupdate", () => {
-    if(audio.duration) {
-      const percent = (audio.currentTime / audio.duration) * 100;
-      progressBar.style.width = percent + "%";
+    if (audio.duration) {
+      progressBar.style.width = (audio.currentTime / audio.duration) * 100 + "%";
     }
   });
 });
@@ -1481,208 +1485,264 @@ async function playMusic() {
   const title = document.getElementById("song-title");
   const thumb = document.getElementById("song-thumb");
   const btnDownload = document.getElementById("btn-download");
-  const audioDuration = document.getElementById("audio-duration");
+  const duration = document.getElementById("audio-duration");
   const notif = document.getElementById("music-notification");
   const wave = document.getElementById("wave");
 
-  if (!query) { alert("Digite o nome da música!"); return; }
+  if (!query) return alert("Digite o nome da música!");
 
-  status.textContent = "⏳ Buscando música... Aproveite para conferir nossas promoções!";
+  status.textContent = "Buscando música... 🎵";
   player.classList.add("hidden");
   notif.classList.add("hidden");
-  wave.style.display = "none";
-  audioDuration.textContent = "";
+  wave.classList.remove("active");
 
-  try {
-    const response = await fetch("/play", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ query, userId: "site", User: "site" })
-    });
+  const res = await fetch("/play", {
+    method: "POST",
+    headers: {"Content-Type":"application/json"},
+    body: JSON.stringify({ query, userId:"site", User:"site" })
+  });
 
-    const data = await response.json();
+  const data = await res.json();
 
-    if (!response.ok) {
-      status.textContent = "❌ Erro no servidor: " + (data.message || data.erro || "Tente novamente.");
-      return;
-    }
-    if (!data.download) {
-      status.textContent = "❌ Nenhuma API conseguiu baixar o áudio.";
-      return;
-    }
-
-    // Preencher dados
-    title.textContent = data.title;
-    thumb.src = data.thumb;
-    audio.src = data.download;
-    btnDownload.href = data.download;
-    btnDownload.download = `${data.title}.mp3`;
-
-    audio.onloadedmetadata = () => {
-      const dur = audio.duration;
-      audioDuration.textContent = `Duração: ${Math.floor(dur/60)}:${("0"+Math.floor(dur%60)).slice(-2)}`;
-      player.classList.remove("hidden");
-      wave.style.display = "block";
-
-      // Notificação
-      notif.classList.remove("hidden");
-      setTimeout(() => notif.classList.add("hidden"), 4000);
-
-      audio.play().catch(() => {
-        status.textContent = "Clique no ▶️ para iniciar a música.";
-      });
-
-      status.textContent = "🎶 Música pronta para ouvir!";
-    };
-  } catch(e) {
-    console.error(e);
+  if (!res.ok || !data.download) {
     status.textContent = "❌ Erro ao buscar música.";
+    return;
   }
+
+  title.textContent = data.title;
+  thumb.src = data.thumb;
+  audio.src = data.download;
+  btnDownload.href = data.download;
+  btnDownload.download = `${data.title}.mp3`;
+
+  audio.onloadedmetadata = () => {
+    duration.textContent = 
+      `Duração: ${Math.floor(audio.duration/60)}:${("0"+Math.floor(audio.duration%60)).slice(-2)}`;
+    
+    player.classList.remove("hidden");
+    wave.classList.add("active");
+
+    notif.classList.remove("hidden");
+    setTimeout(() => notif.classList.add("hidden"), 4000);
+
+    audio.play().catch(()=>{});
+  };
+
+  status.textContent = "🎶 Música encontrada!";
 }
 </script>
 
 <style>
+/* ----------------------------- */
+/* ESTILO NOVO — ULTRA PREMIUM   */
+/* ----------------------------- */
+
 :root {
-  --primary-color: #1c1c1c;
-  --secondary-color: #f9f8f6;
-  --accent-color: #a08857;
-  --accent-hover: #926f48;
-  --text-color: #333;
-  --shadow: 0 6px 20px rgba(0,0,0,0.25);
-  --transition: 0.3s ease;
-  --wave-color: rgba(160,136,87,0.5);
+  --gold: #d4b26a;
+  --gold-dark: #a3864c;
+  --glass-bg: rgba(255,255,255,0.12);
+  --blur: blur(16px);
+  --text-light: #f5f5f5;
+  --text-muted: #ccc;
 }
 
-body { font-family: 'Arial', sans-serif; }
-
-/* Botão flutuante */
+/* Botão Flutuante */
 .floating-btn {
   position: fixed;
-  bottom: 100px;
-  right: 25px;
-  background: var(--accent-color);
-  color: white;
-  border: none;
+  bottom: 110px;
+  right: 30px;
+  width: 70px;
+  height: 70px;
   border-radius: 50%;
-  font-size: 28px;
-  width: 60px;
-  height: 60px;
+  font-size: 32px;
+  border: none;
+  color: white;
+  background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+  box-shadow: 0 10px 25px rgba(0,0,0,0.4);
   cursor: pointer;
-  box-shadow: var(--shadow);
-  transition: transform var(--transition);
-  z-index: 999;
+  transition: 0.3s;
 }
-.floating-btn:hover { transform: scale(1.1); }
+.floating-btn:hover {
+  transform: scale(1.15) rotate(8deg);
+}
 
-/* Player Widget */
+/* Caixa Principal */
 .player-container {
   position: fixed;
-  bottom: 170px;
-  right: 25px;
-  width: 350px;
-  background: var(--secondary-color);
+  bottom: 190px;
+  right: 30px;
+  width: 380px;
+  padding: 20px;
   border-radius: 20px;
-  box-shadow: var(--shadow);
-  padding: 15px;
-  transition: all var(--transition);
-  z-index: 998;
+  backdrop-filter: var(--blur);
+  background: var(--glass-bg);
+  color: var(--text-light);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  animation: slideUp 0.4s;
 }
 .player-container.hidden { display: none; }
 
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Cabeçalho */
 .widget-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-weight: bold;
-  margin-bottom: 10px;
 }
-.close-btn { background: none; border: none; font-size: 18px; cursor: pointer; }
-
-/* Texto motivador */
-.info-text { font-size: 0.9rem; margin-bottom: 10px; color: var(--primary-color); text-align: center; font-style: italic; }
-
-/* Search area */
-.search-area { display: flex; gap: 5px; margin-bottom: 10px; }
-.search-area input { flex: 1; padding: 6px 8px; border-radius: 10px; border: 1px solid #ccc; font-size: 0.9rem; }
-.search-area button {
-  background: var(--accent-color);
-  border: none;
-  border-radius: 10px;
-  color: white;
-  font-weight: bold;
-  padding: 6px 10px;
+.title { font-size: 1.3rem; color: var(--gold); }
+.close-btn {
+  background: none; border: none;
+  font-size: 22px; color: var(--text-light);
   cursor: pointer;
-  transition: var(--transition);
+  transition: 0.2s;
 }
-.search-area button:hover { background: var(--accent-hover); }
+.close-btn:hover { color: var(--gold); transform: scale(1.2); }
 
-/* Música */
-.music-box { display: flex; flex-direction: column; gap: 10px; margin-bottom: 10px; }
-.thumb-container { position: relative; width: 100%; }
-.thumb { width: 100%; border-radius: 10px; object-fit: cover; }
-.wave-animation {
-  position: absolute;
-  bottom: -5px;
-  left: 0;
+.subtitle {
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+  font-style: italic;
+}
+
+/* Campo de busca */
+.search-box {
+  display: flex;
+  gap: 8px;
+}
+.input-search {
+  flex: 1;
+  padding: 8px;
+  border-radius: 12px;
+  border: 1px solid var(--gold-dark);
+  background: rgba(0,0,0,0.4);
+  color: white;
+}
+.input-search:focus {
+  outline: none;
+  box-shadow: 0 0 10px var(--gold);
+}
+.btn-play {
+  background: var(--gold);
+  border: none;
+  padding: 8px 15px;
+  border-radius: 12px;
+  color: black;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.btn-play:hover { background: var(--gold-dark); }
+
+/* Thumb */
+.thumb-wrapper {
+  position: relative;
   width: 100%;
-  height: 5px;
-  display: none;
-  background: repeating-linear-gradient(
-    -45deg,
-    var(--wave-color),
-    var(--wave-color) 2px,
-    transparent 2px,
-    transparent 4px
-  );
-  animation: wave 1s linear infinite;
-  border-radius: 5px;
 }
-@keyframes wave { 0% {background-position:0 0;} 100% {background-position:20px 0;} }
+.thumb {
+  width: 100%;
+  border-radius: 14px;
+  object-fit: cover;
+  transition: 0.3s;
+}
+.thumb:hover {
+  transform: scale(1.03);
+}
+.thumb-glow {
+  position: absolute;
+  inset: 0;
+  border-radius: 14px;
+  box-shadow: 0 0 25px var(--gold);
+  opacity: 0;
+  transition: 0.3s;
+}
+.thumb-wrapper:hover .thumb-glow {
+  opacity: .8;
+}
 
-.music-info h3 { margin: 0; font-size: 1rem; color: var(--primary-color); }
-.audio-duration { font-size: 0.85rem; color: var(--primary-color); display: block; margin-top: 3px; }
+/* Onda animada */
+.wave {
+  height: 6px;
+  width: 100%;
+  margin-top: 5px;
+  background: repeating-linear-gradient(45deg, var(--gold), transparent 6px);
+  animation: waveMove 1s linear infinite;
+  display: none;
+}
+.wave.active { display: block; }
+
+@keyframes waveMove {
+  from { background-position: 0 0; }
+  to   { background-position: 40px 0; }
+}
+
+.song-title {
+  font-size: 1.1rem;
+  margin: 10px 0 5px;
+  text-align: center;
+}
 
 /* Barra de progresso */
 .progress-container {
-  width: 100%;
-  height: 5px;
-  background: #ddd;
-  border-radius: 5px;
+  height: 6px;
+  background: rgba(255,255,255,0.2);
+  border-radius: 4px;
   overflow: hidden;
-  margin-top: 5px;
 }
 .progress-bar {
-  width: 0%;
   height: 100%;
-  background: var(--accent-color);
-  transition: width 0.2s linear;
-  border-radius: 5px;
+  width: 0%;
+  background: var(--gold);
 }
 
-/* Download button */
-.download-btn { display: inline-block; background: var(--accent-color); color: white; text-decoration: none; padding: 5px 10px; border-radius: 8px; font-weight: bold; text-align: center; transition: var(--transition); }
-.download-btn:hover { background: var(--accent-hover); }
-
-/* Status */
-.status-msg { font-size: 0.85rem; color: var(--primary-color); text-align: center; }
+/* Botão download */
+.download-btn {
+  display: block;
+  margin-top: 10px;
+  font-weight: bold;
+  text-align: center;
+  padding: 8px;
+  border-radius: 12px;
+  background: var(--gold);
+  color: black;
+  text-decoration: none;
+  transition: 0.2s;
+}
+.download-btn:hover {
+  background: var(--gold-dark);
+}
 
 /* Notificação */
 .music-notif {
   position: fixed;
   bottom: 25px;
-  right: 25px;
-  background: var(--accent-color);
-  color: white;
-  padding: 10px 15px;
+  right: 30px;
+  padding: 12px 16px;
+  background: var(--gold);
+  color: black;
   border-radius: 12px;
-  box-shadow: var(--shadow);
+  font-weight: bold;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
   opacity: 0;
-  transform: translateY(20px);
-  transition: all var(--transition);
-  z-index: 1000;
+  transform: translateY(10px);
+  transition: 0.3s;
 }
-.music-notif.hidden { opacity: 0; transform: translateY(20px); pointer-events: none; }
-.music-notif:not(.hidden) { opacity: 1; transform: translateY(0); }
+.music-notif:not(.hidden) {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.status-msg {
+  text-align: center;
+  margin-top: 12px;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
 </style>
 
 <div class="carrinho" id="carrinhoBtn" role="button" tabindex="0" aria-label="Abrir carrinho">
@@ -2147,8 +2207,15 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
-  openBtn.onclick = () => widget.classList.remove("hidden");
-  closeBtn.onclick = () => widget.classList.add("hidden");
+  // Toggle: abre se fechado, fecha se aberto
+  openBtn.onclick = () => {
+    widget.classList.toggle("hidden");
+  };
+
+  // Botão de fechar
+  closeBtn.onclick = () => {
+    widget.classList.add("hidden");
+  };
 });
 </script>
 </body>
