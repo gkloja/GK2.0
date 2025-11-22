@@ -1020,78 +1020,112 @@
   letter-spacing: 1.3px;
 }
 
-
-/* BOTÃO FLUTUANTE */
+/* 🌟 BOTÃO FLUTUANTE REINVENTADO */
 #open-music-player {
   position: fixed;
-  bottom: 25px;
+  bottom: 95px; /* ← botão mais alto */
   right: 25px;
-  background: #25D366;
-  color: white;
-  font-size: 26px;
-  border: none;
-  width: 65px;
-  height: 65px;
+
+  width: 68px;
+  height: 68px;
+
+  background: linear-gradient(135deg, #25D366, #128C7E);
   border-radius: 50%;
+  border: none;
+
+  color: white;
+  font-size: 30px;
   cursor: pointer;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.35);
-  z-index: 9999;
-  transition: 0.3s;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  box-shadow: 0 8px 25px rgba(0,0,0,0.4),
+              0 0 18px rgba(37, 211, 102, 0.7);
+
+  z-index: 999999;
+  transition: 0.35s ease;
+  animation: btnPulse 2.2s infinite ease-in-out;
 }
 
+/* 🫧 Hover 3D */
 #open-music-player:hover {
-  transform: scale(1.15);
-  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+  transform: scale(1.18) translateY(-5px);
+  box-shadow: 0 12px 35px rgba(0,0,0,0.5),
+              0 0 28px rgba(37,211,102,0.9);
 }
 
-/* CONTAINER */
+/* ✨ Efeito pulsante */
+@keyframes btnPulse {
+  0% { box-shadow: 0 0 12px rgba(37,211,102,0.4); }
+  50% { box-shadow: 0 0 26px rgba(37,211,102,0.9); }
+  100% { box-shadow: 0 0 12px rgba(37,211,102,0.4); }
+}
+
+/* 🎧 CONTAINER DO PLAYER – vidro fosco + neon */
 .player-container {
   position: fixed;
-  bottom: 100px;
+  bottom: 180px;
   right: 25px;
   width: 330px;
-  background: rgba(30,30,30,0.85);
-  backdrop-filter: blur(12px);
-  padding: 20px;
-  border-radius: 18px;
-  color: white;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.55);
+
+  background: rgba(20,20,20,0.75);
+  backdrop-filter: blur(14px) saturate(180%);
+  -webkit-backdrop-filter: blur(14px);
+
+  padding: 22px;
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,0.1);
+
+  color: #fff;
+  box-shadow: 
+    0 10px 45px rgba(0,0,0,0.55),
+    inset 0 0 12px rgba(255,255,255,0.04);
+
   animation: fadeIn 0.4s ease forwards;
-  z-index: 99999;
+
+  z-index: 999999;
 }
 
 .hidden { display: none; }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(15px); }
-  to { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; transform: translateY(15px) scale(0.95); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
-/* HEADER */
+/* 🌈 CABEÇALHO */
 .widget-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+
   font-size: 18px;
-  margin-bottom: 15px;
   font-weight: bold;
+  margin-bottom: 15px;
+
+  background: linear-gradient(90deg, #25D366, #0A84FF);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
+/* ❌ Botão fechar */
 .widget-header button {
   color: white;
   background: none;
   border: none;
-  font-size: 18px;
+  font-size: 20px;
   cursor: pointer;
-  transition: 0.3s;
+  transition: 0.3s ease;
 }
 
 .widget-header button:hover {
-  transform: rotate(90deg);
-  color: #ff4444;
+  transform: rotate(90deg) scale(1.2);
+  color: #ff4c4c;
 }
 
-/* BUSCA */
+/* 🔍 ÁREA DE BUSCA */
 .search-area {
   display: flex;
   gap: 8px;
@@ -1099,28 +1133,38 @@
 
 .search-area input {
   flex: 1;
-  padding: 10px;
+  padding: 11px;
   border-radius: 12px;
   border: none;
   outline: none;
+
   font-size: 15px;
+
+  background: rgba(255,255,255,0.15);
+  color: white;
+}
+
+.search-area input::placeholder {
+  color: #dcdcdc;
 }
 
 .search-area button {
-  background: #25D366;
+  background: linear-gradient(135deg, #0A84FF, #006FE0);
   border: none;
-  padding: 10px 14px;
+  padding: 11px 14px;
   border-radius: 12px;
   font-size: 18px;
   cursor: pointer;
   transition: 0.3s;
+  box-shadow: 0 4px 15px rgba(10,132,255,0.4);
 }
 
 .search-area button:hover {
-  transform: scale(1.1);
+  transform: scale(1.12);
+  box-shadow: 0 6px 20px rgba(10,132,255,0.6);
 }
 
-/* BOX DA MÚSICA */
+/* 🎶 CAIXA DA MÚSICA */
 .music-box {
   margin-top: 20px;
   text-align: center;
@@ -1128,41 +1172,57 @@
 
 .thumb {
   width: 100%;
-  border-radius: 14px;
-  box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+  border-radius: 16px;
+  box-shadow: 0 5px 25px rgba(0,0,0,0.55),
+              0 0 18px rgba(255,255,255,0.12);
   margin-bottom: 12px;
-  transition: 0.3s;
+  transition: 0.3s ease;
 }
 
+.thumb:hover {
+  transform: scale(1.04);
+}
+
+/* 📝 TÍTULO */
 .music-info h3 {
-  font-size: 1.1rem;
+  font-size: 1.15rem;
   margin-bottom: 10px;
   line-height: 1.3;
+  color: #f2f2f2;
+  font-weight: 600;
 }
 
+/* ⬇️ BOTÃO DE DOWNLOAD PREMIUM */
 .download-btn {
-  margin-top: 12px;
+  margin-top: 14px;
   display: inline-block;
-  background: #0A84FF;
+
+  background: linear-gradient(135deg, #ff7b00, #ff4500);
   color: white;
-  padding: 10px 15px;
-  border-radius: 10px;
+
+  padding: 11px 16px;
+  border-radius: 12px;
   text-decoration: none;
   font-weight: bold;
-  box-shadow: 0 5px 15px rgba(10,132,255,0.4);
-  transition: 0.3s;
+
+  box-shadow: 0 5px 18px rgba(255,100,0,0.45);
+  transition: 0.3s ease;
 }
 
 .download-btn:hover {
-  background: #006FE0;
+  transform: translateY(-3px) scale(1.08);
+  background: linear-gradient(135deg, #ff8c1a, #ff2200);
+  box-shadow: 0 6px 25px rgba(255,100,0,0.7);
 }
 
-/* STATUS */
+/* ⭐ STATUS */
 .status-msg {
   margin-top: 10px;
   font-size: 0.9rem;
   text-align: center;
-  color: gold;
+
+  color: #FFE066;
+  text-shadow: 0 0 5px rgba(255,255,150,0.6);
 }
 
 /* ====================== BOTÃO WHATSAPP PREMIUM ====================== */
