@@ -846,6 +846,73 @@
   100% { transform: scale(1); }
 }
 
+
+/* BOTÃO FLUTUANTE DO CARRINHO */
+.carrinho-flutuante {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: var(--cor-primaria);
+  color: var(--cor-secundaria);
+  padding: 12px 18px;
+  border-radius: 50px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  z-index: 99999;
+  user-select: none;
+  transition: 0.3s ease;
+  backdrop-filter: blur(6px);
+}
+
+.carrinho-flutuante:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.35);
+}
+
+/* Ícone */
+.carrinho-flutuante i {
+  font-size: 1.3rem;
+  color: var(--cor-acento);
+}
+
+/* Texto */
+.carrinho-texto {
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+/* Contador */
+.carrinho-count {
+  background: var(--cor-acento);
+  color: #fff;
+  padding: 4px 8px;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  font-weight: bold;
+  min-width: 22px;
+  text-align: center;
+}
+
+/* MOBILE — fica mais compacto */
+@media (max-width: 600px) {
+  .carrinho-flutuante {
+    padding: 10px 14px;
+    gap: 8px;
+    bottom: 15px;
+    right: 15px;
+  }
+  
+  .carrinho-texto {
+    font-size: 0.9rem;
+  }
+
+  .carrinho-count {
+    font-size: 0.75rem;
+  }
+}
   /* ====================== PAINEL DE FINALIZAÇÃO ATUALIZADO ====================== */
  /* Painel do carrinho */
 .finalizar {
@@ -1286,13 +1353,10 @@
   </div>
 </footer>
 
-<div class="carrinho carrinho-premium" id="carrinhoBtn" role="button" tabindex="0" aria-label="Abrir carrinho">
-    <div class="carrinho-icon-area">
-        <i class="fas fa-shopping-bag"></i>
-    </div>
-    <span class="carrinho-label">Carrinho</span>
-    
-    <span class="carrinho-count" id="carrinhoCount">0</span>
+<div class="carrinho-flutuante" id="carrinhoBtn" role="button" tabindex="0" aria-label="Abrir carrinho">
+  <i class="fas fa-shopping-bag"></i>
+  <span class="carrinho-texto">Carrinho</span>
+  <span class="carrinho-count" id="carrinhoCount">0</span>
 </div>
 
 <!-- Painel do Carrinho (Side Panel Moderno) -->
