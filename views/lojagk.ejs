@@ -1561,6 +1561,8 @@ body { font-family: 'Poppins', sans-serif; background: var(--bg); margin: 0; }
 
     <div class="suggestions">
         <div class="suggestion-tag" onclick="setSuggestion('Doja Cat Kiss Me More')">Doja Cat</div>
+               <div class="suggestion-tag" onclick="setSuggestion('Allan Walker - Faded')">Allan Walker</div>
+                              <div class="suggestion-tag" onclick="setSuggestion('Melhor Amigo (Jesus Está la) Nair Nany')">Gospel</div>
         <div class="suggestion-tag" onclick="setSuggestion('Harry Styles As It Was')">Harry Styles</div>
         <div class="suggestion-tag" onclick="setSuggestion('Metallica Enter Sandman')">Rock</div>
     </div>
@@ -1615,30 +1617,29 @@ body { font-family: 'Poppins', sans-serif; background: var(--bg); margin: 0; }
 <button id="widget-toggle" class="floating-btn">🎧</button>
 
 
-
 <script>
-const toggle = document.getElementById("music-toggle");
-const widgetToggle = document.getElementById("widget-toggle"); // abre/fecha widget
-const musicToggle = document.getElementById("music-toggle");   // play/pause
-const closeBtn = document.getElementById("music-close");
-const widget = document.getElementById("music-widget");
-const audio = document.getElementById("audio");
-const bar = document.getElementById("progress-bar");
+const widgetToggle = document.getElementById("widget-toggle"); // abre o widget
+const musicToggle  = document.getElementById("music-toggle");  // play/pause interno
+const closeBtn     = document.getElementById("music-close");
+const widget       = document.getElementById("music-widget");
+const audio        = document.getElementById("audio");
+const bar          = document.getElementById("progress-bar");
 const progressContainer = document.getElementById("progress-container");
 const progressText = document.getElementById("progress-text");
 const progressPath = document.getElementById("progress-path");
 const loadingMessage = document.getElementById("loading-message");
-const queryInput = document.getElementById("query");
-const searchBtn = document.getElementById("search-btn");
-const content = document.getElementById("music-content");
-const status = document.getElementById("status-message");
-const titleEl = document.getElementById("song-title");
-const thumbEl = document.getElementById("song-thumb");
-const durationEl = document.getElementById("audio-duration");
+const queryInput  = document.getElementById("query");
+const searchBtn   = document.getElementById("search-btn");
+const content     = document.getElementById("music-content");
+const status      = document.getElementById("status-message");
+const titleEl     = document.getElementById("song-title");
+const thumbEl     = document.getElementById("song-thumb");
+const durationEl  = document.getElementById("audio-duration");
 const currentTimeEl = document.getElementById("current-time");
-const equalizer = document.getElementById("equalizer");
+const equalizer   = document.getElementById("equalizer");
 const progressBarContainer = document.getElementById("progress-bar-container");
 
+// MENSAGENS DINÂMICAS
 const loadingMessages = [
     "🎧 Sintonizando as frequências...",
     "🎶 Analisando a batida e o ritmo...",
@@ -1653,39 +1654,50 @@ function formatTime(seconds) {
     return min + ":" + ("0" + sec).slice(-2);
 }
 
+// NOTIFICAÇÃO
 function showNotification(message, type = "success") {
     const notif = document.getElementById("music-notif");
     notif.textContent = message;
-    notif.className = "notif"; 
-    notif.classList.add("show");
-    if (type) notif.classList.add(type);
+    notif.className = "notif show " + type;
 
-    setTimeout(() => {
-        notif.classList.remove("show");
-        notif.classList.remove(type);
-    }, 4000);
+    setTimeout(() => { notif.className = "notif hidden"; }, 3500);
 }
 
-
-// AUDIO EVENTS
-audio.onplay = () => equalizer.classList.remove("hidden");
-audio.onpause = () => equalizer.classList.add("hidden");
-audio.onended = () => { bar.style.width = "0%"; currentTimeEl.textContent = "0:00"; equalizer.classList.add("hidden"); };
-
-audio.addEventListener("loadedmetadata", () => { durationEl.textContent = formatTime(audio.duration); });
-audio.addEventListener("timeupdate", () => {
-    if (audio.duration) {
-        const progressPercent = (audio.currentTime / audio.duration) * 100;
-        bar.style.width = progressPercent + "%";
-        currentTimeEl.textContent = formatTime(audio.currentTime);
-    }
+// ======== EVENTOS DO ÁUDIO ========
+audio.addEventListener("play", () => {
+    equalizer.classList.remove("hidden");
+    musicToggle.textContent = "⏸️";
 });
 
-progressBarContainer.onclick = function(e) {
-    if (!audio.src || !audio.duration) return;
-    const rect = this.getBoundingClientRect();
-    const percentage = (e.clientX - rect.left) / rect.width;
-    audio.currentTime = audio.duration * percentage;
+audio.addEventListener("pause", () => {
+    equalizer.classList.add("hidden");
+    musicToggle.textContent = "▶️";
+});
+
+audio.addEventListener("ended", () => {
+    bar.style.width = "0%";
+    currentTimeEl.textContent = "0:00";
+    equalizer.classList.add("hidden");
+    musicToggle.textContent = "▶️";
+});
+
+audio.addEventListener("loadedmetadata", () => {
+    durationEl.textContent = formatTime(audio.duration);
+});
+
+audio.addEventListener("timeupdate", () => {
+    if (!audio.duration) return;
+    const progressPercent = (audio.currentTime / audio.duration) * 100;
+    bar.style.width = progressPercent + "%";
+    currentTimeEl.textContent = formatTime(audio.currentTime);
+});
+
+// SEEK
+progressBarContainer.onclick = (e) => {
+    if (!audio.duration) return;
+    const rect = progressBarContainer.getBoundingClientRect();
+    const percent = (e.clientX - rect.left) / rect.width;
+    audio.currentTime = audio.duration * percent;
 };
 
 function setSuggestion(song) {
@@ -1693,29 +1705,21 @@ function setSuggestion(song) {
     playMusic();
 }
 
-
+// ======== BOTÃO 1 — ABRE/FECHA WIDGET ========
 widgetToggle.onclick = () => {
     widget.classList.toggle("hidden");
 };
 
+// ======== BOTÃO 2 — PLAY/PAUSE INTERNO ========
 musicToggle.onclick = () => {
     if (!audio.src) {
         showNotification("Nenhuma música carregada ainda!", "error");
         return;
     }
-
-    if (audio.paused) {
-        audio.play();
-    } else {
-        audio.pause();
-    }
+    audio.paused ? audio.play() : audio.pause();
 };
 
-// muda o ícone
-audio.onplay = () => musicToggle.textContent = "⏸️";
-audio.onpause = () => musicToggle.textContent = "▶️";
-audio.onended = () => musicToggle.textContent = "▶️";
-// PROGRESS ANIMATION
+// ======== PROGRESSO ANIMADO ========
 let progressAnimation;
 let progressValue = 0;
 
@@ -1723,15 +1727,17 @@ function startProgressAnimation() {
     progressContainer.classList.remove("hidden");
     status.classList.add("hidden");
     progressValue = 0;
+
     let messageIndex = 0;
     loadingMessage.textContent = loadingMessages[0];
 
     progressAnimation = setInterval(() => {
         progressValue += Math.random() * 1.5 + 0.5;
-        if (progressValue >= 99) progressValue = 99;
+        if (progressValue >= 98) progressValue = 98;
+
         const floorPercent = Math.floor(progressValue);
         progressText.textContent = floorPercent + "%";
-        progressPath.setAttribute('stroke-dasharray', `${floorPercent}, 100`);
+        progressPath.setAttribute("stroke-dasharray", `${floorPercent}, 100`);
 
         if (floorPercent > 10 + messageIndex * 20 && messageIndex < loadingMessages.length - 1) {
             messageIndex++;
@@ -1740,30 +1746,33 @@ function startProgressAnimation() {
     }, 100);
 }
 
-function stopProgressAnimation(success = true) {
+function stopProgressAnimation() {
     clearInterval(progressAnimation);
-    progressValue = 100;
     progressText.textContent = "100%";
-    progressPath.setAttribute('stroke-dasharray', '100, 100');
+    progressPath.setAttribute("stroke-dasharray", "100, 100");
+
     setTimeout(() => {
         progressContainer.classList.add("hidden");
         status.classList.remove("hidden");
-        progressPath.setAttribute('stroke-dasharray', '0, 100');
-    }, success ? 300 : 500);
+        progressPath.setAttribute("stroke-dasharray", "0, 100");
+    }, 300);
 }
 
-// MAIN FUNCTION
+// ======== FUNÇÃO PRINCIPAL ========
 searchBtn.onclick = playMusic;
 
 async function playMusic() {
     const q = queryInput.value.trim();
-    if (!q) { showNotification("⚠️ Digite o nome da música!", "error"); queryInput.focus(); return; }
+    if (!q) {
+        showNotification("⚠️ Digite o nome da música!", "error");
+        return queryInput.focus();
+    }
 
     content.classList.add("hidden");
     audio.pause();
-    searchBtn.classList.add("loading");
-    searchBtn.disabled = true;
 
+    searchBtn.disabled = true;
+    searchBtn.classList.add("loading");
     startProgressAnimation();
 
     try {
@@ -1772,11 +1781,12 @@ async function playMusic() {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ query: q, userId: "site", User: "site" })
         });
+
         const data = await res.json();
 
-        stopProgressAnimation(true);
-        searchBtn.classList.remove("loading");
         searchBtn.disabled = false;
+        searchBtn.classList.remove("loading");
+        stopProgressAnimation();
 
         if (!data.download) {
             status.textContent = `❌ "${q}" não foi encontrada.`;
@@ -1784,28 +1794,29 @@ async function playMusic() {
             return;
         }
 
+        // Exibir dados
         titleEl.textContent = data.title;
         thumbEl.src = data.thumb;
         audio.src = data.download;
-        document.getElementById("btn-download").href = data.download;
-        document.getElementById("btn-download").download = data.title + ".mp3";
+
+        const dl = document.getElementById("btn-download");
+        dl.href = data.download;
+        dl.download = data.title + ".mp3";
 
         audio.onloadeddata = () => {
             content.classList.remove("hidden");
             status.textContent = "🎶 Vibe pronta para tocar!";
-            thumbEl.style.transform = "scale(1.1)";
-            setTimeout(() => thumbEl.style.transform = "scale(1)", 500);
-            showNotification(`✅ Vibe Encontrada! ${data.title}`, "success");
-            audio.play().catch(() => { status.textContent = "Clique no ▶️ para iniciar a música."; });
+            showNotification(`🎵 ${data.title} carregada!`, "success");
+            audio.play();
         };
 
     } catch (e) {
-        console.error("Erro ao buscar música:", e);
-        stopProgressAnimation(false);
-        searchBtn.classList.remove("loading");
+        console.error(e);
+        stopProgressAnimation();
         searchBtn.disabled = false;
-        status.textContent = "❌ Erro ao buscar dados da música.";
-        showNotification("Erro de conexão.", "error");
+        searchBtn.classList.remove("loading");
+        status.textContent = "❌ Erro ao buscar música.";
+        showNotification("Erro de conexão!", "error");
     }
 }
 </script>
