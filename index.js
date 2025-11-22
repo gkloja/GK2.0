@@ -186,29 +186,7 @@ app.post('/play', async (req, res) => {
   // Horário de Brasília
   const dataHora = new Date().toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" });
 
-  // Função para salvar logs
-  const salvarLog = () => {
-  const novoLog = { query, userId, User, horario: dataHora };
 
-  let logs = {};
-  if (fs.existsSync(logPath)) {
-    logs = JSON.parse(fs.readFileSync(logPath, 'utf8'));
-  }
-
-  // Se não existir ainda a chave do IP, cria uma lista
-  if (!logs[userIP]) {
-    logs[userIP] = [];
-  }
-
-  // Adiciona o novo log à lista do IP
-  logs[userIP].push(novoLog);
-
-  // Salva o arquivo novamente
-  fs.writeFileSync(logPath, JSON.stringify(logs, null, 2), 'utf8');
-  console.log(`📄 Log salvo para IP ${userIP}:`, novoLog);
-};
-
-  salvarLog();
 
   if (!global.activeUsers) global.activeUsers = new Set();
   if (!global.activeUsers2) global.activeUsers2 = new Set();
