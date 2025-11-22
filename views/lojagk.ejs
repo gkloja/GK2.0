@@ -1493,6 +1493,22 @@ body { font-family: 'Poppins', sans-serif; background: var(--bg); margin: 0; }
 .progress-text { font-size: 14px; font-weight: 600; }
 .loading-message { font-size: 12px; margin-top: 8px; color: var(--accent-dark); text-align: center; }
 
+.music-control {
+    margin-left: 10px;
+    padding: 6px 12px;
+    font-size: 18px;
+    border: none;
+    background: #ff6f61;
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.music-control:hover {
+    transform: scale(1.1);
+}
+
 /* PLAYER CONTENT */
 #music-content { margin-top: 15px; opacity: 1; transition: all 0.4s ease; }
 .thumb-box { 
@@ -1549,15 +1565,15 @@ body { font-family: 'Poppins', sans-serif; background: var(--bg); margin: 0; }
         <button id="music-close" class="close-btn">✕</button>
     </div>
 
-    <div id="music-search">
-        <input id="query" type="text" placeholder="Buscar música..." />
-        <button id="search-btn" title="Buscar e Tocar">
-            <span class="icon">🔍</span>
-            <span class="loader hidden"></span>
-        </button>
-        <!-- BOTÃO 2: play/pause -->
-<button id="music-toggle" class="floating-btn music-control">▶️</button>
-    </div>
+  <div id="music-search">
+    <input id="query" type="text" placeholder="Buscar música..." />
+    <button id="search-btn" title="Buscar e Tocar">
+        <span class="icon">🔍</span>
+        <span class="loader hidden"></span>
+    </button>
+    <!-- BOTÃO 2: play/pause dentro do widget -->
+    <button id="music-toggle" class="music-control">▶️</button>
+</div>
 
     <div class="suggestions">
         <div class="suggestion-tag" onclick="setSuggestion('Doja Cat Kiss Me More')">Doja Cat</div>
@@ -2291,7 +2307,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Botão de fechar
   closeBtn.onclick = () => {
     widget.classList.add("hidden");
-  };
+};
 });
 </script>
 </body>
