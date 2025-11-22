@@ -1421,7 +1421,7 @@
     <button id="close-music-player" class="close-btn">✖</button>
   </div>
 
-  <p class="info-text">Ouça uma música enquanto veja nosso catálogo de produtos! 🎵✨</p>
+  <p class="info-text">Ouça sua música enquanto explora nosso catálogo! 🎵✨</p>
 
   <div class="search-area">
     <input type="text" id="query" placeholder="Buscar música..." />
@@ -1433,13 +1433,19 @@
 
     <div class="music-info">
       <h3 id="song-title"></h3>
-      <audio controls id="audio" autoplay></audio>
+      <audio controls id="audio"></audio>
+      <span id="audio-duration" class="audio-duration"></span>
     </div>
 
     <a id="btn-download" class="download-btn" download>⬇ Baixar Música</a>
   </div>
 
   <p id="status-message" class="status-msg"></p>
+</div>
+
+<!-- Notificação -->
+<div id="music-notification" class="music-notif hidden">
+  🎶 Música pronta para ouvir! Clique no play ▶️
 </div>
 
 <!-- JavaScript -->
@@ -1461,6 +1467,8 @@ async function playMusic() {
   const title = document.getElementById("song-title");
   const thumb = document.getElementById("song-thumb");
   const btnDownload = document.getElementById("btn-download");
+  const audioDuration = document.getElementById("audio-duration");
+  const notif = document.getElementById("music-notification");
 
   if (!query) {
     alert("Digite o nome da música!");
@@ -1469,6 +1477,8 @@ async function playMusic() {
 
   status.textContent = "🎧 Buscando música...";
   player.classList.add("hidden");
+  notif.classList.add("hidden");
+  audioDuration.textContent = "";
 
   try {
     const response = await fetch("/play", {
@@ -1489,6 +1499,7 @@ async function playMusic() {
       return;
     }
 
+    // Preencher dados
     title.textContent = data.title;
     thumb.src = data.thumb;
     audio.src = data.download;
@@ -1496,12 +1507,21 @@ async function playMusic() {
     btnDownload.href = data.download;
     btnDownload.download = `${data.title}.mp3`;
 
-    status.textContent = "🎶 Tocando sua música!";
-    player.classList.remove("hidden");
+    // Exibir player só depois de carregar
+    audio.onloadedmetadata = () => {
+      const dur = audio.duration;
+      audioDuration.textContent = `Duração: ${Math.floor(dur / 60)}:${("0"+Math.floor(dur % 60)).slice(-2)}`;
+      player.classList.remove("hidden");
+      status.textContent = "🎶 Música pronta!";
+      
+      // Mostrar notificação
+      notif.classList.remove("hidden");
+      setTimeout(() => notif.classList.add("hidden"), 4000);
 
-    audio.play().catch(() => {
-      status.textContent = "Clique no ▶️ para iniciar a música.";
-    });
+      audio.play().catch(() => {
+        status.textContent = "Clique no ▶️ para iniciar a música.";
+      });
+    };
 
   } catch (e) {
     console.error(e);
@@ -1520,14 +1540,12 @@ async function playMusic() {
   --shadow: 0 6px 20px rgba(0,0,0,0.25);
 }
 
-body {
-  font-family: 'Arial', sans-serif;
-}
+body { font-family: 'Arial', sans-serif; }
 
 /* Botão flutuante */
 .floating-btn {
   position: fixed;
-  bottom: 25px;
+  bottom: 90px; /* Mais alto que antes */
   right: 25px;
   background: var(--accent-color);
   color: white;
@@ -1541,27 +1559,22 @@ body {
   transition: transform 0.2s ease;
   z-index: 999;
 }
-.floating-btn:hover {
-  transform: scale(1.1);
-}
+.floating-btn:hover { transform: scale(1.1); }
 
 /* Player Widget */
 .player-container {
   position: fixed;
-  bottom: 100px;
+  bottom: 160px;
   right: 25px;
-  width: 300px;
+  width: 320px;
   background: var(--secondary-color);
-  border-radius: 15px;
+  border-radius: 20px;
   box-shadow: var(--shadow);
   padding: 15px;
-  transition: all 0.3s ease;
-  z-index: 999;
+  transition: all 0.4s ease;
+  z-index: 998;
 }
-
-.player-container.hidden {
-  display: none;
-}
+.player-container.hidden { display: none; }
 
 .widget-header {
   display: flex;
@@ -1570,13 +1583,7 @@ body {
   font-weight: bold;
   margin-bottom: 10px;
 }
-
-.close-btn {
-  background: none;
-  border: none;
-  font-size: 18px;
-  cursor: pointer;
-}
+.close-btn { background: none; border: none; font-size: 18px; cursor: pointer; }
 
 /* Texto motivador */
 .info-text {
@@ -1588,12 +1595,7 @@ body {
 }
 
 /* Search area */
-.search-area {
-  display: flex;
-  gap: 5px;
-  margin-bottom: 10px;
-}
-
+.search-area { display: flex; gap: 5px; margin-bottom: 10px; }
 .search-area input {
   flex: 1;
   padding: 6px 8px;
@@ -1601,7 +1603,6 @@ body {
   border: 1px solid #ccc;
   font-size: 0.9rem;
 }
-
 .search-area button {
   background: var(--accent-color);
   border: none;
@@ -1612,9 +1613,7 @@ body {
   cursor: pointer;
   transition: 0.2s ease;
 }
-.search-area button:hover {
-  background: #926f48;
-}
+.search-area button:hover { background: #926f48; }
 
 /* Música */
 .music-box {
@@ -1623,18 +1622,13 @@ body {
   gap: 10px;
   margin-bottom: 10px;
 }
-
 .thumb {
   width: 100%;
   border-radius: 10px;
   object-fit: cover;
 }
-
-.music-info h3 {
-  margin: 0;
-  font-size: 1rem;
-  color: var(--primary-color);
-}
+.music-info h3 { margin: 0; font-size: 1rem; color: var(--primary-color); }
+.audio-duration { font-size: 0.85rem; color: var(--primary-color); display: block; margin-top: 3px; }
 
 /* Download button */
 .download-btn {
@@ -1648,15 +1642,34 @@ body {
   text-align: center;
   transition: 0.2s ease;
 }
-.download-btn:hover {
-  background: #926f48;
-}
+.download-btn:hover { background: #926f48; }
 
 /* Status */
-.status-msg {
-  font-size: 0.85rem;
-  color: var(--primary-color);
-  text-align: center;
+.status-msg { font-size: 0.85rem; color: var(--primary-color); text-align: center; }
+
+/* Notificação */
+.music-notif {
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  background: var(--accent-color);
+  color: white;
+  padding: 10px 15px;
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.4s ease;
+  z-index: 1000;
+}
+.music-notif.hidden {
+  opacity: 0;
+  transform: translateY(20px);
+  pointer-events: none;
+}
+.music-notif:not(.hidden) {
+  opacity: 1;
+  transform: translateY(0);
 }
 </style>
 
