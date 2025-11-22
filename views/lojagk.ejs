@@ -1609,7 +1609,7 @@ body { font-family: 'Poppins', sans-serif; background: var(--bg); margin: 0; }
             <div class="progress-text" id="progress-text">0%</div>
         </div>
         <div class="loading-message" id="loading-message">Iniciando busca...</div>
-            <button id="music-toggle" class="music-control">▶️</button>
+
     </div>
 
     <div id="music-content" class="hidden">
@@ -1640,6 +1640,7 @@ body { font-family: 'Poppins', sans-serif; background: var(--bg); margin: 0; }
         </div>
 
         <a id="btn-download" class="download-btn" download>⬇ Baixar MP3</a>
+                    <button id="music-toggle" class="music-control">▶️</button>
     </div>
 </div>
 
@@ -2307,7 +2308,7 @@ document.addEventListener("DOMContentLoaded", () => {
 <script>
 document.addEventListener("DOMContentLoaded", () => {
   const closeBtn = document.getElementById("music-close");
-  const widget = document.getElementById("music-player-widget");
+  const widget = document.getElementById("music-widget"); // CORRIGIDO
 
   if (!closeBtn || !widget) {
     console.error("❌ Elementos do player não encontrados!");
@@ -2316,7 +2317,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   closeBtn.onclick = () => {
     widget.classList.add("hidden");
-};
+  };
 });
 </script>
 </body>
