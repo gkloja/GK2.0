@@ -1644,15 +1644,6 @@
 </div>
 
 <script>
-// Abrir e fechar o player
-document.getElementById("open-music-player").onclick = () => {
-  document.getElementById("music-player-widget").classList.remove("hidden");
-};
-
-document.getElementById("close-music-player").onclick = () => {
-  document.getElementById("music-player-widget").classList.add("hidden");
-};
-
 async function playMusic() {
   const query = document.getElementById("query").value.trim();
   const status = document.getElementById("status-message");
@@ -1671,9 +1662,8 @@ async function playMusic() {
   player.classList.add("hidden");
 
   try {
-    const response = await fetch("http://br2.bronxyshost.com:4009/play", {
+    const response = await fetch("/play", {
       method: "POST",
-      mode: "cors", // 👈 AQUI OBRIGATÓRIO
       headers: {
         "Content-Type": "application/json"
       },
@@ -1684,15 +1674,15 @@ async function playMusic() {
       })
     });
 
+    const data = await response.json();
+
     if (!response.ok) {
-      status.textContent = "❌ Erro ao conectar com o servidor.";
+      status.textContent = "❌ Erro no servidor: " + (data.message || data.erro || "Tente novamente.");
       return;
     }
 
-    const data = await response.json();
-
-    if (data.erro || !data.download) {
-      status.textContent = "❌ Música não encontrada.";
+    if (!data.download) {
+      status.textContent = "❌ Nenhuma API conseguiu baixar o áudio.";
       return;
     }
 
@@ -1704,10 +1694,12 @@ async function playMusic() {
     btnDownload.href = data.download;
     btnDownload.download = `${data.title}.mp3`;
 
-    player.classList.remove("hidden");
     status.textContent = "🎶 Tocando sua música!";
+    player.classList.remove("hidden");
 
-    audio.play();
+    audio.play().catch(() => {
+      status.textContent = "Clique no ▶️ para iniciar a música.";
+    });
 
   } catch (e) {
     console.log(e);
