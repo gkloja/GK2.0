@@ -1673,7 +1673,8 @@ async function playMusic() {
   try {
     const response = await fetch("http://br2.bronxyshost.com:4009/play", {
       method: "POST",
-      headers: { 
+      mode: "cors", // 👈 AQUI OBRIGATÓRIO
+      headers: {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
@@ -1690,7 +1691,6 @@ async function playMusic() {
 
     const data = await response.json();
 
-    // Caso retorne erro vindo da API
     if (data.erro || !data.download) {
       status.textContent = "❌ Música não encontrada.";
       return;
