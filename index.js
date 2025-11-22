@@ -218,8 +218,6 @@ const searchYouTube = async (query) => {
   console.log("- Testando OotaIzumi API");
 
   // Substitua pelo termo que você quer buscar
-  const query = "HINO DO FLAMENGO";
-
   const ootaRes = await axios.get('https://api.ootaizumi.web.id/downloader/youtube-play', {
     params: { query }
   });
