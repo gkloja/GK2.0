@@ -214,7 +214,6 @@ const searchYouTube = async (query) => {
   console.log("🔍 Iniciando busca no YouTube:", query);
 
   // 1️⃣ Bronxy
-  for (const key of API_KEYS) {
     try {
   console.log("- Testando OotaIzumi API");
 
