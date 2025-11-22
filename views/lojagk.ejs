@@ -1414,14 +1414,14 @@
   🎧
 </button>
 
-<!-- Widget do player -->
-<div id="music-player-widget" class="player-container hidden minimized">
+<!-- Player Widget -->
+<div id="music-player-widget" class="player-container hidden">
   <div class="widget-header">
     <span>🎶 Music Player</span>
     <button id="close-music-player" class="close-btn">✖</button>
   </div>
 
-  <p class="info-text minimized-text">Ouça sua música enquanto explora nosso catálogo! 🎵✨</p>
+  <p class="info-text">Ouça sua música enquanto explora nosso catálogo! 🎵✨</p>
 
   <div class="search-area">
     <input type="text" id="query" placeholder="Buscar música..." />
@@ -1430,13 +1430,14 @@
 
   <div id="audio-player" class="music-box hidden">
     <img id="song-thumb" class="thumb" />
-
     <div class="music-info">
       <h3 id="song-title"></h3>
       <audio controls id="audio"></audio>
+      <div class="progress-container">
+        <div id="progress-bar" class="progress-bar"></div>
+      </div>
       <span id="audio-duration" class="audio-duration"></span>
     </div>
-
     <a id="btn-download" class="download-btn" download>⬇ Baixar Música</a>
   </div>
 
@@ -1454,13 +1455,26 @@ document.addEventListener("DOMContentLoaded", () => {
   const widget = document.getElementById("music-player-widget");
   const closeBtn = document.getElementById("close-music-player");
 
-  // Toggle widget
+  // Toggle abrir/fechar
   openBtn.onclick = () => {
-    widget.classList.toggle("hidden");
-    widget.classList.toggle("minimized");
+    if(widget.classList.contains("hidden")) {
+      widget.classList.remove("hidden");
+    } else {
+      widget.classList.add("hidden");
+    }
   }
 
   closeBtn.onclick = () => widget.classList.add("hidden");
+
+  // Barra de progresso animada
+  const audio = document.getElementById("audio");
+  const progressBar = document.getElementById("progress-bar");
+  audio.addEventListener("timeupdate", () => {
+    if(audio.duration) {
+      const percent = (audio.currentTime / audio.duration) * 100;
+      progressBar.style.width = percent + "%";
+    }
+  });
 });
 
 async function playMusic() {
@@ -1479,15 +1493,10 @@ async function playMusic() {
     return;
   }
 
-  // Status inicial
-  status.textContent = "🎧 Buscando música...";
-  status.style.color = "#333";
+  status.textContent = "⏳ Buscando música... Aproveite para ver nossas promoções!";
   player.classList.add("hidden");
   notif.classList.add("hidden");
   audioDuration.textContent = "";
-
-  // Mensagem divertida enquanto busca
-  status.textContent = "⏳ Estamos procurando sua música... Fique de olho nas promoções! Você será notificado quando estiver pronta!";
 
   try {
     const response = await fetch("/play", {
@@ -1512,17 +1521,14 @@ async function playMusic() {
     title.textContent = data.title;
     thumb.src = data.thumb;
     audio.src = data.download;
-
     btnDownload.href = data.download;
     btnDownload.download = `${data.title}.mp3`;
 
-    // Exibir player só quando carregar
     audio.onloadedmetadata = () => {
       const dur = audio.duration;
-      audioDuration.textContent = `Duração: ${Math.floor(dur / 60)}:${("0"+Math.floor(dur % 60)).slice(-2)}`;
+      audioDuration.textContent = `Duração: ${Math.floor(dur/60)}:${("0"+Math.floor(dur%60)).slice(-2)}`;
       player.classList.remove("hidden");
-      status.textContent = "🎶 Sua música está pronta para tocar!";
-      
+
       // Notificação
       notif.classList.remove("hidden");
       setTimeout(() => notif.classList.add("hidden"), 4000);
@@ -1530,9 +1536,11 @@ async function playMusic() {
       audio.play().catch(() => {
         status.textContent = "Clique no ▶️ para iniciar a música.";
       });
+
+      status.textContent = "🎶 Música pronta para ouvir!";
     };
 
-  } catch (e) {
+  } catch(e) {
     console.error(e);
     status.textContent = "❌ Erro ao buscar música.";
   }
@@ -1575,7 +1583,7 @@ body { font-family: 'Arial', sans-serif; }
   position: fixed;
   bottom: 170px;
   right: 25px;
-  width: 320px;
+  width: 340px;
   background: var(--secondary-color);
   border-radius: 20px;
   box-shadow: var(--shadow);
@@ -1583,7 +1591,6 @@ body { font-family: 'Arial', sans-serif; }
   transition: all var(--transition);
   z-index: 998;
 }
-.player-container.minimized { height: 70px; overflow: hidden; }
 .player-container.hidden { display: none; }
 
 .widget-header {
@@ -1597,8 +1604,6 @@ body { font-family: 'Arial', sans-serif; }
 
 /* Texto motivador */
 .info-text { font-size: 0.9rem; margin-bottom: 10px; color: var(--primary-color); text-align: center; font-style: italic; }
-.minimized-text { display: none; }
-.player-container:not(.minimized) .minimized-text { display: block; }
 
 /* Search area */
 .search-area { display: flex; gap: 5px; margin-bottom: 10px; }
@@ -1620,6 +1625,23 @@ body { font-family: 'Arial', sans-serif; }
 .thumb { width: 100%; border-radius: 10px; object-fit: cover; }
 .music-info h3 { margin: 0; font-size: 1rem; color: var(--primary-color); }
 .audio-duration { font-size: 0.85rem; color: var(--primary-color); display: block; margin-top: 3px; }
+
+/* Barra de progresso */
+.progress-container {
+  width: 100%;
+  height: 5px;
+  background: #ddd;
+  border-radius: 5px;
+  overflow: hidden;
+  margin-top: 5px;
+}
+.progress-bar {
+  width: 0%;
+  height: 100%;
+  background: var(--accent-color);
+  transition: width 0.2s linear;
+  border-radius: 5px;
+}
 
 /* Download button */
 .download-btn { display: inline-block; background: var(--accent-color); color: white; text-decoration: none; padding: 5px 10px; border-radius: 8px; font-weight: bold; text-align: center; transition: var(--transition); }
