@@ -216,26 +216,37 @@ const searchYouTube = async (query) => {
   // 1️⃣ Bronxy
   for (const key of API_KEYS) {
     try {
-      console.log(`- Testando Bronxy com key: ${key}`);
-      const res = await axios.get(`https://api.bronxyshost.com.br/api-bronxys/pesquisa_ytb?nome=${encodeURIComponent(query)}&apikey=${key}`);
-      const data = res.data;
-      if (Array.isArray(data) && data.length > 0 && data[0].url) {
-        const result = data[0];
-        console.log(`✅ Bronxy encontrou: ${result.titulo}`);
-        return {
-          url: result.url,
-          image: result.thumb || "",
-          title: result.titulo,
-          desc: result.desc || "",
-          tempo: result.tempo || "0:00",
-          fonte: "Bronxy"
-        };
-      }
-    } catch (err) {
-      console.warn(`⚠️ Bronxy erro com key ${key}: ${err.message}`);
-    }
+  console.log("- Testando OotaIzumi API");
+
+  // Substitua pelo termo que você quer buscar
+  const query = "HINO DO FLAMENGO";
+
+  const ootaRes = await axios.get('https://api.ootaizumi.web.id/downloader/youtube-play', {
+    params: { query }
+  });
+
+  const result = ootaRes.data.result;
+
+  if (ootaRes.data.status && result?.url) {
+    console.log(`✅ OotaIzumi encontrou: ${result.title}`);
+    return {
+      url: result.url,
+      title: result.title,
+      image: result.thumbnail || "",
+      desc: result.description || "",
+      tempo: result.metadata?.duration || "0:00",
+      views: result.metadata?.view || "",
+      canal: result.author?.channelTitle || "",
+      audio: result.download || "",
+      videoDownload: result.url || "", // essa API parece retornar apenas link do vídeo
+      fonte: "OotaIzumi"
+    };
   }
 
+  console.warn("⚠️ OotaIzumi retornou resultado inválido.");
+} catch (err) {
+  console.warn(`⚠️ OotaIzumi erro: ${err.response?.data?.mensagem || err.message}`);
+}
 // 2️⃣ NexFuture
 try {
   console.log("- Testando NexFuture");
@@ -416,7 +427,7 @@ const apis = [
     name: "NexFuture V3", 
     needsDownloadLink: true 
   },
-  {
+  { 
     url: (v) => `https://hobsidian.shop/api/downloads/youtubemp3?apikey=daa0da72-6d58-4cd4-9cef-ac355dc4d8dc&query=${encodeURIComponent(v)}`,
     name: "Hobsidian",
     needsDownloadLink: true
@@ -426,19 +437,21 @@ const apis = [
     name: "NexFuture V2", 
     needsDownloadLink: true 
   },
-  // 🔹 NexFuture Play-Audio (testada com curl)
+  { 
+    url: (v) => `https://api.ootaizumi.web.id/downloader/youtube?url=${encodeURIComponent(v)}&format=mp3`, 
+    name: "OotaIzumi", 
+    needsDownloadLink: true 
+  },
   { 
     url: (v) => `https://api.nexfuture.com.br/api/downloads/play-audio?apikey=${apiKey7}&query=${encodeURIComponent(v)}`, 
     name: "NexFuture Play-Audio", 
     needsDownloadLink: true 
   },
-  // 🔹 NexFuture Play-APIYT-MP3
   { 
     url: (v) => `https://api.nexfuture.com.br/api/downloads/play-apiyt-mp3?apikey=${apiKey7}&url=${encodeURIComponent(v)}`, 
     name: "NexFuture Play-APIYT-MP3", 
     needsDownloadLink: true 
   },
-  // 🔹 Nova: NexFuture Play-Vreden-MP3
   { 
     url: (v) => `https://api.nexfuture.com.br/api/downloads/play-vreden-mp3?apikey=${apiKey7}&query=${encodeURIComponent(v)}`, 
     name: "NexFuture Play-Vreden-MP3", 
@@ -459,7 +472,6 @@ const apis = [
     name: "GL API", 
     needsDownloadLink: true 
   },
-  // 🔹 Nova API ZenzzXD (versão v2 atualizada)
   { 
     url: (v) => `https://api.zenzxz.my.id/api/downloader/ytmp3v2?url=${encodeURIComponent(v)}`, 
     name: "ZenzzXD v2", 
