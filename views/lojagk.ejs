@@ -164,6 +164,234 @@
     text-transform: uppercase;
     letter-spacing: 1.5px;
   }
+  /* ============================
+   GRID PREMIUM
+============================ */
+.grid-premium {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 22px;
+  padding: 20px;
+}
+
+
+/* ============================
+   CARD PREMIUM BASE
+============================ */
+.card-premium {
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 16px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 8px 26px rgba(0,0,0,0.08);
+  transition: all 0.25s ease;
+  border: 1px solid transparent;
+}
+
+.card-premium:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.15);
+  border-color: #f1c27d;
+}
+
+
+/* ============================
+   SELO DINÂMICO
+============================ */
+.tag-dinamica {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: linear-gradient(45deg, #ffb800, #ff7600);
+  padding: 6px 12px;
+  font-size: 0.75rem;
+  font-weight: bold;
+  color: #fff;
+  border-radius: 10px;
+  z-index: 5;
+  animation: pulseTag 1.5s infinite;
+}
+
+@keyframes pulseTag {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.12); opacity: .85; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+
+/* ============================
+   IMAGENS PREMIUM
+============================ */
+.premium-img {
+  width: 100%;
+  height: 260px;
+  border-radius: 14px;
+  overflow: hidden;
+  margin-bottom: 12px;
+  background: #eee;
+}
+
+.premium-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform .35s ease;
+}
+
+.card-premium:hover .premium-img img {
+  transform: scale(1.08);
+}
+
+
+/* ============================
+   TÍTULOS & TEXTOS
+============================ */
+.titulo-produto {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 8px;
+  min-height: 42px;
+}
+
+.preco-produto {
+  font-size: 1.2rem;
+  color: #111;
+  margin-bottom: 10px;
+}
+
+.preco-produto span {
+  font-size: 0.9rem;
+  opacity: 0.7;
+}
+
+.preco-produto strong {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #e49522;
+}
+
+
+/* ============================
+   AVALIAÇÃO
+============================ */
+.avaliacao-luxo {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+  color: #666;
+  font-size: 0.85rem;
+}
+
+.avaliacao-luxo .stars i {
+  color: #f4c300;
+  margin-right: 1px;
+}
+
+
+/* ============================
+   ESTOQUE
+============================ */
+.estoque-premium {
+  font-size: 0.85rem;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #333;
+}
+
+.estoque-premium .zero {
+  color: #cc0000;
+  font-weight: bold;
+}
+
+
+/* ============================
+   BARRA DE POPULARIDADE
+============================ */
+.popularidade-bar {
+  width: 100%;
+  height: 6px;
+  background: #eaeaea;
+  border-radius: 10px;
+  overflow: hidden;
+  margin: 6px 0 4px;
+}
+
+.popularidade-bar .bar {
+  height: 100%;
+  background: linear-gradient(90deg, #ffb300, #ff7300);
+  border-radius: 10px;
+  transition: width .5s ease;
+}
+
+.popularidade-texto {
+  font-size: 0.78rem;
+  color: #555;
+  margin-bottom: 16px;
+}
+
+
+/* ============================
+   AÇÕES (BOTÕES)
+============================ */
+.acoes-premium {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.acoes-premium input {
+  width: 60px;
+  height: 38px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  padding-left: 10px;
+  font-size: 0.9rem;
+}
+
+.btn-add-premium {
+  flex: 1;
+  background: linear-gradient(45deg, #ff9d00, #ff6c00);
+  color: white;
+  border: none;
+  padding: 10px 12px;
+  border-radius: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 0.95rem;
+  box-shadow: 0 4px 14px rgba(255, 110, 0, .35);
+  transition: all .2s ease;
+}
+
+.btn-add-premium:hover {
+  filter: brightness(1.1);
+  transform: translateY(-2px);
+}
+
+
+/* ============================
+   BOTÃO ESGOTADO
+============================ */
+.btn-esgotado-premium {
+  width: 100%;
+  background: #333;
+  color: #fff;
+  padding: 12px;
+  border-radius: 12px;
+  border: none;
+  font-size: 0.9rem;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background .2s ease;
+}
+
+.btn-esgotado-premium:hover {
+  background: #000;
+}
 
   /* ====================== BANNER PROMOCIONAL ATUALIZADO ====================== */
   .banner-promocao {
@@ -1002,67 +1230,107 @@
     </div>
   </div>
 
-<div class="produtos" id="produtos">
+<div class="produtos grid-premium" id="produtos">
   <%
-    // Definição de utilitário (SAFE FLOAT PARSER) para uso no servidor EJS
     function safeParseFloatEJS(v){ 
-        const val = String(v).replace(',', '.'); // Substitui vírgula por ponto
-        const num = parseFloat(val); 
-        return isNaN(num) ? 0 : num;
+      const val = String(v).replace(',', '.');
+      const num = parseFloat(val); 
+      return isNaN(num) ? 0 : num;
     }
 
-    // Mapeia os produtos com um ID único (Item)
     const produtosComId = produtos.map(prod => ({
       ...prod,
-      id: prod.Item, // Garantindo que o ID é 'Item'
+      id: prod.Item,
       estoque: prod["ESTOQUE "] || prod.ESTOQUE,
       vendido: prod["Vendido (QNTD)"] || 0,
       valorVenda: prod["Valor Venda (R$)"],
       descricao: prod.Descrição
     }));
+
+    function getTagEspecial(prod) {
+      if (prod.estoque === 0) return "🔥 SOLD OUT";
+      if (prod.vendido >= 10) return "🏆 BEST SELLER";
+      if (prod.vendido > 0) return "⭐ Muito procurado";
+      return "✨ Novo";
+    }
   %>
+
   <% produtosComId.forEach(prod => { %>
-    <div class="produto" 
+    <div class="produto card-premium"
          data-id="<%= prod.id %>"
-         data-nome="<%= prod.descricao.toLowerCase() %>" 
+         data-nome="<%= prod.descricao.toLowerCase() %>"
          data-estoque="<%= prod.estoque %>"
          data-vendido="<%= prod.vendido %>">
-      
-      <% if (prod.vendido > 0) { %>
-        <div class="selo popular">⭐ TOP</div>
-      <% } %>
 
-      <div class="produto-img-container">
-        <img src="<%= prod.Imagem || 'https://raw.githubusercontent.com/nazuninha/uploads/main/fotos/1763313349933_rjvhcz.jpg' %>" alt="<%= prod.descricao %>">
+      <!-- SELO DINÂMICO PREMIUM -->
+      <div class="tag-dinamica">
+        <%= getTagEspecial(prod) %>
       </div>
-      
-      <h3><%= prod.descricao %></h3>
-      <p class="preco">R$ <%= safeParseFloatEJS(prod.valorVenda).toFixed(2) %></p>
-      <div class="avaliacao">
-        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-        <span>5.0 (Clientes amam!)</span>
-      </div>
-      <p class="estoque">Estoque: **<%= prod.estoque %>**</p>
 
+      <!-- Imagem com hover animado -->
+      <div class="produto-img-container premium-img">
+        <img src="<%= prod.Imagem || 'https://raw.githubusercontent.com/nazuninha/uploads/main/fotos/1763313349933_rjvhcz.jpg' %>"
+             alt="<%= prod.descricao %>">
+      </div>
+
+      <!-- Nome -->
+      <h3 class="titulo-produto">
+        <%= prod.descricao %>
+      </h3>
+
+      <!-- Preço Premium -->
+      <p class="preco-produto">
+        <span>R$</span>
+        <strong><%= safeParseFloatEJS(prod.valorVenda).toFixed(2) %></strong>
+      </p>
+
+      <!-- Avaliação Visual -->
+      <div class="avaliacao-luxo">
+        <div class="stars">
+          <i class="fas fa-star"></i><i class="fas fa-star"></i>
+          <i class="fas fa-star"></i><i class="fas fa-star"></i>
+          <i class="fas fa-star"></i>
+        </div>
+        <span>5.0 • Favorito dos clientes</span>
+      </div>
+
+      <!-- Estoque -->
+      <p class="estoque-premium">
+        <i class="fas fa-box"></i> 
+        <%= prod.estoque > 0 ? prod.estoque + ' unidades disponíveis' : 'Sem estoque' %>
+      </p>
+
+      <!-- Barra de Popularidade -->
+      <%
+        const totalEstimado = prod.vendido + prod.estoque;
+        const popularidade = totalEstimado > 0 ? Math.round((prod.vendido / totalEstimado) * 100) : 0;
+      %>
+
+      <div class="popularidade-bar">
+        <div class="bar" style="width: <%= popularidade %>%"></div>
+      </div>
+      <p class="popularidade-texto">
+        <%= popularidade %>% dos clientes escolheram este item
+      </p>
+
+      <!-- Ações -->
       <% if (prod.estoque > 0) { %>
-        <div class="controles-produto">
-          <input type="number" min="1" max="<%= prod.estoque %>" value="1" id="qtd-<%= prod.id %>" aria-label="Quantidade">
-          <button type="button" onclick="adicionarCarrinho('<%= prod.id %>')">
-            <i class="fas fa-shopping-cart"></i> Adicionar
+        <div class="acoes-premium">
+          <input type="number" min="1" max="<%= prod.estoque %>" value="1" id="qtd-<%= prod.id %>">
+
+          <button class="btn-add-premium" onclick="adicionarCarrinho('<%= prod.id %>')">
+            <i class="fas fa-shopping-bag"></i> Comprar Agora
           </button>
         </div>
       <% } else { %>
-        <div class="selo esgotado">Esgotado</div>
-        <div class="controles-produto">
-          <button type="button" onclick="desejoComprar('<%= prod.descricao %>')">
-            <i class="fas fa-heart"></i> Avise-me quando voltar
-          </button>
-        </div>
+        <button class="btn-esgotado-premium" onclick="desejoComprar('<%= prod.descricao %>')">
+          <i class="fas fa-bell"></i> Avise-me quando voltar
+        </button>
       <% } %>
+
     </div>
   <% }) %>
 </div>
-
 </div>
 
 <footer>
@@ -1254,15 +1522,7 @@ window.desejoComprar = function(nome) {
     return;
   }
 
-  // Se o OneSignal estiver carregado
-  if (window.OneSignal) {
-    OneSignal.getNotificationPermission().then(permission => {
-      if (permission !== "granted") {
-        // Mostra o prompt, mas não precisa bloquear o resto
-        OneSignal.showSlidedownPrompt();
-      }
-    });
-  }
+
 
   // Registra o desejo imediatamente
   desejos.push(nome);
@@ -1421,17 +1681,21 @@ function aplicarFiltros(){
       mostrar = false;
     }
 // Novos produtos → IDs maiores
-    if(filtroAtual === 'novos'){
-      // Aqui definimos quantos produtos “novos” você quer mostrar
-      // Ex: top 10 mais recentes
-      const topN = 10;
-      // Ordena todos pelo ID (maior primeiro)
-      const idsOrdenados = produtos
-        .map(p => parseInt(p.dataset.id) || 0)
-        .sort((a,b) => b - a)
-        .slice(0, topN);
-      if(!idsOrdenados.includes(id)) mostrar = false;
-    }
+if (filtroAtual === 'novos') {
+  const topN = 10;
+
+  // pega todos os produtos (ELEMENTOS HTML), não o array original
+  const idsOrdenados = [...produtosContainer.querySelectorAll('.produto')]
+    .map(p => parseInt(p.dataset.id) || 0)
+    .sort((a, b) => b - a)
+    .slice(0, topN);
+
+  const id = parseInt(prod.dataset.id) || 0;
+
+  if (!idsOrdenados.includes(id)) {
+    mostrar = false;
+  }
+}
 
 
     prod.style.display = mostrar ? 'flex' : 'none';
