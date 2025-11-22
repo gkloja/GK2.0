@@ -780,248 +780,188 @@
   }
 
   /* ====================== CARRINHO FLUTUANTE ATUALIZADO ====================== */
-  .carrinho {
-    position: fixed;
-    bottom: 24px;
-    right: 24px;
-    z-index: 5000;
-    background: var(--cor-acento);
-    color: var(--cor-primaria);
-    padding: 15px 25px;
-    border-radius: 40px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), 0 0 0 4px var(--cor-fundo);
-    cursor: pointer;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    transition: var(--transicao);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-  }
+/* ----- BOTÃO DE CARRINHO PREMIUM ----- */
+.carrinho-premium {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #1c1c1c, #2b2b2b);
+  color: #fff;
+  padding: 12px 18px;
+  border-radius: 14px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(4px);
+  position: relative;
+  user-select: none;
+}
 
-  .carrinho:hover {
-    transform: translateY(-4px) scale(1.02);
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5), 0 0 0 6px var(--cor-fundo);
-  }
+.carrinho-premium:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.22);
+}
 
-  .carrinho:active {
-    transform: scale(0.98);
-  }
+.carrinho-premium:active {
+  transform: scale(0.97);
+}
 
-  .carrinho i {
-    animation: pulse-icon 2s infinite ease-in-out;
-  }
+/* Ícone */
+.carrinho-icon-area {
+  font-size: 1.25rem;
+  display: flex;
+  align-items: center;
+}
 
-  @keyframes pulse-icon {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.05); }
-  }
+/* Texto */
+.carrinho-label {
+  font-size: 0.95rem;
+  letter-spacing: 0.4px;
+}
 
-  .carrinho-count {
-    background: var(--cor-erro);
-    color: var(--cor-texto-claro);
-    border-radius: 50%;
-    padding: 4px 9px;
-    font-size: 0.85rem;
-    margin-left: 5px;
-    min-width: 28px;
-    height: 28px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    transition: background 0.2s, transform 0.2s;
-  }
+/* Número do carrinho */
+.carrinho-count {
+  background: #e63946;
+  color: #fff;
+  padding: 2px 7px;
+  font-size: 0.8rem;
+  border-radius: 50px;
+  font-weight: 700;
+  display: inline-block;
+  min-width: 22px;
+  text-align: center;
+  transition: transform 0.2s ease, background 0.2s;
+}
 
-  .carrinho-count.animar-adicao {
-    transform: scale(1.3);
-    background: var(--cor-sucesso);
-  }
+/* Animação quando o número muda */
+.carrinho-count.animate {
+  animation: pulseCart 0.35s ease;
+}
+
+@keyframes pulseCart {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.25); }
+  100% { transform: scale(1); }
+}
 
   /* ====================== PAINEL DE FINALIZAÇÃO ATUALIZADO ====================== */
-  .finalizar {
-    position: fixed;
-    top: 0;
-    right: 0;
-    width: 400px;
-    max-width: 95%;
-    height: 100%;
-    background: var(--cor-fundo);
-    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.15), inset 1px 0 5px rgba(255, 255, 255, 0.1);
-    padding: 30px;
-    transform: translateX(100%);
-    transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-    z-index: 6000;
-    display: flex;
-    flex-direction: column;
-    overflow-y: auto;
-  }
+ /* Painel do carrinho */
+.finalizar {
+  position: fixed;
+  top: 0;
+  right: -100%;
+  width: 380px;
+  height: 100%;
+  background: var(--cor-primaria);
+  color: var(--cor-secundaria);
+  box-shadow: -4px 0 20px rgba(0,0,0,0.25);
+  padding: 20px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  transition: 0.35s ease;
+  backdrop-filter: blur(10px);
+}
 
-  .fechar-carrinho {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    background: var(--cor-fundo);
-    border: none;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    font-size: 1.2rem;
-    color: var(--cor-erro);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15), inset 1px 1px 3px rgba(255,255,255,0.2);
-    transition: var(--transicao);
-  }
+/* Quando aberto */
+.finalizar.ativo {
+  right: 0;
+}
 
-  .fechar-carrinho:hover {
-    transform: rotate(90deg) scale(1.15);
-    box-shadow: 0 6px 18px rgba(0,0,0,0.25), inset 1px 1px 5px rgba(255,255,255,0.3);
-  }
+/* Cabeçalho */
+.carrinho-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 25px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  padding-bottom: 15px;
+}
 
-  .overlay-finalizar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(3px);
-    z-index: 5500;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.4s ease-out;
-  }
+.titulo-carrinho {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--cor-secundaria);
+}
 
-  .finalizar[aria-hidden="false"] {
-    transform: translateX(0);
-  }
+.fechar-carrinho {
+  background: transparent;
+  border: none;
+  font-size: 1.4rem;
+  color: var(--cor-secundaria);
+  cursor: pointer;
+  transition: 0.2s;
+}
 
-  .finalizar[aria-hidden="false"] ~ .overlay-finalizar {
-    opacity: 1;
-    pointer-events: auto;
-  }
+.fechar-carrinho:hover {
+  color: var(--cor-acento);
+  transform: rotate(90deg);
+}
 
-  .finalizar h2 {
-    font-family: 'Playfair Display', serif;
-    color: var(--cor-primaria);
-    font-size: 2.2rem;
-    margin-bottom: 25px;
-    border-bottom: 3px solid var(--cor-acento);
-    padding-bottom: 15px;
-  }
+/* Lista de produtos */
+.lista-carrinho {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
 
-  #listaCarrinho {
-    list-style: none;
-    padding: 0;
-    margin-bottom: 30px;
-    flex-grow: 1;
-  }
+.lista-carrinho::-webkit-scrollbar {
+  width: 6px;
+}
+.lista-carrinho::-webkit-scrollbar-thumb {
+  background: var(--cor-acento);
+  border-radius: 4px;
+}
 
-  .item-carrinho {
-    display: grid;
-    grid-template-areas: 
-      "title actions"
-      "meta actions"
-      "sub actions";
-    grid-template-columns: 1fr max-content;
-    gap: 2px 15px;
-    padding: 12px 0;
-    border-bottom: 1px solid var(--cor-borda-clara);
-    transition: var(--transicao);
-  }
+/* Rodapé */
+.carrinho-footer {
+  border-top: 1px solid rgba(255,255,255,0.08);
+  padding-top: 15px;
+}
 
-  .item-carrinho:hover {
-    background-color: var(--cor-hover-lista);
-    padding-left: 5px;
-  }
+.total {
+  font-size: 1.1rem;
+  margin-bottom: 15px;
+  display: flex;
+  justify-content: space-between;
+  color: var(--cor-secundaria);
+}
 
-  .item-carrinho.desejo {
-    background-color: #fff8e1;
-    padding: 12px;
-    border-radius: 6px;
-    border-left: 5px solid var(--cor-acento);
-    margin: 10px 0;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-  }
+.total strong {
+  color: var(--cor-acento);
+  font-size: 1.25rem;
+}
 
-  .item-title { grid-area: title; font-weight: 700; color: var(--cor-primaria); }
-  .item-meta { grid-area: meta; font-size: 0.9rem; color: #888; }
-  .item-sub { grid-area: sub; font-weight: 500; margin-top: 5px; font-style: italic;}
-  .item-actions { grid-area: actions; align-self: center; display: flex; gap: 10px;}
+/* Botão WhatsApp */
+.btn-whats {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  background: #25D366;
+  color: #fff;
+  font-size: 1.05rem;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: 0.25s ease;
+}
 
-  .item-actions button {
-    background: none;
-    border: none;
-    font-size: 1.2rem;
-    cursor: pointer;
-    color: var(--cor-primaria);
-    opacity: 0.6;
-    transition: var(--transicao);
-  }
-
-  .item-actions button:hover {
-    opacity: 1;
-    color: var(--cor-erro);
-    transform: scale(1.1);
-  }
-
-  .total {
-    font-size: 1.8rem;
-    font-weight: 800;
-    color: var(--cor-acento);
-    margin-top: 30px;
-    padding-top: 15px;
-    border-top: 3px dashed var(--cor-borda-clara);
-    text-align: right;
-    letter-spacing: 1px;
-  }
-
-  #enviarWhats {
-    width: 100%;
-    background-color: #25D366;
-    color: white;
-    padding: 18px;
-    border: none;
-    border-radius: 8px;
-    font-size: 1.2rem;
-    font-weight: 700;
-    cursor: pointer;
-    transition: var(--transicao);
-    margin-top: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 4px 10px rgba(37, 211, 102, 0.4);
-  }
-
-  #enviarWhats:hover {
-    background-color: #128C7E;
-    box-shadow: 0 6px 15px rgba(37, 211, 102, 0.6);
-    transform: translateY(-2px);
-  }
-
-  #enviarWhats:disabled {
-    background-color: #A9D5B9;
-    cursor: not-allowed;
-    box-shadow: none;
-    opacity: 0.7;
-  }
-
-  #enviarWhats i {
-    margin-right: 12px;
-    font-size: 1.5rem;
-    transition: var(--transicao);
-  }
-
-  #enviarWhats:hover i {
-    transform: rotate(5deg) scale(1.05);
-  }
-
+.btn-whats:hover {
+  background: #1ebe59;
+  transform: translateY(-2px);
+}
   /* ====================== NOTIFICAÇÃO ATUALIZADA ====================== */
   .notificacao {
     position: fixed;
@@ -1346,28 +1286,44 @@
   </div>
 </footer>
 
-<div class="carrinho" id="carrinhoBtn" role="button" tabindex="0" aria-label="Abrir carrinho">
-  <i class="fas fa-shopping-bag"></i> Carrinho 
-  <span class="carrinho-count" id="carrinhoCount">0</span>
+<div class="carrinho carrinho-premium" id="carrinhoBtn" role="button" tabindex="0" aria-label="Abrir carrinho">
+    <div class="carrinho-icon-area">
+        <i class="fas fa-shopping-bag"></i>
+    </div>
+    <span class="carrinho-label">Carrinho</span>
+    
+    <span class="carrinho-count" id="carrinhoCount">0</span>
 </div>
 
-<!-- Painel do carrinho -->
+<!-- Painel do Carrinho (Side Panel Moderno) -->
 <div class="finalizar" id="finalizar" aria-hidden="true">
-  
-  <!-- Botão de fechar -->
-  <button class="fechar-carrinho" id="fecharCarrinho" aria-label="Fechar carrinho">
-    <i class="fas fa-times"></i>
-  </button>
 
-  <h2>🛍️ Seu Carrinho</h2>
-  
-  <ul id="listaCarrinho"></ul>
-  
-  <p class="total" id="totalCarrinho">Total: R$ 0,00</p>
-  
-  <button id="enviarWhats" type="button" title="Finalizar pelo WhatsApp">
-    <i class="fab fa-whatsapp"></i> Finalizar Compra
-  </button>
+  <!-- Cabeçalho do painel -->
+  <div class="carrinho-header">
+    <h2 class="titulo-carrinho">
+      <i class="fas fa-shopping-bag"></i>
+      Seu Carrinho
+    </h2>
+
+    <button class="fechar-carrinho" id="fecharCarrinho" aria-label="Fechar carrinho">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+
+  <!-- Lista dos itens -->
+  <ul id="listaCarrinho" class="lista-carrinho"></ul>
+
+  <!-- Rodapé com total e botão -->
+  <div class="carrinho-footer">
+    <p class="total" id="totalCarrinho">
+      <span>Total:</span> <strong>R$ 0,00</strong>
+    </p>
+
+    <button id="enviarWhats" type="button" class="btn-whats" title="Finalizar pelo WhatsApp">
+      <i class="fab fa-whatsapp"></i>
+      Finalizar Compra
+    </button>
+  </div>
 </div>
 
 <div class="notificacao" id="notificacao" aria-live="polite" role="status" style="display:none;">
@@ -1703,51 +1659,38 @@ if (filtroAtual === 'novos') {
 }
 pesquisaInput.addEventListener('input', aplicarFiltros);
 
-// ---------- ORGANIZAR PRODUTOS PREMIUM (TOP 3 PODIUM INVERTIDO) ----------
+// ---------- ORGANIZAR PRODUTOS PREMIUM (TOP 3 ORDENADOS + RESTO ALEATÓRIO) ----------
 document.addEventListener("DOMContentLoaded", () => {
   const container = document.getElementById("produtos");
   let itens = Array.from(container.children);
 
+  // Captura a quantidade vendida de cada item
   itens.forEach(div => {
     div.__vendidos = parseInt(div.dataset.vendido || "0");
   });
 
-  // Ordenar por vendas (do maior para o menor)
+  // Ordena por vendas (maior -> menor)
   const ordenados = [...itens].sort((a, b) => b.__vendidos - a.__vendidos);
 
+  // Pega os 3 mais vendidos
   const top3 = ordenados.filter(item => item.__vendidos > 0).slice(0, 3);
+
+  // Embaralha o resto dos produtos
   const resto = ordenados.slice(top3.length).sort(() => Math.random() - 0.5);
 
+  // Limpa o container
   container.innerHTML = "";
 
-  // Adicionar o TOP 3 (com classe que altera o order no CSS Grid)
-  top3.forEach((item, index) => {
-    const medalhas = ["🥇 TOP Ouro", "🥈 TOP Prata", "🥉 TOP Bronze"];
-    
-    // Remove o selo "TOP" genérico
-    const seloPopular = item.querySelector('.selo.popular');
-    if(seloPopular) seloPopular.remove(); 
-    
-    item.classList.add("produto-top3");
+  // Insere TOP 3 na ordem correta
+  top3.forEach(item => container.appendChild(item));
 
-    // Reutiliza o badge, mas com o conteúdo e cor do podium
-    const badge = document.createElement("div");
-    badge.className = "badge-top3-premium";
-    badge.innerHTML = `
-      <span class="medalha">${medalhas[index]}</span>
-      <small>${item.__vendidos} vendidos</small>
-    `;
-    item.prepend(badge);
-    container.appendChild(item); // Adiciona ao container principal
-  });
-
-  // Adicionar resto embaralhado
+  // Insere o resto em ordem completamente aleatória
   resto.forEach(item => container.appendChild(item));
-  
+
+  // Recarrega carrinho e filtros
   atualizarCarrinho();
   aplicarFiltros();
 });
-
 </script>
 </body>
 </html>
